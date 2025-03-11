@@ -1,18 +1,16 @@
 import prisma from "@/lib/prisma";
+import BlogCard from "./BlogCard";
 
 export default async function Blogs() {
   const blogs = await prisma.blog.findMany();
   return (
     <div>
-      <h1 className="text-xl text-red-500">Superblog</h1>
-      <ol>
+      <h1 className="text-3xl mb-4">My Blog</h1>
+      <section className="grid grid-cols-3 gap-4">
         {blogs.map((blog) => (
-          <li key={blog.id}>
-            <h2 className="text-sm text-blue-500">{blog.title}</h2>
-            <p>{blog.content}</p>
-          </li>
+          <BlogCard {...blog} key={blog.id} />
         ))}
-      </ol>
+      </section>
     </div>
   );
 }

@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently \"npm run tw:watch\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:update": "npx prisma generate && npx prisma db push",
-    "db:reset": "npx prisma generate && npx prisma db push --force-reset && npx prisma db seed "
+    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
+    "db:update": "prisma generate && prisma db push",
+    "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed "
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
@@ -26,12 +27,14 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@tailwindcss/cli": "^4.0.13",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.16",
     "@types/mdx": "^2.0.13",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.1.2",
     "daisyui": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",

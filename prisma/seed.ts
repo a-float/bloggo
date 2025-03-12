@@ -1,15 +1,22 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import fs from "node:fs";
 
 const prisma = new PrismaClient();
 
 const blogData: Prisma.BlogCreateInput[] = [
   {
-    title: "A Day In Venice",
-    content: "It was very nice <3",
+    title: "Trip to Venice",
+    slug: "trip-to-venice",
+    summary:
+      "Explore Venice’s canals, visit St. Mark’s Basilica, take a gondola ride, discover Murano and Burano, and enjoy Venetian cuisine.",
+    content: fs.readFileSync("./prisma/venice.mdx").toString(),
   },
   {
-    title: "A Walk In The Park",
-    content: "Very cold brr",
+    title: "Trip to Prague",
+    slug: "trip-to-prague",
+    summary:
+      "Wander through Prague’s Old Town, cross Charles Bridge, explore Prague Castle, visit the Jewish Quarter, and enjoy Czech food and beer.",
+    content: fs.readFileSync("./prisma/prague.mdx").toString(),
   },
 ];
 

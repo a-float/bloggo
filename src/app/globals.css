@@ -10,4 +10,5 @@
 
 .mdxeditor-root-contenteditable .prose {
   color: var(--tw-prose-body);
+  min-height: 440px;
 }

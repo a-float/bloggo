@@ -9,12 +9,13 @@ type Input = Omit<Blog, "id">;
 
 type ActionState = {
   success?: boolean;
-  errors: { field?: keyof Input; message: string }[];
+  message?: string;
+  errors?: { field: keyof Input; message: string }[];
 };
 
-export async function updateBlog(
+export async function updateCreateBlog(
   prevState: ActionState,
-  blogId: Blog["id"],
+  blogId: Blog["id"] | null,
   data: Partial<Input>
 ): Promise<ActionState> {
   const errors: ActionState["errors"] = [];
@@ -28,11 +29,16 @@ export async function updateBlog(
   if (!data.content)
     errors.push({ field: "content", message: "This field can't be empty." });
 
-  const prev = await prisma.blog.findFirst({ where: { id: blogId } });
-  if (!prev)
-    return { success: false, errors: [{ message: "Blog doesn't exist." }] };
-
   if (errors.length) return { success: false, errors };
+
+  if (!blogId) {
+    await prisma.blog.create({ data: data as Prisma.BlogCreateInput });
+    redirect(`/blogs/${data.slug}`);
+    // return { success: true, message: "Blog created successfully" };
+  }
+
+  const prev = await prisma.blog.findFirst({ where: { id: blogId } });
+  if (!prev) return { success: false, message: "Blog doesn't exist." };
 
   await prisma.blog.update({
     where: { id: blogId },
@@ -45,5 +51,5 @@ export async function updateBlog(
     redirect(`/blogs/${data.slug}/edit`);
   }
 
-  return { success: true, errors: [] };
+  return { success: true, message: "Blog updated successfully." };
 }

@@ -41,7 +41,7 @@ export default function RootLayout({
             </ul>
           </div>
         </div>
-        <main className="container max-w-7xl mx-auto p-4">{children}</main>
+        <main className="container max-w-7xl mx-auto px-8 py-6">{children}</main>
         <Toaster />
       </body>
     </html>

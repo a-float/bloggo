@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import EditBlogForm from "./client";
+import EditBlogForm from "@/app/blogs/EditBlogForm";
 
 export default async function BlogEdit({
   params,

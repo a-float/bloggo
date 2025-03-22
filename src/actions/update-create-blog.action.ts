@@ -33,6 +33,7 @@ export async function updateCreateBlog(
 
   if (!blogId) {
     await prisma.blog.create({ data: data as Prisma.BlogCreateInput });
+    revalidatePath("/blogs");
     redirect(`/blogs/${data.slug}`);
     // return { success: true, message: "Blog created successfully" };
   }

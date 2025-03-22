@@ -19,4 +19,6 @@ model Blog {
   title   String @unique
   summary String
   content String
+
+  @@map("blog")
 }

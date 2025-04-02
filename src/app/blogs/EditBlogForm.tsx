@@ -6,7 +6,7 @@ import React, { useTransition } from "react";
 import Link from "next/link";
 import { type MDXEditorMethods } from "@mdxeditor/editor";
 import { useForm } from "react-hook-form";
-import { ForwardRefMDXEditor } from "@/components/ForwardRefMDXEditor";
+import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
 import { Input, Textarea } from "@/components/Input";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
@@ -24,7 +24,9 @@ export default function EditBlogForm({ blog }: { blog: Partial<Blog> }) {
   const form = useForm<Inputs>({ defaultValues: blog });
 
   const onSubmit = (data: Inputs) =>
-    React.startTransition(() => formAction(data));
+    React.startTransition(() =>
+      formAction({ ...data, content: editorRef.current?.getMarkdown() ?? "" })
+    );
 
   React.useEffect(() => {
     state.errors?.forEach((e) => {
@@ -45,8 +47,9 @@ export default function EditBlogForm({ blog }: { blog: Partial<Blog> }) {
           <ForwardRefMDXEditor
             ref={editorRef}
             markdown={blog.content ?? ""}
-            contentEditableClassName="prose bg-base-200 max-w-none"
-            onChange={(mdx) => form.setValue("content", mdx)}
+            contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
+          
+            // onChange={(mdx) => form.setValue("content", mdx)}
           />
           {errors.content?.message ? (
             <p className="text-error">{errors.content.message}</p>

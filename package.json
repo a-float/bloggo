@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
+    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.scss -o ./.next/static/css/app/layout.css --watch",
     "db:update": "prisma generate && prisma db push",
     "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed "
   },
@@ -26,7 +26,8 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-hot-toast": "^2.5.2",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "sass": "^1.86.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

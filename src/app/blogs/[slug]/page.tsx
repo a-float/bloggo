@@ -6,8 +6,6 @@ import React from "react";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
 
-export const dynamic = "force-dynamic";
-
 export default async function BlogPage({
   params,
 }: {

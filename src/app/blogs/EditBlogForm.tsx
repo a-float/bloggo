@@ -1,81 +1,120 @@
 "use client";
 
-import { Blog } from "@prisma/client";
 import { updateCreateBlog } from "@/actions/update-create-blog.action";
 import React, { useTransition } from "react";
 import Link from "next/link";
 import { type MDXEditorMethods } from "@mdxeditor/editor";
-import { useForm } from "react-hook-form";
-import { ForwardRefMDXEditor } from "@/components/ForwardRefMDXEditor";
-import { Input, Textarea } from "@/components/Input";
+import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
+import { Input, Textarea, DayPickerInput, FileInput } from "@/components/Input";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
+import { BlogWithCoverImage } from "@/types";
+// import { useForm } from "react-hook-form";
 
-type Inputs = Parameters<typeof updateCreateBlog>[2];
-
-export default function EditBlogForm({ blog }: { blog: Partial<Blog> }) {
+export default function EditBlogForm({
+  blog,
+}: {
+  blog: Partial<BlogWithCoverImage>;
+}) {
   const editorRef = React.useRef<MDXEditorMethods | null>(null);
   const [state, formAction, isPending] = React.useActionState<
     ReturnType<typeof updateCreateBlog>,
-    Inputs
-  >((state, data) => updateCreateBlog(state, blog.id ?? null, data), {});
+    FormData
+  >(updateCreateBlog, {});
+
+  const errors: Record<string, string> = (state.errors ?? []).reduce(
+    (acc, err) => ({ ...acc, [err.field]: err.message }),
+    {}
+  );
+
+  // const form = useForm({
+  //   defaultValues: {
+  //     ...blog,
+  //     coverImage: blog.coverImage?.url,
+  //     tags: undefined,
+  //   },
+  // });
 
   const [isPendingDelete, startDeleteTransition] = useTransition();
-  const form = useForm<Inputs>({ defaultValues: blog });
-
-  const onSubmit = (data: Inputs) =>
-    React.startTransition(() => formAction(data));
 
   React.useEffect(() => {
-    state.errors?.forEach((e) => {
-      form.setError(e.field, { message: e.message });
-    });
     if (state.message) {
       if (state.success) toast.success(state.message);
       else toast.error(state.message);
     }
-  }, [state, form]);
+  }, [state]);
 
-  const errors = form.formState.errors;
+  const handleAction = (formData: FormData) => {
+    const content = editorRef.current?.getMarkdown() ?? "";
+    const tags = [...content.matchAll(/#\w+/g).map((m) => m[0])];
+    console.log(tags);
+    formData.set("content", content);
+    tags.forEach((tag) => formData.append("tags", tag));
+    // for (const [url, blob] of Object.entries(blobManager.getAllBlobs())) {
+    //   console.log("attaching", { url, blob });
+    //   if (!blob) continue;
+    //   formData.append("blobUrls", url);
+    //   formData.append("blobs", blob);
+    // }
+    // TODO fix in form
+    const img = formData.get("coverImage") as File | undefined;
+    if (img?.size === 0) formData.delete("coverImage");
+    formAction(formData);
+  };
+
+  console.log("front blog", blog);
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form action={handleAction}>
       <div className="flex flex-row gap-8">
         <div className="mt-4 flex-2/3">
           <ForwardRefMDXEditor
             ref={editorRef}
             markdown={blog.content ?? ""}
-            contentEditableClassName="prose bg-base-200 max-w-none"
-            onChange={(mdx) => form.setValue("content", mdx)}
+            contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
           />
-          {errors.content?.message ? (
-            <p className="text-error">{errors.content.message}</p>
+          {errors.content ? (
+            <p className="text-error">{errors.content}</p>
           ) : null}
         </div>
         <div className="flex-1/3">
+          <input name="id" value={blog.id} type="hidden" />
           <Input
             label="Title"
+            name="title"
             required
             className="input w-full"
-            defaultValue={blog.title}
-            error={errors.title?.message}
-            {...form.register("title")}
+            error={errors.title}
+          />
+          <DayPickerInput
+            label="Date"
+            name="date"
+            defaultValue={blog.date?.toISOString()}
+            error={errors.date}
+          />
+          <FileInput
+            name="coverImage"
+            defaultValue={""}
+            accept="image/png, image/jpeg"
+            label="Pick the cover image"
+            showImage
+            error={errors.coverImage}
+            defaultUrl={blog.coverImage?.url ?? undefined}
           />
           <Input
+            name="slug"
             label="Slug"
-            required
             className="input w-full"
             defaultValue={blog.slug}
-            error={errors.slug?.message}
-            {...form.register("slug")}
+            error={errors.slug}
           />
           <Textarea
             label="Summary"
+            name="summary"
             required
             className="textarea h-24 w-full"
             defaultValue={blog.summary}
-            error={errors.summary?.message}
-            {...form.register("summary")}
+            error={errors.summary}
           />
 
           <div className="flex gap-4 mt-4">

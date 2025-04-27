@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
+    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.scss -o ./.next/static/css/app/layout.css --watch",
     "db:update": "prisma generate && prisma db push",
     "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed "
   },
@@ -20,13 +20,18 @@
     "@mdxeditor/editor": "^3.26.0",
     "@next/mdx": "^15.2.2",
     "@prisma/client": "^6.5.0",
-    "next": "15.2.1",
+    "@sinclair/typebox": "^0.34.33",
+    "@vercel/blob": "^0.27.3",
+    "next": "^15.2.5",
     "prisma": "^6.5.0",
     "react": "^19.0.0",
+    "react-day-picker": "^9.6.6",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-hot-toast": "^2.5.2",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "sass": "^1.86.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -36,6 +41,7 @@
     "@types/mdx": "^2.0.13",
     "@types/node": "^20",
     "@types/react": "^19",
+    "@types/react-day-picker": "^5.2.1",
     "@types/react-dom": "^19",
     "concurrently": "^9.1.2",
     "daisyui": "^5.0.0",

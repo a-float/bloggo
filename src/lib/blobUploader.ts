@@ -24,7 +24,6 @@ export class VercelFileUploader implements FileUploader {
       access: "public",
       addRandomSuffix: true,
     });
-    console.log("got", response);
     return response.url;
   }
 

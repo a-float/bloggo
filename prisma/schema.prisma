@@ -15,9 +15,8 @@ datasource db {
 
 model Blog {
   id         Int       @id @default(autoincrement())
-  slug       String    @unique
+  slug       String    @unique @default(uuid())
   title      String    @unique
-  summary    String
   content    String
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -29,11 +28,12 @@ model Blog {
 }
 
 model Image {
-  id     Int    @id @default(autoincrement())
-  blog   Blog   @relation(fields: [blogId], references: [id])
-  blogId Int    @unique
-  name   String
-  url    String
+  id        Int      @id @default(autoincrement())
+  blog      Blog?    @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  blogId    Int?     @unique
+  name      String
+  url       String   @unique
+  createdAt DateTime @default(now())
 
   @@map("image")
 }

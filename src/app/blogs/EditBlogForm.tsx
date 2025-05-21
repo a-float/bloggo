@@ -1,147 +1,185 @@
 "use client";
 
-import { updateCreateBlog } from "@/actions/update-create-blog.action";
 import React, { useTransition } from "react";
 import Link from "next/link";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { type MDXEditorMethods } from "@mdxeditor/editor";
 import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
 import { Input, Textarea, DayPickerInput, FileInput } from "@/components/Input";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
 import { BlogWithCoverImage } from "@/types";
-// import { useForm } from "react-hook-form";
+import { createBlog } from "@/actions/edit-create-blog.action";
+import { uploadFile } from "@/actions/upload-file.action";
+import { useRouter } from "next/navigation";
+import { resizeImage } from "@/lib/resizeImage";
 
-export default function EditBlogForm({
-  blog,
-}: {
-  blog: Partial<BlogWithCoverImage>;
-}) {
+type FormValues = {
+  id: number;
+  title: string;
+  content: string;
+  date?: Date | null;
+  coverImage?: File | null;
+};
+
+export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
   const editorRef = React.useRef<MDXEditorMethods | null>(null);
-  const [state, formAction, isPending] = React.useActionState<
-    ReturnType<typeof updateCreateBlog>,
-    FormData
-  >(updateCreateBlog, {});
-
-  const errors: Record<string, string> = (state.errors ?? []).reduce(
-    (acc, err) => ({ ...acc, [err.field]: err.message }),
-    {}
-  );
-
-  // const form = useForm({
-  //   defaultValues: {
-  //     ...blog,
-  //     coverImage: blog.coverImage?.url,
-  //     tags: undefined,
-  //   },
-  // });
+  const router = useRouter();
+  const [previewImage, setPreviewImage] = React.useState<
+    { name: string; url: string } | undefined
+  >(blog?.coverImage ?? undefined);
 
   const [isPendingDelete, startDeleteTransition] = useTransition();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      id: blog?.id,
+      title: blog?.title ?? "",
+      content: blog?.content ?? "",
+      date: blog?.date ?? null,
+      coverImage: null,
+    },
+  });
 
-  React.useEffect(() => {
-    if (state.message) {
-      if (state.success) toast.success(state.message);
-      else toast.error(state.message);
+  const uploadImageIfNeeded = async (image?: File | null) => {
+    if (image && previewImage?.url !== blog?.coverImage?.url) {
+      const resizedImage = await resizeImage(image, 1024, 1024);
+      const formData = new FormData();
+      formData.set("file", resizedImage);
+      const newUrl = (await uploadFile(formData)).url;
+      setPreviewImage({ name: image.name, url: newUrl });
+      return newUrl;
     }
-  }, [state]);
-
-  const handleAction = (formData: FormData) => {
-    const content = editorRef.current?.getMarkdown() ?? "";
-    const tags = [...content.matchAll(/#\w+/g).map((m) => m[0])];
-    console.log(tags);
-    formData.set("content", content);
-    tags.forEach((tag) => formData.append("tags", tag));
-    // for (const [url, blob] of Object.entries(blobManager.getAllBlobs())) {
-    //   console.log("attaching", { url, blob });
-    //   if (!blob) continue;
-    //   formData.append("blobUrls", url);
-    //   formData.append("blobs", blob);
-    // }
-    // TODO fix in form
-    const img = formData.get("coverImage") as File | undefined;
-    if (img?.size === 0) formData.delete("coverImage");
-    formAction(formData);
+    return previewImage?.url;
   };
 
-  console.log("front blog", blog);
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const { coverImage, ...rest } = data;
+
+    const blogData = {
+      ...rest,
+      coverImageUrl: await uploadImageIfNeeded(coverImage),
+    };
+
+    await createBlog(blogData).then((res) => {
+      res.errors?.forEach((err) => {
+        form.setError(err.field as any, { message: err.message });
+      });
+      if (res.success) {
+        if (!rest.id && res.data) router.push(`/blogs/${res.data.slug}`);
+        if (res.message) toast.success(res.message);
+      } else if (res.message) {
+        toast.error(res.message);
+      }
+    });
+  };
+
+  const onDelete = () => {
+    if (!blog?.id) return;
+    startDeleteTransition(() =>
+      deleteBlog(blog.id).then((res) => {
+        if (res.message) toast(res.message);
+      })
+    );
+  };
 
   return (
-    <form action={handleAction}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <div className="flex flex-row gap-8">
-        <div className="mt-4 flex-2/3">
-          <ForwardRefMDXEditor
-            ref={editorRef}
-            markdown={blog.content ?? ""}
-            contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
+        <div className="mt-0 flex-2/3">
+          <Controller
+            name="content"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Textarea
+                  required
+                  label="Content"
+                  className="textarea w-full h-96"
+                  {...field}
+                />
+                {/* <ForwardRefMDXEditor
+                  ref={editorRef}
+                  markdown={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
+                /> */}
+                {fieldState.error ? (
+                  <p className="text-error">{fieldState.error?.message}</p>
+                ) : null}
+              </>
+            )}
           />
-          {errors.content ? (
-            <p className="text-error">{errors.content}</p>
-          ) : null}
         </div>
         <div className="flex-1/3">
-          <input name="id" value={blog.id} type="hidden" />
           <Input
+            {...form.register("title")}
+            defaultValue={blog?.title ?? ""}
             label="Title"
-            name="title"
             required
             className="input w-full"
-            error={errors.title}
           />
-          <DayPickerInput
-            label="Date"
+          <Controller
             name="date"
-            defaultValue={blog.date?.toISOString()}
-            error={errors.date}
-          />
-          <FileInput
-            name="coverImage"
-            defaultValue={""}
-            accept="image/png, image/jpeg"
-            label="Pick the cover image"
-            showImage
-            error={errors.coverImage}
-            defaultUrl={blog.coverImage?.url ?? undefined}
-          />
-          <Input
-            name="slug"
-            label="Slug"
-            className="input w-full"
-            defaultValue={blog.slug}
-            error={errors.slug}
-          />
-          <Textarea
-            label="Summary"
-            name="summary"
-            required
-            className="textarea h-24 w-full"
-            defaultValue={blog.summary}
-            error={errors.summary}
+            control={form.control}
+            render={({ field }) => (
+              <DayPickerInput
+                {...form.register("date")}
+                dayPickerProps={{
+                  selected: field.value ?? undefined,
+                  mode: "single",
+                }}
+                onChange={(date) => form.setValue("date", date ?? null)}
+                label="Date"
+                className="w-full"
+              />
+            )}
           />
 
+          <FileInput
+            name="coverImage"
+            accept="image/png, image/jpeg"
+            label="Pick the cover image"
+            className="w-full"
+            preview={previewImage}
+            onClear={() => {
+              form.setValue("coverImage", null);
+              setPreviewImage(undefined);
+            }}
+            onChange={(e) => {
+              const file = e.target.files?.[0] ?? null;
+              if (!file) {
+                form.setValue("coverImage", null);
+                setPreviewImage(undefined);
+              } else {
+                const url = URL.createObjectURL(file);
+                setPreviewImage({ name: file.name, url });
+                form.setValue("coverImage", file);
+              }
+            }}
+          />
           <div className="flex gap-4 mt-4">
-            <Link
-              className="btn btn-primary btn-outline"
-              href={`/blogs/${blog.slug}`}
-            >
-              Go back
-            </Link>
-            <button className="btn btn-primary">
-              {isPending ? (
+            {blog?.slug ? (
+              <Link
+                className="btn btn-primary btn-outline"
+                href={`/blogs/${blog.slug}`}
+              >
+                Go back
+              </Link>
+            ) : null}
+            <button className="btn" type="submit">
+              {form.formState.isSubmitting ? (
                 <span className="loading loading-spinner" />
               ) : (
                 "Save"
               )}
             </button>
             <div className="flex-1" />
-            {blog.id ? (
+            {blog?.id ? (
               <button
+                type="button"
                 className="btn btn-error btn-soft"
-                onClick={() =>
-                  startDeleteTransition(async () => {
-                    if (!blog.id) return;
-                    const res = await deleteBlog(blog.id);
-                    if (res.message) toast(res.message);
-                  })
-                }
+                onClick={onDelete}
               >
                 {isPendingDelete ? (
                   <span className="loading loading-spinner" />

@@ -7,7 +7,6 @@ function createObjectURL(blob: Blob) {
 }
 
 function getObjectForUrl(url: string) {
-  console.log({ blobs });
   return blobs[url] ?? null;
 }
 

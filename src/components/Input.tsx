@@ -26,12 +26,7 @@ export function Input(props: InputProps) {
   return (
     <fieldset className="fieldset">
       <LegendLabel {...rest}>{label}</LegendLabel>
-      <input
-        aria-invalid={!!error}
-        className="input w-full"
-        autoComplete="off"
-        {...rest}
-      />
+      <input aria-invalid={!!error} autoComplete="off" {...rest} />
       {error && <p className="text-error">{error}</p>}
     </fieldset>
   );
@@ -56,32 +51,27 @@ export function Textarea(props: TextareaProps) {
 }
 
 type DayPickerInputProps = BaseProps &
-  React.ComponentProps<"input"> & {
+  Omit<React.ComponentProps<"input">, "onChange"> & {
+    onChange?: (date: Date | undefined) => void;
     dayPickerProps?: DayPickerProps & { mode: "single" };
   };
 
 export function DayPickerInput(props: DayPickerInputProps) {
   const { label, error, dayPickerProps, defaultValue, ...rest } = props;
-  const [date, setDate] = React.useState<Date | undefined>(
-    typeof defaultValue === "string"
-      ? new Date(defaultValue)
-      : defaultValue instanceof Date
-      ? defaultValue
-      : undefined
-  );
+  const selected = dayPickerProps?.selected;
+
   const popoverRef = React.useRef<HTMLDivElement>(null);
 
   return (
     <fieldset className="fieldset">
       <LegendLabel {...rest}>{label}</LegendLabel>
-      {date && <input type="hidden" value={date?.toISOString()} {...rest} />}
       <button
         type="button"
         popoverTarget="rdp-popover"
-        className="input input-border"
+        className={rest.className + " input input-border"}
         style={{ anchorName: "--rdp" } as React.CSSProperties}
       >
-        {date ? date.toDateString() : "Pick a date"}
+        {selected ? selected.toDateString() : "Pick a date"}
       </button>
       <div
         ref={popoverRef}
@@ -94,9 +84,9 @@ export function DayPickerInput(props: DayPickerInputProps) {
           className="react-day-picker"
           mode="single"
           {...dayPickerProps}
-          selected={date}
+          selected={selected}
           onSelect={(date) => {
-            setDate(date);
+            props.onChange?.(date);
             popoverRef.current?.hidePopover();
           }}
         />
@@ -106,33 +96,42 @@ export function DayPickerInput(props: DayPickerInputProps) {
   );
 }
 
-type FileInputProps = BaseProps &
-  InputProps & { showImage?: boolean; defaultUrl?: string };
+type FileInputProps = BaseProps & {
+  preview?: { url: string; name: string };
+  onClear?: () => void;
+} & React.ComponentProps<"input">;
 
 export function FileInput(props: FileInputProps) {
-  const { label, error, showImage, defaultUrl, ...rest } = props;
-  const [fileUrl, setFileUrl] = React.useState(defaultUrl ?? "");
+  const { label, error, onClear, ...rest } = props;
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!showImage) return;
-    const file = e.target.files?.item(0);
-    if (file) {
-      if (fileUrl) URL.revokeObjectURL(fileUrl);
-      setFileUrl(URL.createObjectURL(file));
+  const clearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
     }
+    onClear?.();
   };
 
   return (
     <fieldset className="fieldset">
       <LegendLabel {...rest}>{label}</LegendLabel>
-      <input
-        {...rest}
-        onChange={handleOnChange}
-        type="file"
-        className="file-input"
-      />
+      <div className="flex flex-row">
+        <input {...rest} ref={inputRef} type="file" className="file-input" />
+        <button className="btn btn-ghost" type="button" onClick={clearInput}>
+          Clear
+        </button>
+      </div>
       {error && <p className="text-error">{error}</p>}
-      {fileUrl && <img alt="" src={fileUrl} />}
+      {props.preview && (
+        <div className="text-left">
+          <img
+            className="max-h-[96px] rounded-sm"
+            alt=""
+            src={props.preview.url}
+          />
+          <span>{props.preview.name}</span>
+        </div>
+      )}
     </fieldset>
   );
 }

@@ -12,7 +12,10 @@ export default async function BlogPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const blog = await prisma.blog.findFirst({ where: { slug } });
+  const blog = await prisma.blog.findFirst({
+    where: { slug },
+    include: { coverImage: true },
+  });
   if (!blog) notFound();
   const code = String(
     await compile(blog.content, {
@@ -34,8 +37,17 @@ export default async function BlogPage({
           Edit
         </Link>
       </div>
+
       <div className="prose">
         <h1>{blog.title}</h1>
+        {blog.coverImage ? (
+          <img
+            src={blog.coverImage.url}
+            alt={blog.coverImage.name}
+            style={{ maxHeight: 300 }}
+            className="w-full h-96 object-cover"
+          />
+        ) : null}
         <MDXContent components={{}} />
       </div>
     </>

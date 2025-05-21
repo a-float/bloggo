@@ -8,7 +8,7 @@ export default function BlogCard({ blog }: { blog: BlogWithCoverImage }) {
       <div className="card h-full bg-base-100 shadow-lg">
         <figure>
           <Image
-            className="w-full object-cover"
+            className="w-full object-cover h-36"
             width={600}
             height={300}
             src={
@@ -25,7 +25,7 @@ export default function BlogCard({ blog }: { blog: BlogWithCoverImage }) {
             {/* <div className="badge badge-secondary">NEW</div> */}
           </h2>
           {new Date(blog.date ?? blog.createdAt).toDateString()}
-          {!!blog.summary && <p>{blog.summary}</p>}
+          <p className="line-clamp-2">{blog.content.slice(0, 256)}</p>
           <div className="card-actions justify-end">
             {blog.tags.map((tag) => (
               <div key={tag} className="badge badge-outline">

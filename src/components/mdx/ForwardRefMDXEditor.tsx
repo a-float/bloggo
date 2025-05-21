@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { forwardRef, Suspense } from "react";
+import { forwardRef, Suspense, memo } from "react";
 import { type MDXEditorMethods, type MDXEditorProps } from "@mdxeditor/editor";
 
 const Editor = dynamic(() => import("./InitializedMDXEditor"), {
@@ -13,12 +13,12 @@ const Editor = dynamic(() => import("./InitializedMDXEditor"), {
   ),
 });
 
-export const ForwardRefMDXEditor = forwardRef<MDXEditorMethods, MDXEditorProps>(
-  (props, ref) => (
+export const ForwardRefMDXEditor = memo(
+  forwardRef<MDXEditorMethods, MDXEditorProps>((props, ref) => (
     <Suspense fallback="banana">
       <Editor {...props} editorRef={ref} />
     </Suspense>
-  )
+  ))
 );
 
 ForwardRefMDXEditor.displayName = "ForwardRefMDXEditor";

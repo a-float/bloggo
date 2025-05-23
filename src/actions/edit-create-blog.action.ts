@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 import * as yup from "yup";
 import { Blog, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { deleteFile } from "./delete-file.action";
 
 export type ActionState = {
   success: boolean;

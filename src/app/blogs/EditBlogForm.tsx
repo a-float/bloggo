@@ -3,9 +3,8 @@
 import React, { useTransition } from "react";
 import Link from "next/link";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { type MDXEditorMethods } from "@mdxeditor/editor";
-import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
-import { Input, Textarea, DayPickerInput, FileInput } from "@/components/Input";
+// import { type MDXEditorMethods } from "@mdxeditor/editor";
+// import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
 import { BlogWithCoverImage } from "@/types";
@@ -13,6 +12,9 @@ import { createBlog } from "@/actions/edit-create-blog.action";
 import { uploadFile } from "@/actions/upload-file.action";
 import { useRouter } from "next/navigation";
 import { resizeImage } from "@/lib/resizeImage";
+import { DayPickerInput } from "@/components/form/DayPickerInput";
+import FileInput from "@/components/form/FileInput";
+import { Textarea, Input } from "@/components/form/TextInput";
 
 type FormValues = {
   id: number;
@@ -23,7 +25,7 @@ type FormValues = {
 };
 
 export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
-  const editorRef = React.useRef<MDXEditorMethods | null>(null);
+  // const editorRef = React.useRef<MDXEditorMethods | null>(null);
   const router = useRouter();
   const [previewImage, setPreviewImage] = React.useState<
     { name: string; url: string } | undefined
@@ -117,7 +119,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
             defaultValue={blog?.title ?? ""}
             label="Title"
             required
-            className="input w-full"
+            className="w-full"
           />
           <Controller
             name="date"

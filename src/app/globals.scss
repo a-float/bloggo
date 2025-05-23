@@ -4,6 +4,10 @@
   themes: light --default, dark --prefersdark, cupcake;
 }
 
+html {
+  scrollbar-gutter: auto !important;
+}
+
 .mdx-editor {
   background-color: var(--color-base-200);
 }

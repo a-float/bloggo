@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
+import LoginControl from "@/components/LoginControl";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,8 @@ export default function RootLayout({
               </li>
             </ul>
           </div>
+          <div className="flex-1" />
+          <LoginControl />
         </div>
         {children}
         <Toaster />

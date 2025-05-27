@@ -8,6 +8,7 @@ export default function LoginLink() {
       href="/auth/login"
       className="btn btn-primary btn-sm"
       onClick={(e) => {
+        if (location.pathname === "/auth/login") return;
         e.preventDefault();
         signIn(undefined, { callbackUrl: location.pathname, redirect: true });
       }}

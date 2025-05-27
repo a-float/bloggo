@@ -7,7 +7,7 @@ export default async function Blogs() {
   return (
     <div>
       <div className="flex justify-between mb-4">
-        <h1 className={"text-3xl  "}>Blogs below!</h1>
+        <h1 className="text-3xl">Blogs</h1>
         <Link href="/blogs/create" className="btn btn-primary">
           Create new blog
         </Link>

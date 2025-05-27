@@ -170,7 +170,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
                 Go back
               </Link>
             ) : null}
-            <button className="btn" type="submit">
+            <button className="btn btn-primary" type="submit">
               {form.formState.isSubmitting ? <Spinner /> : "Save"}
             </button>
             <div className="flex-1" />

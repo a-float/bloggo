@@ -15,6 +15,7 @@ import { resizeImage } from "@/lib/resizeImage";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
 import FileInput from "@/components/form/FileInput";
 import { Textarea, Input } from "@/components/form/TextInput";
+import Spinner from "@/components/Spinner";
 
 type FormValues = {
   id: number;
@@ -64,7 +65,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
 
     await createBlog(blogData).then((res) => {
       res.errors?.forEach((err) => {
-        form.setError(err.field as any, { message: err.message });
+        form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
         if (!rest.id && res.data) router.push(`/blogs/${res.data.slug}`);
@@ -170,11 +171,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
               </Link>
             ) : null}
             <button className="btn" type="submit">
-              {form.formState.isSubmitting ? (
-                <span className="loading loading-spinner" />
-              ) : (
-                "Save"
-              )}
+              {form.formState.isSubmitting ? <Spinner /> : "Save"}
             </button>
             <div className="flex-1" />
             {blog?.id ? (
@@ -183,11 +180,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
                 className="btn btn-error btn-soft"
                 onClick={onDelete}
               >
-                {isPendingDelete ? (
-                  <span className="loading loading-spinner" />
-                ) : (
-                  "Delete"
-                )}
+                {isPendingDelete ? <Spinner /> : "Delete"}
               </button>
             ) : null}
           </div>

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.scss -o ./.next/static/css/app/layout.css --watch",
+    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
     "db:update": "prisma generate && prisma db push",
     "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed "
   },

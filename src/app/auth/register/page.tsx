@@ -3,9 +3,11 @@
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function Login() {
+  const router = useRouter();
   return (
     <form
       onSubmit={async (e) => {
@@ -18,6 +20,7 @@ export default function Login() {
         await createUser(data)
           .then(() => {
             toast.success("User created successfully");
+            router.push("/auth/login");
           })
           .catch(() => {
             toast.error("Error creating user");

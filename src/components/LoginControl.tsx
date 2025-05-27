@@ -1,21 +1,19 @@
 import React from "react";
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 import SignOutButton from "./SignOutButton";
+import LoginLink from "./LoginLink";
 
 export default async function LoginControl() {
   const session = await getServerSession();
   return session?.user ? (
-    <div className="flex items-center gap-2">
-      <p className="text-sm">Signed in as {session.user.name}</p>
+    <div className="flex items-center gap-4">
+      <span className="text-sm">Signed in as {session.user.name}</span>
       <SignOutButton />
     </div>
   ) : (
-    <div className="flex items-center gap-2">
-      <p className="text-sm">Not signed in</p>
-      <Link href="/auth/login" className="btn btn-primary btn-sm">
-        Sign in
-      </Link>
+    <div className="flex items-center gap-4">
+      <span className="text-sm">Not signed in</span>
+      <LoginLink />
     </div>
   );
 }

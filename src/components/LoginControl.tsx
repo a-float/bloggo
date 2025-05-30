@@ -6,13 +6,27 @@ import LoginLink from "./LoginLink";
 export default async function LoginControl() {
   const session = await getServerSession();
   return session?.user ? (
-    <div className="flex items-center gap-4">
-      <span className="text-sm">Signed in as {session.user.name}</span>
-      <SignOutButton />
+    <div className="dropdown dropdown-end pr-2 ">
+      <div
+        tabIndex={0}
+        role="button"
+        className="avatar focus-within:[&>*]:shadow-lg "
+      >
+        <div className="w-8 rounded-full select-none">
+          <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
+        </div>
+      </div>
+      <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">
+        {/* <li>
+          <Link href="/settings">Settings</Link>
+        </li> */}
+        <li>
+          <SignOutButton />
+        </li>
+      </ul>
     </div>
   ) : (
     <div className="flex items-center gap-4">
-      <span className="text-sm">Not signed in</span>
       <LoginLink />
     </div>
   );

@@ -3,6 +3,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
+import { Prisma } from "@prisma/client";
 
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
@@ -22,20 +23,27 @@ const handler = NextAuth({
 
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-        if (!user) return null;
-        const isValidPassword = await compare(
-          credentials.password,
-          user.password
-        );
-        if (!isValidPassword) return null;
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        };
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+          });
+          if (!user) return null;
+          const isValidPassword = await compare(
+            credentials.password,
+            user.password
+          );
+          if (!isValidPassword) return null;
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
+        } catch (error) {
+          if (error instanceof Prisma.PrismaClientInitializationError) {
+            throw new Error("Database connection error");
+          }
+          return null;
+        }
       },
     }),
   ],

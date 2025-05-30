@@ -24,7 +24,11 @@ export default function LoginForm() {
     const result = await signIn("credentials", { ...data, redirect: false });
     console.log(result);
     if (result?.error) {
-      toast.error(result.error);
+      toast.error(
+        result.error === "CredentialsSignin"
+          ? "Invalid email or password"
+          : "Seomthing went wrong"
+      );
     } else if (result?.ok) {
       router.push(getRedirectUrl());
       router.refresh();

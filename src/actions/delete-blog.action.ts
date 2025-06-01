@@ -1,9 +1,13 @@
 "use server";
 
+import { canUserEditBlog } from "@/data/access";
+import { getBlogById } from "@/data/blog-dto";
 import { getFileUploader } from "@/lib/blobUploader";
+import getUser from "@/lib/getUser";
 import prisma from "@/lib/prisma";
 import { Blog } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { notFound, unauthorized } from "next/navigation";
 
 type ActionState = {
   success?: boolean;
@@ -11,9 +15,16 @@ type ActionState = {
 };
 
 export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
+  const user = await getUser();
+  if (!user) return unauthorized();
+  const blog = await getBlogById(blogId);
+  if (!blog) return notFound();
+  if (canUserEditBlog(user, blog)) unauthorized();
+
+  const uploader = getFileUploader();
+
   try {
-    const uploader = getFileUploader();
-    const blog = await prisma.blog.delete({
+    await prisma.blog.delete({
       where: { id: blogId },
       include: { coverImage: true },
     });

@@ -1,22 +1,19 @@
-import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
+import { notFound, unauthorized } from "next/navigation";
 import EditBlogForm from "@/app/blogs/EditBlogForm";
-import AccessDenied from "@/components/AccessDenied";
-import { getServerSession } from "next-auth";
+import getUser from "@/lib/getUser";
+import { getBlogBySlug } from "@/data/blog-dto";
+import { canUserEditBlog } from "@/data/access";
 
 export default async function BlogEdit({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const session = await getServerSession();
-  if (!session?.user) return <AccessDenied />;
-
+  const user = await getUser();
+  if (!user) return unauthorized();
   const { slug } = await params;
-  const blog = await prisma.blog.findFirst({
-    where: { slug },
-    include: { coverImage: true },
-  });
+  const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
+  if (!canUserEditBlog(user, blog)) return unauthorized();
   return <EditBlogForm blog={blog} />;
 }

@@ -1,9 +1,11 @@
-import prisma from "@/lib/prisma";
 import BlogCard from "./BlogCard";
 import Link from "next/link";
+import { getBlogsForUser } from "@/data/blog-dto";
+import getUser from "@/lib/getUser";
 
 export default async function Blogs() {
-  const blogs = await prisma.blog.findMany({ include: { coverImage: true } });
+  const user = await getUser();
+  const blogs = await getBlogsForUser(user);
   return (
     <div>
       <div className="flex justify-between mb-4">

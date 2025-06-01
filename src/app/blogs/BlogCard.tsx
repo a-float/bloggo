@@ -1,16 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BlogWithCoverImage } from "@/types";
+import { BlogDTO } from "@/data/blog-dto";
 
-export default function BlogCard({ blog }: { blog: BlogWithCoverImage }) {
+export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <Link href={`/blogs/${blog.slug}`}>
       <div className="card h-full bg-base-100 shadow-lg">
         <figure>
           <Image
             className="w-full object-cover h-36"
-            width={600}
-            height={300}
+            width={400}
+            height={200}
             src={
               blog.coverImage
                 ? blog.coverImage.url
@@ -24,7 +24,10 @@ export default function BlogCard({ blog }: { blog: BlogWithCoverImage }) {
             {blog.title}
             {/* <div className="badge badge-secondary">NEW</div> */}
           </h2>
-          {new Date(blog.date ?? blog.createdAt).toDateString()}
+          <span>
+            {new Date(blog.date ?? blog.createdAt).toDateString()} by
+            {blog.author?.name ? ` ${blog.author.name}` : " Unknown Author"}
+          </span>
           <p className="line-clamp-2">{blog.content.slice(0, 256)}</p>
           <div className="card-actions justify-end">
             {blog.tags.map((tag) => (

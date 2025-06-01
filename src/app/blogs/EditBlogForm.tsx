@@ -7,7 +7,6 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 // import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
-import { BlogWithCoverImage } from "@/types";
 import { createBlog } from "@/actions/edit-create-blog.action";
 import { uploadFile } from "@/actions/upload-file.action";
 import { useRouter } from "next/navigation";
@@ -16,6 +15,7 @@ import { DayPickerInput } from "@/components/form/DayPickerInput";
 import FileInput from "@/components/form/FileInput";
 import { Textarea, Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
+import { BlogDTO } from "@/data/blog-dto";
 
 type FormValues = {
   id: number;
@@ -25,7 +25,7 @@ type FormValues = {
   coverImage?: File | null;
 };
 
-export default function EditBlogForm({ blog }: { blog?: BlogWithCoverImage }) {
+export default function EditBlogForm({ blog }: { blog?: BlogDTO }) {
   // const editorRef = React.useRef<MDXEditorMethods | null>(null);
   const router = useRouter();
   const [previewImage, setPreviewImage] = React.useState<

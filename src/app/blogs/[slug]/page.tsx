@@ -1,10 +1,10 @@
-import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { compile, run } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime";
 import React from "react";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
+import { getBlogBySlug } from "@/data/blog-dto";
 
 export default async function BlogPage({
   params,
@@ -12,10 +12,7 @@ export default async function BlogPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const blog = await prisma.blog.findFirst({
-    where: { slug },
-    include: { coverImage: true },
-  });
+  const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
   const code = String(
     await compile(blog.content, {
@@ -37,6 +34,11 @@ export default async function BlogPage({
           Edit
         </Link>
       </div>
+
+      <span>
+        Published on {blog.createdAt.toLocaleDateString("en-US")}
+        {blog.author ? ` by ${blog.author.name}` : ""}
+      </span>
 
       <div className="prose">
         <h1>{blog.title}</h1>

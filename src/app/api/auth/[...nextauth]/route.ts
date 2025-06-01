@@ -6,9 +6,32 @@ import { compare } from "bcrypt";
 import { Prisma } from "@prisma/client";
 
 const handler = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/auth/login",
+  },
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        if (!user.email) return false;
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        if (!existingUser) {
+          console.log("Creating account for OAuth user");
+          await prisma.user.create({
+            data: {
+              name: user.name || user.email,
+              email: user.email,
+              avatarUrl: user.image,
+            },
+          });
+        }
+      }
+
+      return true;
+    },
   },
   providers: [
     GoogleProvider({
@@ -27,7 +50,7 @@ const handler = NextAuth({
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
-          if (!user) return null;
+          if (!user || !user.password) return null;
           const isValidPassword = await compare(
             credentials.password,
             user.password

@@ -23,6 +23,9 @@ model Blog {
   date       DateTime?
   coverImage Image?
   tags       String[]  @default([])
+  author     User?     @relation(fields: [authorId], references: [id])
+  authorId   Int?
+  isPublic   Boolean   @default(false)
 
   @@map("blog")
 }
@@ -34,6 +37,8 @@ model Image {
   name      String
   url       String   @unique
   createdAt DateTime @default(now())
+  owner     User     @relation(fields: [userId], references: [id])
+  userId    Int
 
   @@map("image")
 }
@@ -45,6 +50,10 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Blog      Blog[]
+  avatarUrl String?
+  isAdmin   Boolean  @default(false)
+  Image     Image[]
 
   @@map("user")
 }

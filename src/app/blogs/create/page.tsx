@@ -1,10 +1,10 @@
 import EditBlogForm from "@/app/blogs/EditBlogForm";
-import AccessDenied from "@/components/AccessDenied";
-import { getServerSession } from "next-auth";
+import { canUserCreateBlog } from "@/data/access";
+import getUser from "@/lib/getUser";
+import { unauthorized } from "next/navigation";
 
 export default async function BlogCreate() {
-  const session = await getServerSession();
-  if (!session?.user) return <AccessDenied />;
-
+  const user = await getUser();
+  if (!canUserCreateBlog(user)) return unauthorized();
   return <EditBlogForm blog={undefined} />;
 }

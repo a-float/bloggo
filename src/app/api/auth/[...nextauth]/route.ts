@@ -34,7 +34,7 @@ const handler = NextAuth({
           );
           if (!isValidPassword) return null;
           return {
-            id: user.id,
+            id: user.id.toString(),
             email: user.email,
             name: user.name,
           };

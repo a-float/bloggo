@@ -4,8 +4,12 @@ type BlogWithCoverImage = Prisma.BlogGetPayload<{
   include: { coverImage: true };
 }>;
 
-declare module "next-auth" {
-  interface User extends DefaultUser {
-    id: number;
-  }
-}
+// declare module "next-auth" {
+//   interface User extends DefaultUser {
+//     id: number;
+//   }
+
+//   interface Session extends DefaultSession {
+//     user: DefaultSession["user"] & { id: number };
+//   }
+// }

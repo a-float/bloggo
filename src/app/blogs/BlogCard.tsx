@@ -22,11 +22,10 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         <div className="card-body">
           <h2 className="card-title">
             {blog.title}
-            {/* <div className="badge badge-secondary">NEW</div> */}
           </h2>
           <span>
-            {new Date(blog.date ?? blog.createdAt).toDateString()} by
-            {blog.author?.name ? ` ${blog.author.name}` : " Unknown Author"}
+            {new Date(blog.date ?? blog.createdAt).toDateString()}
+            {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
           <p className="line-clamp-2">{blog.content.slice(0, 256)}</p>
           <div className="card-actions justify-end">

@@ -9,7 +9,7 @@ const defaultAvatarUrl =
 export default async function LoginControl() {
   const user = await getUser();
   return user ? (
-    <div className="dropdown dropdown-end pr-2 ">
+    <div className="dropdown dropdown-end pr-2">
       <div
         tabIndex={0}
         role="button"
@@ -29,7 +29,7 @@ export default async function LoginControl() {
       </ul>
     </div>
   ) : (
-    <div className="flex items-center gap-4">
+    <div className="pr-2">
       <LoginLink />
     </div>
   );

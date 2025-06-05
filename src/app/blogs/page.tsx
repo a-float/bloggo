@@ -1,12 +1,14 @@
 import BlogCard from "./BlogCard";
 import Link from "next/link";
-import { getBlogsForUser } from "@/data/blog-dto";
+import { getBlogsForUser, getBlogTagsForUser } from "@/data/blog-dto";
 import getUser from "@/lib/getUser";
 import { canUserCreateBlog } from "@/data/access";
 
 export default async function Blogs() {
   const user = await getUser();
   const blogs = await getBlogsForUser(user);
+  const tags = await getBlogTagsForUser(user);
+  console.log({ tags });
   return (
     <div>
       <div className="flex justify-between mb-4">

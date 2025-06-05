@@ -33,6 +33,7 @@ export async function getBlogsForUser(user: User | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
     include: { coverImage: true, author: true },
+    orderBy: { createdAt: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));
 }
@@ -58,5 +59,19 @@ export function getBlogDTO(blog: FullBlog) {
   };
 }
 
+export async function getBlogTagsForUser(user: User | null) {
+  const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(
+    Prisma.sql`
+    SELECT tag, COUNT(*) as count
+    FROM (
+      SELECT UNNEST(tags) AS tag FROM blog
+      WHERE ${user?.isAdmin} = true OR "isPublic" = true OR ${user?.id} = "authorId"
+    )
+    GROUP BY tag
+    ORDER BY count DESC;
+  `
+  );
+  return tags.map(({ tag, count }) => ({ tag, count: Number(count) }));
+}
 
 export type BlogDTO = Awaited<ReturnType<typeof getBlogDTO>>;

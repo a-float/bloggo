@@ -49,7 +49,7 @@ export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
   const { id, coverImageUrl, ...rest } = parsedInput;
   const data: Prisma.BlogCreateInput = {
     ...rest,
-    tags: [...rest.content.matchAll(/#\w+/g).map((m) => m[0])],
+    tags: [...new Set(rest.content.matchAll(/#\w+/g).map((m) => m[0]))],
     coverImage: coverImageUrl ? { connect: { url: coverImageUrl } } : undefined,
   };
 

@@ -18,6 +18,7 @@ export type ActionState = {
 const CreateBlogSchema = yup.object({
   id: yup.number().optional(),
   title: yup.string().required().trim().min(1),
+  tags: yup.array().of(yup.string().trim().required()),
   content: yup.string().required().trim().min(1),
   coverImageUrl: yup.string().nullable(),
   date: yup.date().nullable(),
@@ -49,7 +50,7 @@ export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
   const { id, coverImageUrl, ...rest } = parsedInput;
   const data: Prisma.BlogCreateInput = {
     ...rest,
-    tags: [...new Set(rest.content.matchAll(/#\w+/g).map((m) => m[0]))],
+    tags: [...new Set(rest.tags ?? [])],
     coverImage: coverImageUrl ? { connect: { url: coverImageUrl } } : undefined,
   };
 

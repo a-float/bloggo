@@ -1,7 +1,7 @@
 import { notFound, unauthorized } from "next/navigation";
 import EditBlogForm from "@/app/blogs/EditBlogForm";
 import getUser from "@/lib/getUser";
-import { getBlogBySlug } from "@/data/blog-dto";
+import { getBlogBySlug, getBlogTagCountsForUser } from "@/data/blog-dto";
 import { canUserEditBlog } from "@/data/access";
 
 export default async function BlogEdit({
@@ -15,5 +15,6 @@ export default async function BlogEdit({
   const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
   if (!canUserEditBlog(user, blog)) return unauthorized();
-  return <EditBlogForm blog={blog} />;
+  const tagCounts = await getBlogTagCountsForUser(user);
+  return <EditBlogForm blog={blog} tagCounts={tagCounts} />;
 }

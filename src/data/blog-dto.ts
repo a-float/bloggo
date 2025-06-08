@@ -2,6 +2,7 @@ import "server-only";
 import prisma from "@/lib/prisma";
 import { Prisma, User } from "@prisma/client";
 import { getUserDTO } from "./user-dto.ts";
+import { TagWithCount } from "@/types.js";
 
 type FullBlog = Prisma.BlogGetPayload<{
   include: { coverImage: true; author: true };
@@ -59,7 +60,9 @@ export function getBlogDTO(blog: FullBlog) {
   };
 }
 
-export async function getBlogTagsForUser(user: User | null) {
+export async function getBlogTagCountsForUser(
+  user: User | null
+): Promise<TagWithCount[]> {
   const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(
     Prisma.sql`
     SELECT tag, COUNT(*) as count

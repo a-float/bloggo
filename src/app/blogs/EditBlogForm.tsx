@@ -16,17 +16,24 @@ import FileInput from "@/components/form/FileInput";
 import { Textarea, Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { BlogDTO } from "@/data/blog-dto";
+import TagSelect from "@/components/TagSelect/TagSelect";
+import { TagWithCount } from "@/types";
 
 type FormValues = {
   id: number;
   title: string;
   content: string;
-  date?: Date | null;
+  tags: string[];
+  date: Date | null;
   coverImage?: File | null;
 };
 
-export default function EditBlogForm({ blog }: { blog?: BlogDTO }) {
-  // const editorRef = React.useRef<MDXEditorMethods | null>(null);
+type EditBlogFormProps = {
+  blog?: BlogDTO;
+  tagCounts: TagWithCount[];
+};
+
+export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
   const [previewImage, setPreviewImage] = React.useState<
     { name: string; url: string } | undefined
@@ -37,6 +44,7 @@ export default function EditBlogForm({ blog }: { blog?: BlogDTO }) {
     defaultValues: {
       id: blog?.id,
       title: blog?.title ?? "",
+      tags: blog?.tags ?? [],
       content: blog?.content ?? "",
       date: blog?.date ?? null,
       coverImage: null,
@@ -138,7 +146,6 @@ export default function EditBlogForm({ blog }: { blog?: BlogDTO }) {
               />
             )}
           />
-
           <FileInput
             name="coverImage"
             accept="image/png, image/jpeg"
@@ -160,6 +167,18 @@ export default function EditBlogForm({ blog }: { blog?: BlogDTO }) {
                 form.setValue("coverImage", file);
               }
             }}
+          />
+          <Controller
+            name="tags"
+            control={form.control}
+            render={({ field }) => (
+              <TagSelect
+                tagCounts={tagCounts}
+                selectedTags={field.value}
+                maxResults={8}
+                onChange={(tags) => field.onChange(tags)}
+              />
+            )}
           />
           <div className="flex gap-4 mt-4">
             {blog?.slug ? (

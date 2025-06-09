@@ -1,6 +1,6 @@
 import "server-only";
 import prisma from "@/lib/prisma";
-import { Prisma, User } from "@prisma/client";
+import { BlogVisibility, Prisma, Role, User } from "@prisma/client";
 import { getUserDTO } from "./user-dto.ts";
 import { TagWithCount } from "@/types.js";
 
@@ -25,9 +25,9 @@ export async function getBlogBySlug(slug: string) {
 }
 
 function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
-  if (user?.isAdmin) return {};
-  if (!user) return { isPublic: true };
-  return { OR: [{ authorId: user.id }, { isPublic: true }] };
+  if (user?.role === Role.ADMIN) return {};
+  if (!user) return { visibility: BlogVisibility.PUBLIC };
+  return { OR: [{ authorId: user.id }, { visibility: BlogVisibility.PUBLIC }] };
 }
 
 export async function getBlogsForUser(user: User | null) {
@@ -47,7 +47,7 @@ export function getBlogDTO(blog: FullBlog) {
     content: blog.content,
     date: blog.date,
     tags: blog.tags,
-    isPublic: blog.isPublic,
+    visibility: blog.visibility,
     createdAt: blog.createdAt,
     updatedAt: blog.updatedAt,
     coverImage: blog.coverImage
@@ -68,7 +68,7 @@ export async function getBlogTagCountsForUser(
     SELECT tag, COUNT(*) as count
     FROM (
       SELECT UNNEST(tags) AS tag FROM blog
-      WHERE ${user?.isAdmin} = true OR "isPublic" = true OR ${user?.id} = "authorId"
+      WHERE ${user?.role} = 'ADMIN' OR "visibility" = 'PUBLIC' OR ${user?.id} = "authorId"
     )
     GROUP BY tag
     ORDER BY count DESC;

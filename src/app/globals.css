@@ -52,7 +52,7 @@ html {
   @apply bg-base-100 shadow-lg my-1 overflow-hidden absolute top-full w-[102%] left-[-1%];
 }
 
-.tag-select__option {
+.tag-select__menu-list > div {
   @apply px-4 py-2;
 }
 
@@ -79,4 +79,8 @@ html {
 
 .tag-select__indicator {
   @apply flex p-2;
+}
+
+.tag-select__loading-indicator {
+  @apply loading loading-dots loading-sm mx-2;
 }

@@ -20,18 +20,33 @@ const blogData: Prisma.BlogCreateInput[] = [
   },
 ];
 
+async function getUsers() {
+  const password = await hash("pass", 10);
+  const users: Prisma.UserCreateInput[] = [...new Array(10)].map((_, i) => ({
+    email: `user${i + 1}`,
+    name: `User ${i + 1}`,
+    password,
+    role: Role.USER,
+  }));
+
+  users.push({
+    email: "matt",
+    name: "matt",
+    password: await hash("mati123", 10),
+    role: Role.ADMIN,
+  });
+
+  return users;
+}
+
 export async function main() {
   for (const data of blogData) {
     await prisma.blog.create({ data });
   }
-  await prisma.user.create({
-    data: {
-      email: "matt",
-      name: "matt",
-      password: await hash("mati123", 10),
-      role: Role.ADMIN,
-    },
-  });
+
+  for (const data of await getUsers()) {
+    await prisma.user.create({ data });
+  }
 }
 
 main();

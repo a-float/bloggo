@@ -50,16 +50,18 @@ model Image {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String       @unique
   password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
   Blog      Blog[]
   avatarUrl String?
-  role      Role     @default(USER)
+  role      Role         @default(USER)
   Image     Image[]
+  friends   Friendship[] @relation("friends")
+  friendOf  Friendship[] @relation("friendOf")
 
   @@map("user")
 }
@@ -67,4 +69,21 @@ model User {
 enum Role {
   USER
   ADMIN
+}
+
+model Friendship {
+  requester   User             @relation("friendOf", fields: [requesterId], references: [id])
+  requesterId Int
+  recipient   User             @relation("friends", fields: [recipientId], references: [id])
+  recipientId Int
+  createdAt   DateTime         @default(now())
+  status      FriendshipStatus @default(PENDING)
+
+  @@id([requesterId, recipientId])
+  @@map("friendship")
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
 }

@@ -16,7 +16,7 @@ import FileInput from "@/components/form/FileInput";
 import { Textarea, Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { BlogDTO } from "@/data/blog-dto";
-import TagSelect from "@/components/TagSelect/TagSelect";
+import TagSelect from "@/components/TagSelect";
 import { TagWithCount } from "@/types";
 
 type FormValues = {

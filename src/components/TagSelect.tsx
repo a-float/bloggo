@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import CreatableSelect from "react-select/creatable";
-import { LegendLabel } from "../form/common";
+import { LegendLabel } from "./form/common";
 import { components, OptionProps } from "react-select";
 
 type TagWithCount = {
@@ -33,7 +33,7 @@ const Option = (props: OptionProps<TagWithCountOption>) => {
   );
 };
 
-const clearStyleProxy = new Proxy({}, { get: () => () => {} });
+export const clearStyleProxy = new Proxy({}, { get: () => () => {} });
 
 export default function TagSelect(props: TagSelectProps) {
   const instanceId = React.useId();
@@ -45,7 +45,6 @@ export default function TagSelect(props: TagSelectProps) {
         classNamePrefix="tag-select"
         instanceId={instanceId}
         styles={clearStyleProxy}
-        // menuIsOpen
         isClearable
         closeMenuOnSelect={false}
         isMulti

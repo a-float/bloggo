@@ -1,5 +1,5 @@
 export function objectToFormData(
-  obj: Record<string, any>,
+  obj: Record<string, unknown>,
   formData = new FormData(),
   parentKey = ""
 ): FormData {
@@ -13,8 +13,6 @@ export function objectToFormData(
       value.forEach((item) => formData.append(key, item));
     } else if (value === null) {
       formData.append(formKey, "");
-    } else if (typeof value === "object" && !(value instanceof Date)) {
-      objectToFormData(value, formData, formKey);
     } else {
       formData.append(formKey, String(value));
     }

@@ -1,6 +1,6 @@
 import { FriendshipStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
-import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
+import { UserDTO } from "@/data/user-dto.ts";
 import { getFriendshipDTO } from "@/data/friendship-dto";
 
 export async function createFriendship(

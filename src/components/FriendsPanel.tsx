@@ -2,7 +2,6 @@
 
 import { UserDTO } from "@/data/user-dto.ts";
 import React from "react";
-import { components, OptionProps } from "react-select";
 import AsyncSelect from "react-select/async";
 import { clearStyleProxy } from "./TagSelect";
 import { FriendshipDTO } from "@/data/friendship-dto";
@@ -202,7 +201,7 @@ export function FriendPanel(props: { user: UserDTO }) {
             ))}
           </div>
         ) : (
-          <p>You don't have any friends yet. Invite some!</p>
+          <p>You don&apos;t have any friends yet. Invite some!</p>
         )}
       </section>
     </div>

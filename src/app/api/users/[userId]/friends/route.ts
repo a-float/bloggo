@@ -2,10 +2,9 @@ import getUser from "@/lib/getUser";
 import { unauthorized } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import * as friendService from "@/lib/service/friend.service";
-import { FriendshipStatus } from "@prisma/client";
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;

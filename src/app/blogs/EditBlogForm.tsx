@@ -8,7 +8,6 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
 import { createBlog } from "@/actions/edit-create-blog.action";
-import { uploadFile } from "@/actions/upload-file.action";
 import { useRouter } from "next/navigation";
 import { resizeImage } from "@/lib/resizeImage";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
@@ -18,14 +17,15 @@ import Spinner from "@/components/Spinner";
 import { BlogDTO } from "@/data/blog-dto";
 import TagSelect from "@/components/TagSelect";
 import { TagWithCount } from "@/types";
+import { objectToFormData } from "@/lib/formData";
 
 type FormValues = {
-  id: number;
+  id: number | null;
   title: string;
   content: string;
   tags: string[];
   date: Date | null;
-  coverImage?: File | null;
+  images: File[];
 };
 
 type EditBlogFormProps = {
@@ -35,51 +35,39 @@ type EditBlogFormProps = {
 
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
-  const [previewImage, setPreviewImage] = React.useState<
-    { name: string; url: string } | undefined
-  >(blog?.coverImage ?? undefined);
+  const [previewImages, setPreviewImages] = React.useState(blog?.images ?? []);
 
   const [isPendingDelete, startDeleteTransition] = useTransition();
   const form = useForm<FormValues>({
     defaultValues: {
-      id: blog?.id,
+      id: blog?.id ?? null,
       title: blog?.title ?? "",
       tags: blog?.tags ?? [],
       content: blog?.content ?? "",
-      date: blog?.date ?? null,
-      coverImage: null,
+      date: blog?.date || null,
+      images: [],
     },
   });
 
-  const uploadImageIfNeeded = async (image?: File | null) => {
-    if (image && previewImage?.url !== blog?.coverImage?.url) {
-      const resizedImage = await resizeImage(image, 1024, 1024);
-      const formData = new FormData();
-      formData.set("file", resizedImage);
-      const newUrl = (await uploadFile(formData)).url;
-      setPreviewImage({ name: image.name, url: newUrl });
-      return newUrl;
-    }
-    return previewImage?.url;
-  };
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const { coverImage, ...rest } = data;
-
-    const blogData = {
-      ...rest,
-      coverImageUrl: await uploadImageIfNeeded(coverImage),
-    };
-
-    await createBlog(blogData).then((res) => {
+    const formData = objectToFormData({
+      ...data,
+      images: await Promise.all(
+        data.images.map((file) => resizeImage(file, 1024, 1024))
+      ),
+    });
+    await createBlog(formData).then((res) => {
       res.errors?.forEach((err) => {
+        if (err.field === "id") return;
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
-        if (!rest.id && res.data) router.push(`/blogs/${res.data.slug}`);
+        if (!data.id && res.data) router.push(`/blogs/${res.data.slug}`);
         if (res.message) toast.success(res.message);
       } else if (res.message) {
         toast.error(res.message);
+      } else {
+        toast.error("An error occurred while saving the blog.");
       }
     });
   };
@@ -91,6 +79,12 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
         if (res.message) toast(res.message);
       })
     );
+  };
+
+  const handleImagesClear = () => {
+    previewImages.forEach((image) => URL.revokeObjectURL(image.url));
+    setPreviewImages([]);
+    form.setValue("images", []);
   };
 
   return (
@@ -133,38 +127,46 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
           <Controller
             name="date"
             control={form.control}
-            render={({ field }) => (
-              <DayPickerInput
-                {...form.register("date")}
-                dayPickerProps={{
-                  selected: field.value ?? undefined,
-                  mode: "single",
-                }}
-                onChange={(date) => form.setValue("date", date ?? null)}
-                label="Date"
-                className="w-full"
-              />
+            render={({ field, fieldState }) => (
+              <>
+                <DayPickerInput
+                  {...form.register("date")}
+                  dayPickerProps={{
+                    selected: field.value ?? undefined,
+                    mode: "single",
+                  }}
+                  onChange={(date) => form.setValue("date", date ?? null)}
+                  label="Date"
+                  className="w-full"
+                />
+                {fieldState.error?.message ? (
+                  <p className="text-error text-sm">
+                    {fieldState.error.message}
+                  </p>
+                ) : null}
+              </>
             )}
           />
           <FileInput
-            name="coverImage"
+            name="images"
             accept="image/png, image/jpeg"
+            multiple
             label="Pick the cover image"
             className="w-full"
-            preview={previewImage}
-            onClear={() => {
-              form.setValue("coverImage", null);
-              setPreviewImage(undefined);
-            }}
+            previews={previewImages}
+            onClear={handleImagesClear}
             onChange={(e) => {
-              const file = e.target.files?.[0] ?? null;
-              if (!file) {
-                form.setValue("coverImage", null);
-                setPreviewImage(undefined);
+              const files = Array.from(e.target.files ?? []);
+              if (!files.length) {
+                handleImagesClear();
               } else {
-                const url = URL.createObjectURL(file);
-                setPreviewImage({ name: file.name, url });
-                form.setValue("coverImage", file);
+                setPreviewImages(
+                  files.map((file) => ({
+                    name: file.name,
+                    url: URL.createObjectURL(file),
+                  }))
+                );
+                form.setValue("images", files);
               }
             }}
           />

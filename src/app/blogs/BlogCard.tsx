@@ -12,17 +12,15 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
             width={400}
             height={200}
             src={
-              blog.coverImage
-                ? blog.coverImage.url
+              blog.images.length > 0
+                ? blog.images[0].url
                 : `https://picsum.photos/seed/${blog.title}/600/300`
             }
             alt=""
           />
         </figure>
         <div className="card-body">
-          <h2 className="card-title">
-            {blog.title}
-          </h2>
+          <h2 className="card-title">{blog.title}</h2>
           <span>
             {new Date(blog.date ?? blog.createdAt).toDateString()}
             {blog.author?.name ? ` by ${blog.author.name}` : null}

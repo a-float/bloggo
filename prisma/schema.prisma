@@ -21,7 +21,7 @@ model Blog {
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
   date       DateTime?
-  coverImage Image?
+  images     Image[]
   tags       String[]       @default([])
   author     User?          @relation(fields: [authorId], references: [id])
   authorId   Int?
@@ -39,12 +39,10 @@ enum BlogVisibility {
 model Image {
   id        Int      @id @default(autoincrement())
   blog      Blog?    @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  blogId    Int?     @unique
+  blogId    Int?
   name      String
   url       String   @unique
   createdAt DateTime @default(now())
-  owner     User     @relation(fields: [userId], references: [id])
-  userId    Int
 
   @@map("image")
 }
@@ -59,7 +57,6 @@ model User {
   Blog      Blog[]
   avatarUrl String?
   role      Role         @default(USER)
-  Image     Image[]
   friends   Friendship[] @relation("friends")
   friendOf  Friendship[] @relation("friendOf")
 

@@ -41,7 +41,7 @@ export function resizeImage(
       // Convert canvas to Blob
       canvas.toBlob((blob) => {
         if (blob) {
-          resolve(blob);
+          resolve(new File([blob], file.name));
         } else {
           reject(new Error("Canvas toBlob failed"));
         }

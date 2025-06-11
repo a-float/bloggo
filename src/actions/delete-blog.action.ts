@@ -26,9 +26,11 @@ export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
   try {
     await prisma.blog.delete({
       where: { id: blogId },
-      include: { coverImage: true },
+      include: { images: true },
     });
-    if (blog.coverImage?.url) uploader.remove(blog.coverImage.url);
+    for (const image of blog.images) {
+      uploader.remove(image.url);
+    }
     revalidatePath(`/blogs/${blog.slug}`);
   } catch (e) {
     console.error(e);

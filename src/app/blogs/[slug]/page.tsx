@@ -49,14 +49,19 @@ export default async function BlogPage({
 
       <div className="prose">
         <h1>{blog.title}</h1>
-        {blog.coverImage ? (
+      </div>
+      <div className="flex flex-wrap gap-2 my-4 w-full">
+        {blog.images.map((image) => (
           <img
-            src={blog.coverImage.url}
-            alt={blog.coverImage.name}
-            style={{ maxHeight: 300 }}
-            className="w-full h-96 object-cover rounded-md"
+            key={image.url}
+            src={image.url}
+            alt={image.name}
+            style={{ maxHeight: 240 }}
+            className="h-96 object-cover rounded-md"
           />
-        ) : null}
+        ))}
+      </div>
+      <div className="prose">
         <MDXContent components={{}} />
       </div>
     </>

@@ -7,7 +7,7 @@ import { FriendPanel } from "./FriendsPanel";
 const defaultAvatarUrl =
   "https://img.daisyui.com/images/profile/demo/batperson@192.webp";
 
-export async function UserBlock(props: {
+export function UserBlock(props: {
   user: NonNullable<Awaited<ReturnType<typeof getUser>>>;
 }) {
   const id = React.useId();
@@ -25,7 +25,7 @@ export async function UserBlock(props: {
           className="avatar focus-within:[&>*]:shadow-lg "
         >
           <div className="w-8 rounded-full select-none">
-            <img src={props.user.avatarUrl || defaultAvatarUrl} />
+            <img src={props.user.avatarUrl || defaultAvatarUrl} alt="User avatar" />
           </div>
         </div>
         <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">

@@ -5,13 +5,13 @@ import { getUserDTO } from "./user-dto.ts";
 import { TagWithCount } from "@/types.js";
 
 type FullBlog = Prisma.BlogGetPayload<{
-  include: { coverImage: true; author: true };
+  include: { images: true; author: true };
 }>;
 
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({
     where: { id },
-    include: { coverImage: true, author: true },
+    include: { images: true, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -19,7 +19,7 @@ export async function getBlogById(id: number) {
 export async function getBlogBySlug(slug: string) {
   const blog = await prisma.blog.findUnique({
     where: { slug },
-    include: { coverImage: true, author: true },
+    include: { images: true, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -33,7 +33,7 @@ function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
 export async function getBlogsForUser(user: User | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
-    include: { coverImage: true, author: true },
+    include: { images: true, author: true },
     orderBy: { createdAt: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));
@@ -50,12 +50,10 @@ export function getBlogDTO(blog: FullBlog) {
     visibility: blog.visibility,
     createdAt: blog.createdAt,
     updatedAt: blog.updatedAt,
-    coverImage: blog.coverImage
-      ? {
-          url: blog.coverImage.url,
-          name: blog.coverImage.name,
-        }
-      : null,
+    images: blog.images.map((image) => ({
+      url: image.url,
+      name: image.name,
+    })),
     author: blog.author ? getUserDTO(blog.author) : null,
   };
 }

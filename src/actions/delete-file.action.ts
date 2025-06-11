@@ -14,10 +14,10 @@ export async function deleteFile(url: string): Promise<void> {
   // TODO ImageDTO and getImageByUrl
   const image = await prisma.image.findUnique({
     where: { url },
-    include: { owner: true },
+    include: { blog: { include: { author: true } } },
   });
   if (!image) return notFound();
-  if (image.owner.id !== user.id && user.role !== Role.ADMIN)
+  if (image.blog?.authorId !== user.id && user.role !== Role.ADMIN)
     return unauthorized();
 
   await uploader.remove(url);

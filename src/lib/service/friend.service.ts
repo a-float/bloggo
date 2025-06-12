@@ -1,3 +1,4 @@
+import "server-only";
 import { FriendshipStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { UserDTO } from "@/data/user-dto.ts";

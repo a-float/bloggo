@@ -4,7 +4,7 @@ import * as runtime from "react/jsx-runtime";
 import React from "react";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
-import { getBlogBySlug } from "@/data/blog-dto";
+import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
 import getUser from "@/lib/getUser";
 

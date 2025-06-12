@@ -1,6 +1,6 @@
 import BlogCard from "./BlogCard";
 import Link from "next/link";
-import { getBlogsForUser } from "@/data/blog-dto";
+import { getBlogsForUser } from "@/lib/service/blog.service";
 import getUser from "@/lib/getUser";
 import { canUserCreateBlog } from "@/data/access";
 

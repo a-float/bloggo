@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { Blog, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import getUser from "@/lib/getUser";
-import { getBlogById } from "@/data/blog-dto";
+import { getBlogById } from "@/lib/service/blog.service";
 import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
 import { getFileUploader } from "@/lib/blobUploader";
 

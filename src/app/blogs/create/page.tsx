@@ -1,6 +1,6 @@
 import EditBlogForm from "@/app/blogs/EditBlogForm";
 import { canUserCreateBlog } from "@/data/access";
-import { getBlogTagCountsForUser } from "@/data/blog-dto";
+import { getBlogTagCountsForUser } from "@/lib/service/blog.service";
 import getUser from "@/lib/getUser";
 import { unauthorized } from "next/navigation";
 

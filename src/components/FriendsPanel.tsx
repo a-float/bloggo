@@ -124,7 +124,9 @@ export function FriendPanel(props: { user: UserDTO }) {
       if (response.ok) {
         const users: UserDTO[] = await response.json();
         const idsToIgnore = new Set(
-          friendships.flatMap((f) => [f.requester.id, f.recipient.id])
+          friendships
+            .flatMap((f) => [f.requester.id, f.recipient.id])
+            .concat(props.user.id)
         );
         return users.flatMap((user) => {
           if (!user) return [];

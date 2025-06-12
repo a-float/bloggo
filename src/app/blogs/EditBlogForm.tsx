@@ -18,6 +18,8 @@ import { BlogDTO } from "@/data/blog-dto";
 import TagSelect from "@/components/TagSelect";
 import { TagWithCount } from "@/types";
 import { objectToFormData } from "@/lib/formData";
+import { BlogVisibility } from "@prisma/client";
+import { Select } from "@/components/form/Select";
 
 type FormValues = {
   id: number | null;
@@ -26,6 +28,7 @@ type FormValues = {
   tags: string[];
   date: Date | null;
   images: File[];
+  visibility: BlogVisibility;
 };
 
 type EditBlogFormProps = {
@@ -47,6 +50,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
       content: blog?.content ?? "",
       date: blog?.date || null,
       images: [],
+      visibility: blog?.visibility ?? BlogVisibility.FRIENDS,
     },
   });
 
@@ -139,6 +143,16 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
             required
             className="w-full"
           />
+          <Select
+            label={"Blog visibility"}
+            {...form.register("visibility")}
+            className="w-full"
+            required
+          >
+            <option value={BlogVisibility.PUBLIC}>Everyone</option>
+            <option value={BlogVisibility.FRIENDS}>Friends only</option>
+            <option value={BlogVisibility.PRIVATE}>Just me</option>
+          </Select>
           <Controller
             name="date"
             control={form.control}
@@ -166,7 +180,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
             name="images"
             accept="image/png, image/jpeg"
             multiple
-            label="Pick the cover image"
+            label="Attach images"
             className="w-full"
             previews={previewImages}
             onClear={handleImagesClear}

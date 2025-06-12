@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import * as yup from "yup";
-import { Blog, Prisma } from "@prisma/client";
+import { Blog, BlogVisibility, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import getUser from "@/lib/getUser";
 import { getBlogById } from "@/lib/service/blog.service";
@@ -22,6 +22,7 @@ const CreateBlogSchema = yup.object({
   tags: yup.array().of(yup.string().trim().required()),
   content: yup.string().required().trim().min(1),
   images: yup.array().of(yup.mixed<File>().required()).default([]),
+  visibility: yup.string().oneOf(Object.values(BlogVisibility)).required(),
   date: yup.date().nullable(),
 });
 
@@ -36,7 +37,8 @@ function formDataToObject(formData: FormData) {
     title: formData.get("title"),
     tags: formData.getAll("tags").map((tag) => tag.toString().trim()),
     content: formData.get("content"),
-    images: formData.getAll("images") as File[],
+    images: formData.getAll("images"),
+    visibility: formData.get("visibility"),
     date: formData.get("date")
       ? new Date(formData.get("date") as string)
       : null,

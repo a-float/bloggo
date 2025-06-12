@@ -19,7 +19,7 @@ export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
   if (!user) return unauthorized();
   const blog = await getBlogById(blogId);
   if (!blog) return notFound();
-  if (canUserEditBlog(user, blog)) unauthorized();
+  if (!canUserEditBlog(user, blog)) unauthorized();
 
   const uploader = getFileUploader();
 

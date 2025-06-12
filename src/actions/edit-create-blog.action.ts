@@ -45,7 +45,6 @@ function formDataToObject(formData: FormData) {
 
 async function uploadImages(images: File[]) {
   const fileUploader = getFileUploader();
-  console.log("Uploading images:", images);
   return await Promise.all(
     images.map(async (image) => ({
       url: await fileUploader.upload(image),
@@ -101,11 +100,9 @@ export async function createBlog(formData: FormData): Promise<ActionState> {
       return { success: false, message: "Access denied." };
     }
     // Remove all old images
-    console.log("Removing old images for blog with ID:", id);
     await Promise.all(
       oldBlog.images.map((image) => getFileUploader().remove(image.url))
     );
-    console.log("Updating blog with ID:", id);
     const blog = await prisma.blog.update({
       where: { id },
       data: {

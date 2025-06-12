@@ -61,18 +61,23 @@ export function getBlogDTO(blog: FullBlog) {
 export async function getBlogTagCountsForUser(
   user: User | null
 ): Promise<TagWithCount[]> {
-  const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(
-    Prisma.sql`
+  try {
+    const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(
+      Prisma.sql`
     SELECT tag, COUNT(*) as count
     FROM (
       SELECT UNNEST(tags) AS tag FROM blog
       WHERE ${user?.role} = 'ADMIN' OR "visibility" = 'PUBLIC' OR ${user?.id} = "authorId"
-    )
+    ) as unnested_tags
     GROUP BY tag
     ORDER BY count DESC;
   `
-  );
-  return tags.map(({ tag, count }) => ({ tag, count: Number(count) }));
+    );
+    return tags.map(({ tag, count }) => ({ tag, count: Number(count) }));
+  } catch (error) {
+    console.error("Error querying blog tag counts:", error);
+    return [];
+  }
 }
 
 export type BlogDTO = Awaited<ReturnType<typeof getBlogDTO>>;

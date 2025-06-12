@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useTransition } from "react";
+import React from "react";
 import Link from "next/link";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 // import { type MDXEditorMethods } from "@mdxeditor/editor";
@@ -36,8 +36,9 @@ type EditBlogFormProps = {
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
   const [previewImages, setPreviewImages] = React.useState(blog?.images ?? []);
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
 
-  const [isPendingDelete, startDeleteTransition] = useTransition();
   const form = useForm<FormValues>({
     defaultValues: {
       id: blog?.id ?? null,
@@ -48,6 +49,8 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
       images: [],
     },
   });
+
+  const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData = objectToFormData({
@@ -62,7 +65,10 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
-        if (!data.id && res.data) router.push(`/blogs/${res.data.slug}`);
+        if (!data.id && res.data) {
+          setWaitingForRedirect(true);
+          router.push(`/blogs/${res.data.slug}`);
+        }
         if (res.message) toast.success(res.message);
       } else if (res.message) {
         toast.error(res.message);
@@ -74,11 +80,20 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
   const onDelete = () => {
     if (!blog?.id) return;
-    startDeleteTransition(() =>
-      deleteBlog(blog.id).then((res) => {
-        if (res.message) toast(res.message);
+    setIsDeleting(true);
+    deleteBlog(blog.id)
+      .then((res) => {
+        if (res.success) {
+          router.push("/blogs");
+          if (res.message) toast.success(res.message);
+        } else {
+          if (res.message) toast.error(res.message);
+        }
       })
-    );
+      .catch(() => {
+        toast.error("An error occurred while deleting the blog.");
+        setIsDeleting(false);
+      });
   };
 
   const handleImagesClear = () => {
@@ -191,17 +206,18 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 Go back
               </Link>
             ) : null}
-            <button className="btn btn-primary" type="submit">
-              {form.formState.isSubmitting ? <Spinner /> : "Save"}
+            <button className="btn btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner /> : "Save"}
             </button>
             <div className="flex-1" />
             {blog?.id ? (
               <button
                 type="button"
+                disabled={isDeleting}
                 className="btn btn-error btn-soft"
                 onClick={onDelete}
               >
-                {isPendingDelete ? <Spinner /> : "Delete"}
+                {isDeleting ? <Spinner /> : "Delete"}
               </button>
             ) : null}
           </div>

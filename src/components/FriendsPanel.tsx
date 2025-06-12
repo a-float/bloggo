@@ -161,7 +161,6 @@ export function FriendPanel(props: { user: UserDTO }) {
         value={null}
         onChange={(selectedOption) => {
           if (!selectedOption) return;
-          console.log("Selected option:", selectedOption);
           inviteFriend(selectedOption.data.id).then(refetch);
         }}
         formatOptionLabel={(option: UserOption) => (

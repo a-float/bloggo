@@ -22,7 +22,6 @@ export default function LoginForm() {
 
   const onSubmit = async (data: { email: string; password: string }) => {
     const result = await signIn("credentials", { ...data, redirect: false });
-    console.log(result);
     if (result?.error) {
       toast.error(
         result.error === "CredentialsSignin"

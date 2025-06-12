@@ -1,7 +1,7 @@
 "use server";
 
 import { canUserEditBlog } from "@/data/access";
-import { getBlogById } from "@/data/blog-dto";
+import { getBlogById } from "@/lib/service/blog.service";
 import { getFileUploader } from "@/lib/blobUploader";
 import getUser from "@/lib/getUser";
 import prisma from "@/lib/prisma";

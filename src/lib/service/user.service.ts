@@ -1,3 +1,4 @@
+import "server-only";
 import { getUserDTO } from "@/data/user-dto.ts";
 import prisma from "../prisma";
 

@@ -10,12 +10,12 @@ export default function FileInput(props: FileInputProps) {
   const { label, error, onClear, ...rest } = props;
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const clearInput = () => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-    onClear?.();
-  };
+  // const clearInput = () => {
+  //   if (inputRef.current) {
+  //     inputRef.current.value = "";
+  //   }
+  //   onClear?.();
+  // };
 
   return (
     <fieldset className="fieldset">

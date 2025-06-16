@@ -8,6 +8,7 @@ import getUser from "@/lib/getUser";
 import { getBlogById } from "@/lib/service/blog.service";
 import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
 import { getFileUploader } from "@/lib/blobUploader";
+import { ImageResponse } from "next/server";
 
 export type ActionState = {
   success: boolean;
@@ -21,46 +22,31 @@ const CreateBlogSchema = yup.object({
   title: yup.string().required().trim().min(1),
   tags: yup.array().of(yup.string().trim().required()),
   content: yup.string().required().trim().min(1),
-  images: yup.array().of(yup.mixed<File>().required()).default([]),
+  images: yup
+    .array()
+    .of(
+      yup.object({
+        url: yup.string().required(),
+        order: yup.number().required(),
+      })
+    )
+    .required(),
   visibility: yup.string().oneOf(Object.values(BlogVisibility)).required(),
   date: yup.date().nullable(),
 });
+
+type CreateBlogInput = yup.InferType<typeof CreateBlogSchema>;
 
 const capitalize = (str: string) =>
   str.slice(0, 1).toUpperCase() + str.slice(1);
 
 // Wish I could return 401 for unauthorized access and 404 for not found, but Next.js doesn't let me do that :(
 
-function formDataToObject(formData: FormData) {
-  return {
-    id: formData.get("id") ? formData.get("id") : null,
-    title: formData.get("title"),
-    tags: formData.getAll("tags").map((tag) => tag.toString().trim()),
-    content: formData.get("content"),
-    images: formData.getAll("images"),
-    visibility: formData.get("visibility"),
-    date: formData.get("date")
-      ? new Date(formData.get("date") as string)
-      : null,
-  };
-}
-
-async function uploadImages(images: File[]) {
-  const fileUploader = getFileUploader();
-  return await Promise.all(
-    images.map(async (image) => ({
-      url: await fileUploader.upload(image),
-      name: image.name,
-    }))
-  );
-}
-
-export async function createBlog(formData: FormData): Promise<ActionState> {
+export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
   const user = await getUser();
   if (!user) return { success: false, message: "Access denied." };
   const errors: ActionState["errors"] = [];
 
-  const input = formDataToObject(formData);
   const parsedInput = await CreateBlogSchema.validate(input, {
     abortEarly: false,
   }).catch((e: yup.ValidationError) => {
@@ -73,27 +59,45 @@ export async function createBlog(formData: FormData): Promise<ActionState> {
   if (errors.length > 0 || !parsedInput) return { success: false, errors };
 
   const { id, tags, images, ...rest } = parsedInput;
-  const uploadedImages = await uploadImages(images);
-  const dataNoImages: Prisma.BlogCreateInput = {
+
+  const data: Prisma.BlogCreateInput = {
     ...rest,
     tags: [...new Set(tags ?? [])],
   };
 
+  const imagesWhere: Prisma.ImageWhereUniqueInput[] = images.map((image) => ({
+    url: image.url,
+  }));
+
+  const updateImagesOrder = () =>
+    images.map((image) =>
+      prisma.image.update({
+        data: { order: image.order },
+        where: { url: image.url },
+      })
+    );
+
   if (!id) {
+    // Creating a new blog
     if (!canUserCreateBlog(user)) {
       return { success: false, message: "Access denied." };
     }
-    const blog = await prisma.blog.create({
-      data: {
-        ...dataNoImages,
-        images: { create: uploadedImages },
-        author: { connect: { id: user.id } },
-      },
-    });
+    const [blog] = await prisma.$transaction([
+      prisma.blog.create({
+        data: {
+          ...data,
+          images: { connect: imagesWhere },
+          author: { connect: { id: user.id } },
+        },
+      }),
+      ...updateImagesOrder(),
+    ]);
+
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);
     return { success: true, message: "Blog updated successfully.", data: blog };
   } else {
+    // Editing an existing blog
     const oldBlog = await getBlogById(id);
     if (!oldBlog) {
       return { success: false, message: "Blog not found." };
@@ -101,17 +105,15 @@ export async function createBlog(formData: FormData): Promise<ActionState> {
     if (!canUserEditBlog(user, oldBlog)) {
       return { success: false, message: "Access denied." };
     }
-    // Remove all old images
-    await Promise.all(
-      oldBlog.images.map((image) => getFileUploader().remove(image.url))
-    );
-    const blog = await prisma.blog.update({
-      where: { id },
-      data: {
-        ...dataNoImages,
-        images: { deleteMany: {}, create: uploadedImages },
-      },
-    });
+
+    const [blog] = await prisma.$transaction([
+      prisma.blog.update({
+        where: { id },
+        data: { ...data, images: { set: imagesWhere } },
+      }),
+      ...updateImagesOrder(),
+    ]);
+
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);
     return { success: true, message: "Blog updated successfully.", data: blog };

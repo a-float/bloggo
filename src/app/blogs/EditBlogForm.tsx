@@ -11,15 +11,17 @@ import { createBlog } from "@/actions/edit-create-blog.action";
 import { useRouter } from "next/navigation";
 import { resizeImage } from "@/lib/resizeImage";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
-import FileInput from "@/components/form/FileInput";
 import { Textarea, Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { BlogDTO } from "@/data/blog-dto";
 import TagSelect from "@/components/TagSelect";
 import { TagWithCount } from "@/types";
-import { objectToFormData } from "@/lib/formData";
 import { BlogVisibility } from "@prisma/client";
 import { Select } from "@/components/form/Select";
+import { uploadFiles } from "@/actions/upload-files.action";
+import { BlobManager } from "@/lib/blobManager";
+import { type ItemInterface, ReactSortable } from "react-sortablejs";
+import { LegendLabel } from "@/components/form/common";
 
 type FormValues = {
   id: number | null;
@@ -27,7 +29,6 @@ type FormValues = {
   content: string;
   tags: string[];
   date: Date | null;
-  images: File[];
   visibility: BlogVisibility;
 };
 
@@ -36,11 +37,17 @@ type EditBlogFormProps = {
   tagCounts: TagWithCount[];
 };
 
+type SortableImage = ItemInterface & { url: string };
+
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
-  const [previewImages, setPreviewImages] = React.useState(blog?.images ?? []);
+  const blobManagerRef = React.useRef(new BlobManager());
+
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
+  const [imagePreviews, setImagePreviews] = React.useState<SortableImage[]>(
+    blog?.images ?? []
+  );
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -49,27 +56,41 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
       tags: blog?.tags ?? [],
       content: blog?.content ?? "",
       date: blog?.date || null,
-      images: [],
       visibility: blog?.visibility ?? BlogVisibility.FRIENDS,
     },
   });
 
   const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
+  const uploadNewImages = async (images: typeof imagePreviews) => {
+    const formData = new FormData();
+    for (const image of images) {
+      const file = blobManagerRef.current.getObjectForUrl(image.url);
+      if (!file) continue;
+      const resizedImage = await resizeImage(file as File, 1024, 1024);
+      formData.append("file", resizedImage);
+    }
+    const uploaded = await uploadFiles(formData);
+    let i = 0;
+    return images.map((image, idx) => ({
+      order: idx,
+      name: image.name,
+      url: blobManagerRef.current.getObjectForUrl(image.url)
+        ? uploaded[i++].url
+        : image.url,
+    }));
+  };
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const formData = objectToFormData({
-      ...data,
-      images: await Promise.all(
-        data.images.map((file) => resizeImage(file, 1024, 1024))
-      ),
-    });
-    await createBlog(formData).then((res) => {
+    const body = { ...data, images: await uploadNewImages(imagePreviews) };
+    await createBlog(body).then((res) => {
       res.errors?.forEach((err) => {
         if (err.field === "id") return;
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
         if (!data.id && res.data) {
+          // If this is a new blog, redirect to the new blog page
           setWaitingForRedirect(true);
           router.push(`/blogs/${res.data.slug}`);
         }
@@ -98,12 +119,6 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
         toast.error("An error occurred while deleting the blog.");
         setIsDeleting(false);
       });
-  };
-
-  const handleImagesClear = () => {
-    previewImages.forEach((image) => URL.revokeObjectURL(image.url));
-    setPreviewImages([]);
-    form.setValue("images", []);
   };
 
   return (
@@ -176,29 +191,51 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
               </>
             )}
           />
-          <FileInput
-            name="images"
-            accept="image/png, image/jpeg"
-            multiple
-            label="Attach images"
-            className="w-full"
-            previews={previewImages}
-            onClear={handleImagesClear}
-            onChange={(e) => {
-              const files = Array.from(e.target.files ?? []);
-              if (!files.length) {
-                handleImagesClear();
-              } else {
-                setPreviewImages(
-                  files.map((file) => ({
-                    name: file.name,
-                    url: URL.createObjectURL(file),
-                  }))
-                );
-                form.setValue("images", files);
-              }
-            }}
-          />
+          <fieldset className="fieldset">
+            <LegendLabel>Attach images</LegendLabel>
+            <input
+              type="file"
+              className="file-input w-full"
+              key={imagePreviews.length}
+              name="imageFiles"
+              accept="image/png, image/jpeg"
+              multiple
+              onChange={(e) => {
+                const files = Array.from(e.target.files ?? []);
+                if (!files.length) return;
+                const newFiles = files.map((file) => {
+                  const url = blobManagerRef.current.createObjectURL(file);
+                  return { name: file.name, url, id: url };
+                });
+                setImagePreviews((prev) => [...newFiles, ...prev]);
+              }}
+            />
+            <ReactSortable list={imagePreviews} setList={setImagePreviews}>
+              {imagePreviews.map((item) => (
+                <div key={item.id}>
+                  <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
+                    <img
+                      className="h-[36px] w-[36px] text-info rounded-sm object-cover"
+                      alt=""
+                      src={item.url}
+                    />
+                    <span>{item.name}</span>
+                    <div className="flex-1" />
+                    <button
+                      className="btn btn-xs btn-soft btn-error"
+                      onClick={() =>
+                        setImagePreviews((prev) =>
+                          prev.filter((x) => x.url !== item.url)
+                        )
+                      }
+                    >
+                      X
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </ReactSortable>
+          </fieldset>
           <Controller
             name="tags"
             control={form.control}

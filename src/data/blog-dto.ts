@@ -17,6 +17,7 @@ export function getBlogDTO(blog: FullBlog) {
     createdAt: blog.createdAt,
     updatedAt: blog.updatedAt,
     images: blog.images.map((image) => ({
+      id: image.id,
       url: image.url,
       name: image.name,
     })),

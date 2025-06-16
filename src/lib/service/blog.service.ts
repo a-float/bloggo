@@ -13,7 +13,7 @@ import prisma from "../prisma";
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({
     where: { id },
-    include: { images: true, author: true },
+    include: { images: { orderBy: { order: "asc" } }, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -64,7 +64,7 @@ function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
 export async function getBlogsForUser(user: User | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
-    include: { images: true, author: true },
+    include: { images: { orderBy: { order: "asc" } }, author: true },
     orderBy: { createdAt: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));

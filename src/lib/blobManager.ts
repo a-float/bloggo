@@ -1,36 +1,28 @@
-const blobs: Record<string, Blob | null> = {};
+export class BlobManager {
+  blobs: Record<string, Blob | null> = {};
 
-function createObjectURL(blob: Blob) {
-  const url = URL.createObjectURL(blob);
-  blobs[url] = blob;
-  return url;
-}
+  createObjectURL(blob: Blob) {
+    const url = URL.createObjectURL(blob);
+    this.blobs[url] = blob;
+    return url;
+  }
 
-function getObjectForUrl(url: string) {
-  return blobs[url] ?? null;
-}
+  getObjectForUrl(url: string) {
+    return this.blobs[url] ?? null;
+  }
 
-function revokeObjectUrl(url: string) {
-  URL.revokeObjectURL(url);
-  if (blobs[url]) delete blobs[url];
-}
+  revokeObjectUrl(url: string) {
+    URL.revokeObjectURL(url);
+    if (this.blobs[url]) delete this.blobs[url];
+  }
 
-function getAllBlobs() {
-  return blobs;
-}
+  getAllBlobs() {
+    return this.blobs;
+  }
 
-function revokeAllBlobs() {
-  for (const url in blobs) {
-    revokeObjectUrl(url);
+  revokeAllBlobs() {
+    for (const url in this.blobs) {
+      this.revokeObjectUrl(url);
+    }
   }
 }
-
-const blobManager = {
-  createObjectURL,
-  getObjectForUrl,
-  revokeObjectUrl,
-  revokeAllBlobs,
-  getAllBlobs,
-} as const;
-
-export default blobManager;

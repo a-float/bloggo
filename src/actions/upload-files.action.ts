@@ -13,7 +13,7 @@ export async function uploadFiles(
 
   const uploader = getFileUploader();
   const files = formData.getAll("file");
-  const uploadPromises = files.map(async (file, idx) => {
+  const uploadPromises = files.map(async (file) => {
     if (!file || !(file instanceof File)) throw new Error("No file provided");
     const data = { url: await uploader.upload(file as File), name: file.name };
     await prisma.image.create({

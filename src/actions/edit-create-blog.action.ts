@@ -7,8 +7,6 @@ import { revalidatePath } from "next/cache";
 import getUser from "@/lib/getUser";
 import { getBlogById } from "@/lib/service/blog.service";
 import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
-import { getFileUploader } from "@/lib/blobUploader";
-import { ImageResponse } from "next/server";
 
 export type ActionState = {
   success: boolean;

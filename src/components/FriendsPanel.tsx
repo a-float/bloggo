@@ -33,7 +33,7 @@ function acceptFriend(friendId: number) {
 const useFriends = (userId: number) => {
   const [friendships, setFriendships] = React.useState<FriendshipDTO[]>([]);
 
-  const fetchFriends = async () => {
+  const fetchFriends = React.useCallback(async () => {
     try {
       const response = await fetch(`/api/users/${userId}/friends`);
       if (response.ok) {
@@ -45,11 +45,11 @@ const useFriends = (userId: number) => {
     } catch (error) {
       console.error("Error fetching friends:", error);
     }
-  };
+  }, [userId, setFriendships]);
 
   React.useEffect(() => {
     fetchFriends();
-  }, []);
+  }, [fetchFriends]);
 
   return { friendships, setFriendships, refetch: fetchFriends };
 };

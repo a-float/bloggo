@@ -25,12 +25,14 @@ export function UserBlock(props: {
           className="avatar focus-within:[&>*]:shadow-lg "
         >
           <div className="w-8 rounded-full select-none">
-            <img src={props.user.avatarUrl || defaultAvatarUrl} alt="User avatar" />
+            <img
+              src={props.user.avatarUrl || defaultAvatarUrl}
+              alt="User avatar"
+            />
           </div>
         </div>
         <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">
           <li>
-            {/* TODO doesnt take the full width */}
             <DrawerToggle drawerId={id}>Friends</DrawerToggle>
           </li>
           <li>

@@ -1,11 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake;
-}
-
-html {
-  scrollbar-gutter: auto !important;
+  themes: all;
 }
 
 .embla {

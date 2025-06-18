@@ -10,7 +10,8 @@
     "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
     "type:check": "tsc --noEmit",
     "db:push": "prisma generate && prisma db push",
-    "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed "
+    "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed",
+    "prepare": "husky"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
@@ -58,6 +59,7 @@
     "daisyui": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.1",
+    "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

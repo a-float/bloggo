@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
 import LoginControl from "@/components/LoginControl";
+import { FaGithub } from "react-icons/fa6";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -46,6 +47,14 @@ export default function RootLayout({
         </div>
         {children}
         <Toaster />
+        <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+          <aside className="flex justify-center items-center gap-2">
+            Created by Mati
+            <Link href="https://github.com/a-float">
+              <FaGithub />
+            </Link>
+          </aside>
+        </footer>
       </body>
     </html>
   );

@@ -44,7 +44,7 @@ export default async function BlogPage({
       ) : null}
 
       <div className="mx-auto prose max-w-[80ch]">
-        <div className="mb-4">
+        <div className="mb-4 text-sm">
           Published on {blog.createdAt.toLocaleDateString("en-US")}
           {blog.author ? ` by ${blog.author.name}` : ""}
         </div>

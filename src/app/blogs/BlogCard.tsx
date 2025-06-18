@@ -26,13 +26,15 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
             {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
           <p className="line-clamp-2">{blog.content.slice(0, 256)}</p>
-          <div className="card-actions justify-end">
-            {blog.tags.map((tag) => (
-              <div key={tag} className="badge badge-outline">
-                {tag}
-              </div>
-            ))}
-          </div>
+          {blog.tags.length > 0 && (
+            <div className="card-actions justify-end">
+              {blog.tags.map((tag) => (
+                <div key={tag} className="badge badge-outline">
+                  {tag}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </Link>

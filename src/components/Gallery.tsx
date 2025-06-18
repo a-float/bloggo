@@ -60,7 +60,8 @@ export default function Gallery(props: GalleryProps) {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        // modal-open DaisyUI handles root overflow and gutter
+        <div className="fixed inset-0 z-50 flex items-center justify-center modal-open">
           <div
             className="inset-0 -z-10 bg-black opacity-75 fixed"
             onClick={closeModal}

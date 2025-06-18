@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@source "../../src";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark, cupcake;
@@ -7,6 +6,17 @@
 
 html {
   scrollbar-gutter: auto !important;
+}
+
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__container > * {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 .tag-select__container {

@@ -5,7 +5,7 @@ import { BlogDTO } from "@/data/blog-dto";
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <Link href={`/blogs/${blog.slug}`}>
-      <div className="card h-full bg-base-100 shadow-lg">
+      <div className="card card-border h-full bg-base-100 shadow-lg">
         <figure>
           <Image
             className="w-full object-cover h-36"

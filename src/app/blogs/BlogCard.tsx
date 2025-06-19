@@ -1,31 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
 import { BlogDTO } from "@/data/blog-dto";
+import dayjs from "dayjs";
 
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <Link href={`/blogs/${blog.slug}`}>
-      <div className="card card-border h-full bg-base-100 shadow-lg">
-        <figure>
+      <div className="card card-side card-border h-full bg-base-100 shadow-lg ">
+        <figure className="flex-[0_0_96px] md:flex-[0_0_128px]">
           <Image
-            className="w-full object-cover h-36"
-            width={400}
-            height={200}
+            className="object-cover w-full"
+            width={125}
+            height={150}
             src={
-              blog.images.length > 0
-                ? blog.images[0].url
-                : `https://picsum.photos/seed/${blog.title}/600/300`
+              blog.images.at(0)?.url ||
+              `https://picsum.photos/seed/${blog.title}/600/300`
             }
             alt=""
           />
         </figure>
         <div className="card-body">
           <h2 className="card-title">{blog.title}</h2>
-          <span>
-            {new Date(blog.date ?? blog.createdAt).toDateString()}
+          <span className="text-xs">
+            {dayjs(blog.date ?? blog.createdAt).format("MMM D, YYYY")}
             {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
-          <p className="line-clamp-2">{blog.content.slice(0, 256)}</p>
+          <p className="line-clamp-2 flex-none">{blog.content}</p>
           {blog.tags.length > 0 && (
             <div className="card-actions justify-end">
               {blog.tags.map((tag) => (

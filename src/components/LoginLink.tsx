@@ -6,7 +6,7 @@ export default function LoginLink() {
   return (
     <a
       href="/auth/login"
-      className="btn btn-primary btn-sm"
+      className="btn btn-ghost btn-sm"
       onClick={(e) => {
         if (location.pathname === "/auth/login") return;
         e.preventDefault();

@@ -32,8 +32,8 @@ export default function Gallery(props: GalleryProps) {
   };
 
   const closeModal = React.useCallback(() => {
-    router.back();
-  }, [router]);
+    if (isOpen) router.back();
+  }, [router, isOpen]);
 
   useKeyPress({ key: "Escape", onKeyPressed: closeModal });
 

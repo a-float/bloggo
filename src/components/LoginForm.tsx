@@ -58,7 +58,13 @@ export default function LoginForm() {
           {form.formState.isSubmitting ? <Spinner /> : "Sign In"}
         </button>
       </form>
-      <div className="divider">OR</div>
+      <p className="mt-4 text-center">
+        Don&apos;t have an account?{" "}
+        <Link href="./register" className="text-primary underline">
+          Register here
+        </Link>
+      </p>
+      <div className="divider my-6">OR</div>
       <button
         className="btn bg-white text-black border-[#e5e5e5] w-full"
         onClick={() => signIn("google", { callbackUrl: getRedirectUrl() })}
@@ -92,12 +98,6 @@ export default function LoginForm() {
         </svg>
         Login with Google
       </button>
-      <p className="mt-4 text-center">
-        Don&apos;t have an account?{" "}
-        <Link href="./register" className="text-primary underline">
-          Register here
-        </Link>
-      </p>
     </div>
   );
 }

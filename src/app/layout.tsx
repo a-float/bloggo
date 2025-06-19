@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Toaster } from "react-hot-toast";
 import LoginControl from "@/components/LoginControl";
 import { FaGithub } from "react-icons/fa6";
+import { ThemeController } from "@/components/ThemeController";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -27,7 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script>
+          {`document.documentElement.setAttribute("data-theme", localStorage.getItem("theme"))`}
+        </script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
@@ -43,7 +49,10 @@ export default function RootLayout({
             </ul>
           </div>
           <div className="flex-1" />
-          <LoginControl />
+          <div className="flex gap-2 justify-between items-center">
+            <ThemeController />
+            <LoginControl />
+          </div>
         </div>
         {children}
         <Toaster />

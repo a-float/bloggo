@@ -24,7 +24,7 @@ export function UserBlock(props: {
           role="button"
           className="avatar focus-within:[&>*]:shadow-lg "
         >
-          <div className="w-8 rounded-full select-none">
+          <div className="w-6 md:w-8 rounded-full select-none">
             <img
               src={props.user.avatarUrl || defaultAvatarUrl}
               alt="User avatar"

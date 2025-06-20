@@ -6,8 +6,8 @@ import dayjs from "dayjs";
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <Link href={`/blogs/${blog.slug}`}>
-      <div className="card card-side card-border h-full bg-base-100 shadow-lg ">
-        <figure className="flex-[0_0_96px] md:flex-[0_0_128px]">
+      <div className="card card-sm card-side card-border h-full bg-base-100 shadow-lg ">
+        <figure className="flex-[0_0_96px] sm:flex-[0_0_128px]">
           <Image
             className="object-cover w-full"
             width={125}
@@ -21,15 +21,24 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         </figure>
         <div className="card-body">
           <h2 className="card-title">{blog.title}</h2>
-          <span className="text-xs">
+          <span className="text-xs whitespace-pre text-base-content/60">
             {dayjs(blog.date ?? blog.createdAt).format("MMM D, YYYY")}
             {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
-          <p className="line-clamp-2 flex-none">{blog.content}</p>
+          <p
+            className={`${
+              blog.tags.length > 0 ? "line-clamp-1" : "line-clamp-2"
+            } flex-none`}
+          >
+            {blog.content}
+          </p>
           {blog.tags.length > 0 && (
-            <div className="card-actions justify-end">
+            <div className="flex gap-1 flex-wrap justify-end">
               {blog.tags.map((tag) => (
-                <div key={tag} className="badge badge-outline">
+                <div
+                  key={tag}
+                  className="badge not-hover:badge-ghost badge-sm hover:badge-primary transition-colors"
+                >
                   {tag}
                 </div>
               ))}

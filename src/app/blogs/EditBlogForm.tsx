@@ -22,6 +22,7 @@ import { uploadFiles } from "@/actions/upload-files.action";
 import { BlobManager } from "@/lib/blobManager";
 import { type ItemInterface, ReactSortable } from "react-sortablejs";
 import { LegendLabel } from "@/components/form/common";
+import { FaChevronLeft } from "react-icons/fa6";
 
 type FormValues = {
   id: number | null;
@@ -122,158 +123,172 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
-      <div className="flex flex-row gap-8">
-        <div className="mt-0 flex-2/3">
-          <Controller
-            name="content"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <>
-                <Textarea
-                  required
-                  label="Content"
-                  className="textarea w-full h-96"
-                  {...field}
-                />
-                {/* <ForwardRefMDXEditor
+    <>
+      <div className="flex gap-4 items-center mb-6">
+        {!!blog?.slug && (
+          <Link className="btn btn-sm btn-soft" href={`/blogs/${blog.slug}`}>
+            <FaChevronLeft /> <span className="sr-only">Go back</span>
+          </Link>
+        )}
+        <h1 className="text-3xl">
+          {blog?.id ? (
+            <span>
+              Edit <span className="font-bold">{blog.title}</span>
+            </span>
+          ) : (
+            "Create new blog"
+          )}
+        </h1>
+      </div>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col flex-1"
+      >
+        <div className="lg:flex gap-8 lg:[&_fieldset:not(:last-child)]:mb-1">
+          <div className="flex flex-col flex-[1.5]">
+            <Input
+              {...form.register("title")}
+              defaultValue={blog?.title ?? ""}
+              label="Title"
+              required
+              className="w-full"
+            />
+            <Controller
+              name="content"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <>
+                  <Textarea
+                    required
+                    label="Content"
+                    className="textarea w-full resize-none flex-1 min-h-[64px] md:min-h-[256px] field-sizing-content"
+                    {...field}
+                  />
+                  {/* <ForwardRefMDXEditor
                   ref={editorRef}
                   markdown={field.value}
                   onChange={field.onChange}
                   onBlur={field.onBlur}
                   contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
                 /> */}
-                {fieldState.error ? (
-                  <p className="text-error">{fieldState.error?.message}</p>
-                ) : null}
-              </>
-            )}
-          />
-        </div>
-        <div className="flex-1/3">
-          <Input
-            {...form.register("title")}
-            defaultValue={blog?.title ?? ""}
-            label="Title"
-            required
-            className="w-full"
-          />
-          <Select
-            label={"Blog visibility"}
-            {...form.register("visibility")}
-            className="w-full"
-            required
-          >
-            <option value={BlogVisibility.PUBLIC}>Everyone</option>
-            <option value={BlogVisibility.FRIENDS}>Friends only</option>
-            <option value={BlogVisibility.PRIVATE}>Just me</option>
-          </Select>
-          <Controller
-            name="date"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <>
-                <DayPickerInput
-                  {...form.register("date")}
-                  dayPickerProps={{
-                    selected: field.value ?? undefined,
-                    mode: "single",
-                  }}
-                  onChange={(date) => form.setValue("date", date ?? null)}
-                  label="Date"
-                  className="w-full"
-                />
-                {fieldState.error?.message ? (
-                  <p className="text-error text-sm">
-                    {fieldState.error.message}
-                  </p>
-                ) : null}
-              </>
-            )}
-          />
-          <fieldset className="fieldset">
-            <LegendLabel>Attach images</LegendLabel>
-            <input
-              type="file"
-              className="file-input w-full"
-              key={imagePreviews.length}
-              name="imageFiles"
-              accept="image/png, image/jpeg"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files ?? []);
-                if (!files.length) return;
-                const newFiles = files.map((file) => {
-                  const url = blobManagerRef.current.createObjectURL(file);
-                  return { name: file.name, url, id: url };
-                });
-                setImagePreviews((prev) => [...newFiles, ...prev]);
-              }}
+                  {fieldState.error ? (
+                    <p className="text-error">{fieldState.error?.message}</p>
+                  ) : null}
+                </>
+              )}
             />
-            <ReactSortable list={imagePreviews} setList={setImagePreviews}>
-              {imagePreviews.map((item) => (
-                <div key={item.id}>
-                  <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
-                    <img
-                      className="h-[36px] w-[36px] text-info rounded-sm object-cover"
-                      alt=""
-                      src={item.url}
-                    />
-                    <span>{item.name}</span>
-                    <div className="flex-1" />
-                    <button
-                      className="btn btn-xs btn-soft btn-error"
-                      onClick={() =>
-                        setImagePreviews((prev) =>
-                          prev.filter((x) => x.url !== item.url)
-                        )
-                      }
-                    >
-                      X
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </ReactSortable>
-          </fieldset>
-          <Controller
-            name="tags"
-            control={form.control}
-            render={({ field }) => (
-              <TagSelect
-                tagCounts={tagCounts}
-                selectedTags={field.value}
-                maxResults={8}
-                onChange={(tags) => field.onChange(tags)}
+          </div>
+          <div className="flex-1">
+            <Select
+              label={"Blog visibility"}
+              defaultValue={form.formState.defaultValues?.visibility}
+              {...form.register("visibility")}
+              className="w-full"
+              required
+            >
+              <option value={BlogVisibility.PUBLIC}>🌍 Everyone</option>
+              <option value={BlogVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends only</option>
+              <option value={BlogVisibility.PRIVATE}>🔒 Just me</option>
+            </Select>
+            <Controller
+              name="date"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <>
+                  <DayPickerInput
+                    {...form.register("date")}
+                    dayPickerProps={{
+                      selected: field.value ?? undefined,
+                      mode: "single",
+                    }}
+                    onChange={(date) => form.setValue("date", date ?? null)}
+                    label="Date"
+                    className="w-full"
+                  />
+                  {fieldState.error?.message ? (
+                    <p className="text-error text-sm">
+                      {fieldState.error.message}
+                    </p>
+                  ) : null}
+                </>
+              )}
+            />
+            <fieldset className="fieldset">
+              <LegendLabel>Attach images</LegendLabel>
+              <input
+                type="file"
+                className="file-input w-full"
+                key={imagePreviews.length}
+                name="imageFiles"
+                accept="image/png, image/jpeg"
+                multiple
+                onChange={(e) => {
+                  const files = Array.from(e.target.files ?? []);
+                  if (!files.length) return;
+                  const newFiles = files.map((file) => {
+                    const url = blobManagerRef.current.createObjectURL(file);
+                    return { name: file.name, url, id: url };
+                  });
+                  setImagePreviews((prev) => [...newFiles, ...prev]);
+                }}
               />
-            )}
-          />
-          <div className="flex gap-4 mt-4">
-            {blog?.slug ? (
-              <Link
-                className="btn btn-primary btn-outline"
-                href={`/blogs/${blog.slug}`}
-              >
-                Go back
-              </Link>
-            ) : null}
-            <button className="btn btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? <Spinner /> : "Save"}
-            </button>
-            <div className="flex-1" />
-            {blog?.id ? (
-              <button
-                type="button"
-                disabled={isDeleting}
-                className="btn btn-error btn-soft"
-                onClick={onDelete}
-              >
-                {isDeleting ? <Spinner /> : "Delete"}
+              <ReactSortable list={imagePreviews} setList={setImagePreviews}>
+                {imagePreviews.map((item) => (
+                  <div key={item.id}>
+                    <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
+                      <img
+                        className="h-[36px] w-[36px] text-info rounded-sm object-cover"
+                        alt=""
+                        src={item.url}
+                      />
+                      <span>{item.name}</span>
+                      <div className="flex-1" />
+                      <button
+                        className="btn btn-xs btn-soft btn-error"
+                        onClick={() =>
+                          setImagePreviews((prev) =>
+                            prev.filter((x) => x.url !== item.url)
+                          )
+                        }
+                      >
+                        X <span className="sr-only">Remove image</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </ReactSortable>
+            </fieldset>
+            <Controller
+              name="tags"
+              control={form.control}
+              render={({ field }) => (
+                <TagSelect
+                  tagCounts={tagCounts}
+                  selectedTags={field.value}
+                  maxResults={8}
+                  onChange={(tags) => field.onChange(tags)}
+                />
+              )}
+            />
+            <div className="flex justify-between mt-4">
+              {!!blog?.id && (
+                <button
+                  type="button"
+                  disabled={isDeleting}
+                  className="btn btn-error btn-soft"
+                  onClick={onDelete}
+                >
+                  {isDeleting ? <Spinner /> : "Delete"}
+                </button>
+              )}
+              <div className="flex-1" />
+              <button className="btn btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? <Spinner /> : "Save"}
               </button>
-            ) : null}
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }

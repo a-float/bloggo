@@ -8,6 +8,7 @@ import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
 import getUser from "@/lib/getUser";
 import Gallery from "@/components/Gallery";
+import dayjs from "dayjs";
 
 export default async function BlogPage({
   params,
@@ -35,21 +36,24 @@ export default async function BlogPage({
 
   return (
     <>
-      {canUserEditBlog(user, blog) ? (
-        <div className="float-right">
-          <Link className="btn btn-secondary" href={`/blogs/${slug}/edit`}>
-            Edit
-          </Link>
+      <div className="self-center prose w-full max-w-[80ch] flex-1 mt-4">
+        <div className="flex justify-between">
+          <h1>{blog.title}</h1>
+          <div className="flex-1" />
+          {canUserEditBlog(user, blog) && (
+            <Link
+              className="btn btn-secondary btn-soft"
+              href={`/blogs/${slug}/edit`}
+            >
+              Edit
+            </Link>
+          )}
         </div>
-      ) : null}
-
-      <div className="mx-auto prose max-w-[80ch]">
-        <div className="mb-4 text-sm">
-          Published on {blog.createdAt.toLocaleDateString("en-US")}
+        <div className="text-sm -mt-4">
+          {dayjs(blog.createdAt).format("MMMM D, YYYY")}
           {blog.author ? ` by ${blog.author.name}` : ""}
         </div>
-
-        <h1>{blog.title}</h1>
+        <div className="divider" />
         {blog.images.length > 0 && (
           <Gallery
             images={blog.images.map((image) => image.url)}

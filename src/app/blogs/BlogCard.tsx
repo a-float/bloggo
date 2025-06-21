@@ -22,7 +22,7 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         <div className="card-body">
           <h2 className="card-title">{blog.title}</h2>
           <span className="text-xs whitespace-pre text-base-content/60">
-            {dayjs(blog.date ?? blog.createdAt).format("MMM D, YYYY")}
+            {dayjs(blog.date ?? blog.createdAt).format("MMMM D, YYYY")}
             {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
           <p

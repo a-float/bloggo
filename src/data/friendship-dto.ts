@@ -12,6 +12,7 @@ export function getFriendshipDTO(
     requester: getUserDTO(friendship.requester),
     recipient: getUserDTO(friendship.recipient),
     status: friendship.status,
+    createdAt: friendship.createdAt.getTime(),
   };
 }
 

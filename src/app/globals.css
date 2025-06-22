@@ -88,5 +88,5 @@
 }
 
 .tag-select__loading-indicator {
-  @apply loading loading-dots loading-sm mx-2;
+  @apply loading loading-dots loading-xs mx-2 flex;
 }

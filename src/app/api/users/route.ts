@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const query = searchParams.get("query");
 
-  if (!query) {
+  if (typeof query !== "string") {
     return new Response("Query parameter is required", { status: 400 });
   }
 

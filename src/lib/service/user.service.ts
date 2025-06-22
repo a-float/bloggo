@@ -3,6 +3,7 @@ import { getUserDTO } from "@/data/user-dto.ts";
 import prisma from "../prisma";
 
 export async function findUsersByString(query: string) {
+  if (query.length === 0) return [];
   const users = await prisma.user.findMany({
     where: {
       OR: [

@@ -1,39 +1,57 @@
-import React from "react";
 import { Drawer, DrawerToggle } from "./Drawer";
 import SignOutButton from "./SignOutButton";
 import getUser from "@/lib/getUser";
 import { FriendPanel } from "./FriendsPanel";
+import QueryProvider from "@/components/QueryProvider";
+import * as friendService from "@/lib/service/friend.service";
+import AvatarWithFallback from "./AvatarWithFallback";
 
-const defaultAvatarUrl =
-  "https://img.daisyui.com/images/profile/demo/batperson@192.webp";
-
-export function UserBlock(props: {
+export async function UserBlock(props: {
   user: NonNullable<Awaited<ReturnType<typeof getUser>>>;
 }) {
-  const id = React.useId();
+  const drawerId = "friend-panel-drawer";
+  const friends = await friendService.getFriendsForUser(props.user);
+  const pendingFriendRequests = friends.filter(
+    (f) => f.recipient.id === props.user.id && f.status === "PENDING"
+  ).length;
+
+  const friendNotificationIndicator =
+    pendingFriendRequests > 0 ? (
+      <span className="indicator-item badge badge-secondary badge-xs px-1">
+        {pendingFriendRequests}
+      </span>
+    ) : null;
 
   return (
     <Drawer
-      drawerId={id}
-      drawerContent={<FriendPanel user={props.user} />}
+      drawerId={drawerId}
+      drawerContent={
+        <QueryProvider>
+          <FriendPanel user={props.user} friends={friends} />
+        </QueryProvider>
+      }
       className="w-auto"
     >
       <div className="dropdown dropdown-end pr-2">
         <div
           tabIndex={0}
           role="button"
-          className="avatar focus-within:[&>*]:shadow-lg "
+          className="avatar indicator focus-within:[&>*]:shadow-lg "
         >
+          {friendNotificationIndicator}
           <div className="w-6 md:w-8 rounded-full select-none">
-            <img
-              src={props.user.avatarUrl || defaultAvatarUrl}
-              alt="User avatar"
+            <AvatarWithFallback
+              src={props.user.avatarUrl}
+              name={props.user.email}
             />
           </div>
         </div>
         <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">
           <li>
-            <DrawerToggle drawerId={id}>Friends</DrawerToggle>
+            <DrawerToggle drawerId={drawerId}>
+              Friends
+              {friendNotificationIndicator}
+            </DrawerToggle>
           </li>
           <li>
             <SignOutButton />

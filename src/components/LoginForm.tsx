@@ -1,7 +1,6 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { Input } from "./form/TextInput";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -60,9 +59,9 @@ export default function LoginForm() {
       </form>
       <p className="mt-4 text-center">
         Don&apos;t have an account?{" "}
-        <Link href="./register" className="text-primary underline">
+        <a href="./register" className="text-primary underline">
           Register here
-        </Link>
+        </a>
       </p>
       <div className="divider my-6">OR</div>
       <button

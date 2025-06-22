@@ -3,7 +3,6 @@
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -60,9 +59,9 @@ export default function Login() {
       </button>
       <p className="mt-4">
         Already have an account?{" "}
-        <Link href="./login" className="text-primary hover:underline">
+        <a href="./login" className="text-primary hover:underline">
           Sign in
-        </Link>
+        </a>
       </p>
     </form>
   );

@@ -1,11 +1,10 @@
-import Link from "next/link";
 import Image from "next/image";
 import { BlogDTO } from "@/data/blog-dto";
 import dayjs from "dayjs";
 
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
-    <Link href={`/blogs/${blog.slug}`}>
+    <a href={`/blogs/${blog.slug}`}>
       <div className="card card-sm card-side card-border h-full bg-base-100 shadow-lg ">
         <figure className="flex-[0_0_96px] sm:flex-[0_0_128px]">
           <Image
@@ -46,6 +45,6 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
           )}
         </div>
       </div>
-    </Link>
+    </a>
   );
 }

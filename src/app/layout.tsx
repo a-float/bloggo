@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
 import { Toaster } from "react-hot-toast";
 import LoginControl from "@/components/LoginControl";
 import { FaGithub } from "react-icons/fa6";
@@ -38,13 +37,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
         <div className="navbar bg-base-100 shadow-sm">
-          <Link href="/" className="btn btn-ghost text-xl">
+          <a href="/" className="btn btn-ghost text-xl">
             Bloggo
-          </Link>
+          </a>
           <div className="flex-none">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <Link href="/blogs">Blogs</Link>
+                <a href="/blogs">Blogs</a>
               </li>
             </ul>
           </div>
@@ -59,9 +58,9 @@ export default function RootLayout({
         <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
           <aside className="flex justify-center items-center gap-2">
             Created by Mati
-            <Link href="https://github.com/a-float">
+            <a href="https://github.com/a-float">
               <FaGithub />
-            </Link>
+            </a>
           </aside>
         </footer>
       </body>

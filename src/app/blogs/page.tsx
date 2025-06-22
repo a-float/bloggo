@@ -1,5 +1,4 @@
 import BlogCard from "./BlogCard";
-import Link from "next/link";
 import { getBlogsForUser } from "@/lib/service/blog.service";
 import getUser from "@/lib/getUser";
 import { canUserCreateBlog } from "@/data/access";
@@ -12,9 +11,9 @@ export default async function Blogs() {
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl">Blogs</h1>
         {canUserCreateBlog(user) ? (
-          <Link href="/blogs/create" className="btn btn-primary ">
+          <a href="/blogs/create" className="btn btn-primary ">
             Create new blog
-          </Link>
+          </a>
         ) : null}
       </div>
       <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">

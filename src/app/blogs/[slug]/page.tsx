@@ -2,7 +2,6 @@ import { notFound, unauthorized } from "next/navigation";
 import { compile, run } from "@mdx-js/mdx";
 import * as runtime from "react/jsx-runtime";
 import React from "react";
-import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
@@ -41,12 +40,12 @@ export default async function BlogPage({
           <h1>{blog.title}</h1>
           <div className="flex-1" />
           {canUserEditBlog(user, blog) && (
-            <Link
+            <a
               className="btn btn-secondary btn-soft"
               href={`/blogs/${slug}/edit`}
             >
               Edit
-            </Link>
+            </a>
           )}
         </div>
         <div className="text-sm -mt-4">

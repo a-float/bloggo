@@ -1,4 +1,3 @@
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -9,9 +8,9 @@ export default function Home() {
           <p className="py-6">
             A lil&apos; app for travel memories and things we do daily.
           </p>
-          <Link href="/blogs" className="btn btn-primary">
+          <a href="/blogs" className="btn btn-primary">
             View blogs
-          </Link>
+          </a>
         </div>
       </div>
     </main>

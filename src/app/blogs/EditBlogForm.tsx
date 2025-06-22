@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 // import { type MDXEditorMethods } from "@mdxeditor/editor";
 // import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
@@ -126,9 +125,9 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
     <>
       <div className="flex gap-4 items-center mb-6">
         {!!blog?.slug && (
-          <Link className="btn btn-sm btn-soft" href={`/blogs/${blog.slug}`}>
+          <a className="btn btn-sm btn-soft" href={`/blogs/${blog.slug}`}>
             <FaChevronLeft /> <span className="sr-only">Go back</span>
-          </Link>
+          </a>
         )}
         <h1 className="text-3xl">
           {blog?.id ? (

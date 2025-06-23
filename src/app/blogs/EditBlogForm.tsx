@@ -121,6 +121,18 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
       });
   };
 
+  React.useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (form.formState.isDirty) {
+        e.preventDefault();
+        return "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [form.formState.isDirty]);
+
   return (
     <>
       <div className="flex gap-4 items-center mb-6">

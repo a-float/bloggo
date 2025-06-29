@@ -1,6 +1,7 @@
 "use client";
 
-import { FaChevronDown } from "react-icons/fa6";
+import React from "react";
+import { FaCheck, FaChevronDown } from "react-icons/fa6";
 
 function ThemeIcon(props: { theme?: string; className?: string }) {
   return (
@@ -20,26 +21,37 @@ function ThemeIcon(props: { theme?: string; className?: string }) {
 }
 
 export function ThemeController() {
-  const setTheme = (theme: string) => {
+  const [activeTheme, _setActiveTheme] = React.useState("");
+
+  const setActiveTheme = (theme: string) => {
+    _setActiveTheme(theme);
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   };
 
+  React.useEffect(() => {
+    setActiveTheme(localStorage.getItem("theme") || "");
+  }, []);
+
   return (
     <div title="Change theme" className="dropdown dropdown-end">
       <button className="btn btn-ghost btn-sm px-0.5 gap-1 md:mr-2">
-        <ThemeIcon className="scale-70" /> <FaChevronDown className="hidden sm:block" />
+        <ThemeIcon className="scale-70" />
+        <FaChevronDown className="hidden sm:block" />
       </button>
-      <ul className="dropdown-content rounded-box overflow-auto z-1 shadow-sm menu bg-base-200 grid grid-cols-1 max-h-[60vh] md:grid-cols-4 w-max mt-2">
+      <ul className="dropdown-content rounded-box overflow-auto z-1 shadow-sm menu bg-base-200 grid grid-cols-1 max-h-[60vh] md:grid-cols-2 lg:grid-cols-4 w-max mt-2">
         {themes.map((theme) => (
           <li key={theme}>
             <button
               type="button"
               className="flex items-center gap-2 p-2 whitespace-pre"
-              onClick={() => setTheme(theme)}
+              onClick={() => setActiveTheme(theme)}
             >
               <ThemeIcon theme={theme} />
               {theme}
+              <FaCheck
+                className={theme !== activeTheme ? "invisible" : "ml-auto"}
+              />
             </button>
           </li>
         ))}

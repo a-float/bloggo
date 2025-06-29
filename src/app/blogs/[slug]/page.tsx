@@ -40,10 +40,7 @@ export default async function BlogPage({
           <h1>{blog.title}</h1>
           <div className="flex-1" />
           {canUserEditBlog(user, blog) && (
-            <a
-              className="btn btn-secondary btn-soft"
-              href={`/blogs/${slug}/edit`}
-            >
+            <a className="btn btn-ghost" href={`/blogs/${slug}/edit`}>
               Edit
             </a>
           )}

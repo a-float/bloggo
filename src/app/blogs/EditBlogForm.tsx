@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
 import { createBlog } from "@/actions/edit-create-blog.action";
 import { useRouter } from "next/navigation";
-import { resizeImage } from "@/lib/resizeImage";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
 import { Textarea, Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
@@ -17,11 +16,11 @@ import TagSelect from "@/components/TagSelect";
 import { TagWithCount } from "@/types";
 import { BlogVisibility } from "@prisma/client";
 import { Select } from "@/components/form/Select";
-import { uploadFiles } from "@/actions/upload-files.action";
 import { BlobManager } from "@/lib/blobManager";
 import { type ItemInterface, ReactSortable } from "react-sortablejs";
 import { LegendLabel } from "@/components/form/common";
-import { FaChevronLeft } from "react-icons/fa6";
+import { FaChevronLeft, FaXmark } from "react-icons/fa6";
+import { uploadNewImages } from "./uploadNewImages";
 
 type FormValues = {
   id: number | null;
@@ -37,7 +36,7 @@ type EditBlogFormProps = {
   tagCounts: TagWithCount[];
 };
 
-type SortableImage = ItemInterface & { url: string };
+type SortableImage = ItemInterface & { name: string; url: string };
 
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
@@ -62,27 +61,11 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
   const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
-  const uploadNewImages = async (images: typeof imagePreviews) => {
-    const formData = new FormData();
-    for (const image of images) {
-      const file = blobManagerRef.current.getObjectForUrl(image.url);
-      if (!file) continue;
-      const resizedImage = await resizeImage(file as File, 1024, 1024);
-      formData.append("file", resizedImage);
-    }
-    const uploaded = await uploadFiles(formData);
-    let i = 0;
-    return images.map((image, idx) => ({
-      order: idx,
-      name: image.name,
-      url: blobManagerRef.current.getObjectForUrl(image.url)
-        ? uploaded[i++].url
-        : image.url,
-    }));
-  };
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const body = { ...data, images: await uploadNewImages(imagePreviews) };
+    const body = {
+      ...data,
+      images: await uploadNewImages(imagePreviews, blobManagerRef.current),
+    };
     await createBlog(body).then((res) => {
       res.errors?.forEach((err) => {
         if (err.field === "id") return;
@@ -255,14 +238,15 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                       <span>{item.name}</span>
                       <div className="flex-1" />
                       <button
-                        className="btn btn-xs btn-soft btn-error"
+                        className="btn btn-xs btn-soft btn-error btn-square"
                         onClick={() =>
                           setImagePreviews((prev) =>
                             prev.filter((x) => x.url !== item.url)
                           )
                         }
                       >
-                        X <span className="sr-only">Remove image</span>
+                        <FaXmark />
+                        <span className="sr-only">Remove image</span>
                       </button>
                     </div>
                   </div>

@@ -41,7 +41,8 @@ export class LocalFileUploader implements FileUploader {
   }
 
   private getTimestamp() {
-    return new Date().toISOString().replace(/[-:.]/g, "_");
+    const rng = Math.floor(Math.random() * 8999) + 1000;
+    return new Date().toISOString().replace(/[-:.]/g, "_") + "_" + rng;
   }
 
   async upload(file: File): Promise<string> {

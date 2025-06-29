@@ -6,18 +6,20 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <a href={`/blogs/${blog.slug}`}>
       <div className="card card-sm card-side card-border h-full bg-base-100 shadow-lg ">
-        <figure className="flex-[0_0_96px] sm:flex-[0_0_128px]">
-          <Image
-            className="object-cover w-full"
-            width={125}
-            height={150}
-            src={
-              blog.images.at(0)?.url ||
-              `https://picsum.photos/seed/${blog.title}/600/300`
-            }
-            alt=""
-          />
-        </figure>
+        {blog.images.length > 0 ? (
+          <figure className="flex-[0_0_96px] sm:flex-[0_0_128px]">
+            <Image
+              className="object-cover w-full"
+              width={125}
+              height={150}
+              src={
+                blog.images.at(0)?.url ||
+                `https://picsum.photos/seed/${blog.title}/600/300`
+              }
+              alt=""
+            />
+          </figure>
+        ) : null}
         <div className="card-body">
           <h2 className="card-title">{blog.title}</h2>
           <span className="text-xs whitespace-pre text-base-content/60">

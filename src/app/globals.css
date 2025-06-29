@@ -55,7 +55,12 @@
 
 .tag-select__menu {
   border-radius: var(--radius-field);
-  @apply bg-base-100 shadow-lg my-1 overflow-hidden absolute top-full w-[102%] left-[-1%];
+  /* @applt absolute top-full w-[102%] left-[-1%]; */
+  @apply bg-base-100 shadow-lg my-1 overflow-hidden relative;
+}
+
+.tag-select__menu-list {
+  @apply max-h-[200px] overflow-y-auto;
 }
 
 .tag-select__menu-list > div {

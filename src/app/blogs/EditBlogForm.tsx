@@ -260,7 +260,6 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 <TagSelect
                   tagCounts={tagCounts}
                   selectedTags={field.value}
-                  maxResults={8}
                   onChange={(tags) => field.onChange(tags)}
                 />
               )}

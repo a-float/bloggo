@@ -17,7 +17,6 @@ type TagWithCountOption = {
 type TagSelectProps = {
   tagCounts: TagWithCount[];
   selectedTags: string[];
-  maxResults: number;
   onChange: (selectedTags: string[]) => void;
 };
 

@@ -27,8 +27,8 @@ export async function getBlogBySlug(slug: string) {
 }
 
 function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
-  if (user?.role === Role.ADMIN) return {};
   if (!user) return { visibility: BlogVisibility.PUBLIC };
+  if (user.role === Role.ADMIN) return {};
   // TODO improve friends blogs querying
   return {
     OR: [

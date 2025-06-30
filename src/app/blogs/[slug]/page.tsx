@@ -18,7 +18,8 @@ export default async function BlogPage({
   const user = await getUser();
   const blog = await getBlogBySlug(slug);
   if (!blog) return notFound();
-  if (!canUserSeeBlog(user, blog)) return unauthorized();
+  const canSeeBlog = await canUserSeeBlog(user, blog);
+  if (!canSeeBlog) return unauthorized();
 
   const code = String(
     await compile(blog.content, {

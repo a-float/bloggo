@@ -1,8 +1,25 @@
 import "server-only";
-import { FriendshipStatus } from "@prisma/client";
+import { FriendshipStatus, User } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { UserDTO } from "@/data/user-dto.ts";
 import { getFriendshipDTO } from "@/data/friendship-dto";
+
+export async function areUsersFriends(
+  userA: Pick<User, "id">,
+  userB: Pick<User, "id">
+) {
+  const friendship = await prisma.friendship.findFirst({
+    where: {
+      status: FriendshipStatus.ACCEPTED,
+      OR: [
+        { recipientId: userA.id, requesterId: userB.id },
+        { recipientId: userB.id, requesterId: userA.id },
+      ],
+    },
+  });
+  console.log(userA, userB, friendship);
+  return !!friendship;
+}
 
 export async function createFriendship(
   requesterId: number,

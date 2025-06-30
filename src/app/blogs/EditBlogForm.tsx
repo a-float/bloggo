@@ -72,6 +72,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
+        form.reset(form.getValues());
         if (!data.id && res.data) {
           // If this is a new blog, redirect to the new blog page
           setWaitingForRedirect(true);

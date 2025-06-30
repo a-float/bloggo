@@ -55,7 +55,7 @@ export default function RootLayout({
         </div>
         {children}
         <Toaster />
-        <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+        <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-auto">
           <aside className="flex justify-center items-center gap-2">
             Created by Mati
             <a href="https://github.com/a-float">

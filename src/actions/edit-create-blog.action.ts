@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import * as yup from "yup";
 import { Blog, BlogVisibility, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import { getBlogById } from "@/lib/service/blog.service";
 import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
 
@@ -41,7 +41,7 @@ const capitalize = (str: string) =>
 // Wish I could return 401 for unauthorized access and 404 for not found, but Next.js doesn't let me do that :(
 
 export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
   const errors: ActionState["errors"] = [];
 

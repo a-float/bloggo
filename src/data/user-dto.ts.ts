@@ -6,7 +6,8 @@ export function getUserDTO(user: User) {
     id: user.id,
     email: user.email,
     name: user.name,
-    avatarUrl: user.avatarUrl,
+    image: user.image,
+    role: user.role,
   };
 }
 

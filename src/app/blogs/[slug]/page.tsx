@@ -5,7 +5,7 @@ import React from "react";
 import remarkGfm from "remark-gfm";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import Gallery from "@/components/Gallery";
 import dayjs from "dayjs";
 
@@ -15,7 +15,7 @@ export default async function BlogPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const user = await getUser();
+  const { user } = await getSession();
   const blog = await getBlogBySlug(slug);
   if (!blog) return notFound();
   const canSeeBlog = await canUserSeeBlog(user, blog);

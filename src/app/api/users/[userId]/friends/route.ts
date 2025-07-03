@@ -1,4 +1,4 @@
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import { unauthorized } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import * as friendService from "@/lib/service/friend.service";
@@ -8,8 +8,8 @@ export async function GET(
   { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;
-  const user = await getUser();
-  if (!user || user.id !== parseInt(userId)) {
+  const { user } = await getSession();
+  if (!user || user.id !== userId) {
     return unauthorized();
   }
 

@@ -1,14 +1,14 @@
 "use server";
 
 import { getFileUploader } from "@/lib/blobUploader";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { unauthorized } from "next/navigation";
 
 export async function uploadFiles(
   formData: FormData
 ): Promise<{ url: string; name: string }[]> {
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
 
   const uploader = getFileUploader();

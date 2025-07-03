@@ -1,12 +1,12 @@
 import "server-only";
-import { FriendshipStatus, User } from "@prisma/client";
+import { FriendshipStatus } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { UserDTO } from "@/data/user-dto.ts";
 import { getFriendshipDTO } from "@/data/friendship-dto";
 
 export async function areUsersFriends(
-  userA: Pick<User, "id">,
-  userB: Pick<User, "id">
+  userA: Pick<UserDTO, "id">,
+  userB: Pick<UserDTO, "id">
 ) {
   const friendship = await prisma.friendship.findFirst({
     where: {
@@ -22,8 +22,8 @@ export async function areUsersFriends(
 }
 
 export async function createFriendship(
-  requesterId: number,
-  recipientId: number
+  requesterId: UserDTO["id"],
+  recipientId: UserDTO["id"]
 ) {
   try {
     await prisma.friendship.create({
@@ -43,8 +43,8 @@ export async function createFriendship(
 }
 
 export async function updateFriendship(
-  requesterId: number,
-  recipientId: number,
+  requesterId: UserDTO["id"],
+  recipientId: UserDTO["id"],
   status: FriendshipStatus
 ) {
   try {
@@ -67,7 +67,10 @@ export async function updateFriendship(
   }
 }
 
-export async function deleteFriendship(friendId1: number, friendId2: number) {
+export async function deleteFriendship(
+  friendId1: UserDTO["id"],
+  friendId2: UserDTO["id"]
+) {
   try {
     await prisma.friendship.deleteMany({
       where: {

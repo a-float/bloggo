@@ -1,10 +1,10 @@
 import React from "react";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import LoginLink from "./LoginLink";
 import { UserBlock } from "./UserBlock";
 
 export default async function LoginControl() {
-  const user = await getUser();
+  const { user } = await getSession();
   return user ? (
     <UserBlock user={user} />
   ) : (

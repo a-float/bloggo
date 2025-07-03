@@ -1,9 +1,10 @@
-import { BlogVisibility, Role, User } from "@prisma/client";
-import { BlogDTO } from "./blog-dto";
+import { BlogVisibility, Role } from "@prisma/client";
+import { type BlogDTO } from "./blog-dto";
+import { type UserDTO } from "./user-dto.ts";
 import * as friendService from "@/lib/service/friend.service";
 
 export async function canUserSeeBlog(
-  user: User | null,
+  user: UserDTO | null,
   blog: BlogDTO
 ): Promise<boolean> {
   if (blog.visibility === BlogVisibility.PUBLIC) return true;
@@ -20,13 +21,13 @@ export async function canUserSeeBlog(
   return false;
 }
 
-export function canUserEditBlog(user: User | null, blog: BlogDTO): boolean {
+export function canUserEditBlog(user: UserDTO | null, blog: BlogDTO): boolean {
   if (!user) return false;
   if (user.role === Role.ADMIN) return true;
   if (blog.author && blog.author.id === user.id) return true;
   return false;
 }
 
-export function canUserCreateBlog(user: User | null): boolean {
+export function canUserCreateBlog(user: UserDTO | null): boolean {
   return !!user;
 }

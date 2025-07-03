@@ -3,7 +3,7 @@
 import { canUserEditBlog } from "@/data/access";
 import { getBlogById } from "@/lib/service/blog.service";
 import { getFileUploader } from "@/lib/blobUploader";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { Blog } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -15,7 +15,7 @@ type ActionState = {
 };
 
 export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
   const blog = await getBlogById(blogId);
   if (!blog) return notFound();

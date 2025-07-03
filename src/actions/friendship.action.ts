@@ -1,6 +1,7 @@
 "use server";
 
-import getUser from "@/lib/getUser";
+import { type UserDTO } from "@/data/user-dto.ts";
+import { getSession } from "@/lib/session";
 import * as friendService from "@/lib/service/friend.service";
 import { FriendshipStatus } from "@prisma/client";
 import { notFound, unauthorized } from "next/navigation";
@@ -11,12 +12,12 @@ type FriendshipResponse = {
 };
 
 export async function createFriendship(
-  friendId: number
+  friendId: UserDTO["id"]
 ): Promise<FriendshipResponse> {
   if (!friendId) {
     throw new Error("Invalid data");
   }
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
   if (user.id === friendId)
     return { success: false, message: "You cannot befriend yourself." };
@@ -25,25 +26,25 @@ export async function createFriendship(
 }
 
 export async function updateFriendship(
-  friendId: number,
+  friendId: UserDTO["id"],
   status: FriendshipStatus
 ): Promise<FriendshipResponse> {
   if (!friendId || status === FriendshipStatus.PENDING) {
     throw new Error("Invalid data");
   }
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
   await friendService.updateFriendship(friendId, user.id, status);
   return { success: true, message: "Friendship updated." };
 }
 
 export async function deleteFriendship(
-  friendId: number
+  friendId: UserDTO["id"]
 ): Promise<FriendshipResponse> {
   if (!friendId) {
     throw new Error("Invalid data");
   }
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return notFound();
   await friendService.deleteFriendship(user.id, friendId);
   return { success: true, message: "Friendship deleted." };

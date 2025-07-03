@@ -1,10 +1,10 @@
 import BlogCard from "./BlogCard";
 import { getBlogsForUser } from "@/lib/service/blog.service";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import { canUserCreateBlog } from "@/data/access";
 
 export default async function Blogs() {
-  const user = await getUser();
+  const { user } = await getSession();
   const blogs = await getBlogsForUser(user);
   return (
     <div>

@@ -13,12 +13,12 @@ import FriendItem from "./FriendItem";
 
 const USER_SEARCH_DEBOUNCE_MS = 100;
 
-function inviteFriend(friendId: number) {
+function inviteFriend(friendId: UserDTO["id"]) {
   return createFriendship(friendId);
 }
 
 const getPendingFriendshipSorter =
-  (userId: number) => (a: FriendshipDTO, b: FriendshipDTO) => {
+  (userId: UserDTO["id"]) => (a: FriendshipDTO, b: FriendshipDTO) => {
     // Sort so that request directed at the current user are at the top
     if (a.recipient.id === userId && b.recipient.id !== userId) return -1;
     if (a.recipient.id !== userId && b.recipient.id === userId) return 1;

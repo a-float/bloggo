@@ -8,11 +8,11 @@ import { FriendshipStatus } from "@prisma/client";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import AvatarWithFallback from "./AvatarWithFallback";
 
-function removeFriend(friendId: number) {
+function removeFriend(friendId: UserDTO["id"]) {
   return deleteFriendship(friendId);
 }
 
-function acceptFriend(friendId: number) {
+function acceptFriend(friendId: UserDTO["id"]) {
   return updateFriendship(friendId, FriendshipStatus.ACCEPTED);
 }
 
@@ -28,7 +28,7 @@ export default function FriendItem(props: {
   return (
     <li className="list-row flex gap-3 px-2 py-2 items-center">
       <div className="size-8 rounded-full overflow-hidden">
-        <AvatarWithFallback src={otherUser.avatarUrl} name={otherUser.email} />
+        <AvatarWithFallback src={otherUser.image} name={otherUser.email} />
       </div>
       {friendship.status === FriendshipStatus.ACCEPTED && (
         <>
@@ -44,8 +44,10 @@ export default function FriendItem(props: {
       )}
       {friendship.status === FriendshipStatus.PENDING && isRequester && (
         <>
-           <div className="flex flex-col">
-            <span className="text-xs text-base-content/70 tracking-wide">You invited</span>
+          <div className="flex flex-col">
+            <span className="text-xs text-base-content/70 tracking-wide">
+              You invited
+            </span>
             <span>{otherUser.name}</span>
           </div>
           <button
@@ -61,7 +63,9 @@ export default function FriendItem(props: {
       {friendship.status === FriendshipStatus.PENDING && !isRequester && (
         <>
           <div className="flex flex-col">
-            <span className="text-xs text-base-content/70 tracking-wide">Invite from</span>
+            <span className="text-xs text-base-content/70 tracking-wide">
+              Invite from
+            </span>
             <span>{otherUser.name}</span>
           </div>
           <div className="flex gap-2 ml-auto">

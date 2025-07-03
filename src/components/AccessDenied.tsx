@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
+import { getSession } from "@/lib/session";
 import React from "react";
 
 export default async function AccessDenied() {
-  const session = await getServerSession();
+  const { user } = await getSession();
 
   return (
     <div className="flex flex-col items-center justify-center pt-32 max-w-md mx-auto text-center">
@@ -10,7 +10,7 @@ export default async function AccessDenied() {
       <p className="text-md mb-8">
         You don&apos;t have permission to view this page.
         <br />
-        {!session?.user ? " Please try logging in." : ""}
+        {!user ? " Please try logging in." : ""}
       </p>
     </div>
   );

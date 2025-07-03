@@ -1,7 +1,10 @@
 import { notFound, unauthorized } from "next/navigation";
 import EditBlogForm from "@/app/blogs/EditBlogForm";
-import getUser from "@/lib/getUser";
-import { getBlogBySlug, getBlogTagCountsForUser } from "@/lib/service/blog.service";
+import { getSession } from "@/lib/session";
+import {
+  getBlogBySlug,
+  getBlogTagCountsForUser,
+} from "@/lib/service/blog.service";
 import { canUserEditBlog } from "@/data/access";
 
 export default async function BlogEdit({
@@ -9,7 +12,7 @@ export default async function BlogEdit({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);

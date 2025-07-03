@@ -1,13 +1,13 @@
 "use server";
 
 import { getFileUploader } from "@/lib/blobUploader";
-import getUser from "@/lib/getUser";
+import { getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { notFound, unauthorized } from "next/navigation";
 
 export async function deleteFile(url: string): Promise<void> {
-  const user = await getUser();
+  const { user } = await getSession();
   if (!user) return unauthorized();
 
   const uploader = getFileUploader();

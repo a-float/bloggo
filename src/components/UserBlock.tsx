@@ -1,14 +1,12 @@
 import { Drawer, DrawerToggle } from "./Drawer";
 import SignOutButton from "./SignOutButton";
-import getUser from "@/lib/getUser";
+import { type UserDTO } from "@/data/user-dto.ts";
 import { FriendPanel } from "./FriendsPanel";
 import QueryProvider from "@/components/QueryProvider";
 import * as friendService from "@/lib/service/friend.service";
 import AvatarWithFallback from "./AvatarWithFallback";
 
-export async function UserBlock(props: {
-  user: NonNullable<Awaited<ReturnType<typeof getUser>>>;
-}) {
+export async function UserBlock(props: { user: UserDTO }) {
   const drawerId = "friend-panel-drawer";
   const friends = await friendService.getFriendsForUser(props.user);
   const pendingFriendRequests = friends.filter(
@@ -41,7 +39,7 @@ export async function UserBlock(props: {
           {friendNotificationIndicator}
           <div className="w-6 md:w-8 rounded-full select-none">
             <AvatarWithFallback
-              src={props.user.avatarUrl}
+              src={props.user.image}
               name={props.user.email}
             />
           </div>

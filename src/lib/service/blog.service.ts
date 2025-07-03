@@ -1,14 +1,9 @@
 import "server-only";
 import { getBlogDTO } from "@/data/blog-dto";
-import { TagWithCount } from "@/types";
-import {
-  Prisma,
-  Role,
-  BlogVisibility,
-  User,
-  FriendshipStatus,
-} from "@prisma/client";
+import { type TagWithCount } from "@/types/common";
+import { Prisma, Role, BlogVisibility, FriendshipStatus } from "@prisma/client";
 import prisma from "../prisma";
+import { type UserDTO } from "@/data/user-dto.ts";
 
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({
@@ -26,7 +21,7 @@ export async function getBlogBySlug(slug: string) {
   return blog ? getBlogDTO(blog) : null;
 }
 
-function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
+function getBlogWhereForUser(user: UserDTO | null): Prisma.BlogWhereInput {
   if (!user) return { visibility: BlogVisibility.PUBLIC };
   if (user.role === Role.ADMIN) return {};
   // TODO improve friends blogs querying
@@ -61,7 +56,7 @@ function getBlogWhereForUser(user: User | null): Prisma.BlogWhereInput {
   };
 }
 
-export async function getBlogsForUser(user: User | null) {
+export async function getBlogsForUser(user: UserDTO | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
     include: { images: { orderBy: { order: "asc" } }, author: true },
@@ -71,7 +66,7 @@ export async function getBlogsForUser(user: User | null) {
 }
 
 export async function getBlogTagCountsForUser(
-  user: User | null
+  user: UserDTO | null
 ): Promise<TagWithCount[]> {
   // try {
   //   const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(

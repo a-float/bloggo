@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
 
 export async function createUser(data: {
@@ -22,7 +22,10 @@ export async function createUser(data: {
       },
     });
   } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError && e.code === "P2002") {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === "P2002"
+    ) {
       throw new Error("User with this email already exists");
     }
     throw new Error("Something went wrong");

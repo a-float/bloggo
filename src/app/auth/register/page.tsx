@@ -3,6 +3,7 @@
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -19,9 +20,17 @@ export default function Login() {
 
   const onSubmit = (data: { email: string; name: string; password: string }) =>
     createUser(data)
+      .then(() =>
+        // the email flow handles verification of created user's email
+        signIn("email", {
+          email: data.email,
+          redirect: false,
+          callbackUrl: "/",
+        })
+      )
       .then(() => {
         toast.success("User created successfully");
-        router.push("/auth/login");
+        router.push("/auth/login?pass=1");
       })
       .catch((e) => {
         toast.error(e.message || "Something went wrong");
@@ -33,6 +42,7 @@ export default function Login() {
       <Input
         {...form.register("email")}
         label="Email"
+        type="email"
         placeholder="Enter your email"
         required
         className="input input-bordered"

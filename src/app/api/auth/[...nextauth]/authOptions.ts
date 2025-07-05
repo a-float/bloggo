@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-import { Prisma } from "@prisma/client";
+import { Prisma, type User } from "@prisma/client";
 import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
 
 const adapter = PrismaAdapter(prisma);
@@ -22,7 +22,12 @@ export const authOptions = {
   callbacks: {
     jwt({ user, token }) {
       if (user) {
-        token.user = user;
+        // TODO figure out when the full user comes in. on first login?
+        if ("password" in user) {
+          token.user = getUserDTO(user as User);
+        } else {
+          token.user = user;
+        }
       }
       return token;
     },
@@ -60,7 +65,7 @@ export const authOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        port: parseInt(process.env.EMAIL_SERVER_PORT!),
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.AUTH_RESEND_KEY,

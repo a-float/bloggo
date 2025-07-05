@@ -28,6 +28,7 @@ export async function createUser(data: {
     ) {
       throw new Error("User with this email already exists");
     }
+    console.error(e);
     throw new Error("Something went wrong");
   }
 }

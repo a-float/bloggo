@@ -22,12 +22,12 @@ export async function canUserSeeBlog(
 }
 
 export function canUserEditBlog(user: UserDTO | null, blog: BlogDTO): boolean {
-  if (!user) return false;
+  if (!user || !user.hasVerifiedEmail) return false;
   if (user.role === Role.ADMIN) return true;
   if (blog.author && blog.author.id === user.id) return true;
   return false;
 }
 
 export function canUserCreateBlog(user: UserDTO | null): boolean {
-  return !!user;
+  return !!(user && user.hasVerifiedEmail);
 }

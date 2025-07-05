@@ -23,10 +23,11 @@ const blogData: Prisma.BlogCreateInput[] = [
 async function getUsers() {
   const password = await hash("pass", 10);
   const users: Prisma.UserCreateInput[] = [...new Array(10)].map((_, i) => ({
-    email: `user${i + 1}`,
+    email: `user${i + 1}@bloggo.fun`,
     name: `User ${i + 1}`,
     password,
     role: Role.USER,
+    emailVerified: new Date(),
   }));
 
   users.push({
@@ -34,6 +35,7 @@ async function getUsers() {
     name: "matt",
     password: await hash("mati123", 10),
     role: Role.ADMIN,
+    emailVerified: new Date(),
   });
 
   return users;

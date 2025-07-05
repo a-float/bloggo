@@ -6,8 +6,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex-1 grid place-items-center pb-24 bg-base-200">
-      {children}
+    <main className="flex-1 bg-base-200 pt-[15vh] flex justify-center">
+      <div className="mx-4 w-full max-w-[320px]">{children}</div>
     </main>
   );
 }

@@ -2,15 +2,19 @@ import prisma from "@/lib/prisma";
 import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
+import EmailProvider from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
+
+const adapter = PrismaAdapter(prisma);
 
 export const authOptions = {
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/auth/login",
+    verifyRequest: "/auth/verify-request",
   },
   session: {
     strategy: "jwt",
@@ -18,45 +22,51 @@ export const authOptions = {
   callbacks: {
     jwt({ user, token }) {
       if (user) {
-        token.user = getUserDTO(user as User);
+        token.user = user;
       }
       return token;
     },
-    session({ session, token, user }) {
-      console.log("in session", { session, token, user });
+    session({ session, token }) {
       return {
         ...session,
         user: (token?.user ?? null) as UserDTO | null,
       };
     },
-    // async signIn({ user, account }) {
-    //   if (account?.provider === "google") {
-    //     if (!user.email) return false;
-    //     const existingUser = await prisma.user.findUnique({
-    //       where: { email: user.email },
-    //     });
-
-    //     if (!existingUser) {
-    //       console.log("Creating account for OAuth user");
-    //       await prisma.user.create({
-    //         data: {
-    //           name: user.name || user.email,
-    //           email: user.email,
-    //           image: user.image,
-    //         },
-    //       });
-    //     }
-    //   }
-
-    //   return true;
-    // },
   },
-  adapter: PrismaAdapter(prisma),
+  adapter,
+  events: {
+    linkAccount: async ({ user, profile }) => {
+      if ("emailVerified" in profile) {
+        await adapter.updateUser?.({
+          id: user.id,
+          emailVerified: profile.emailVerified ? new Date() : null,
+        });
+      }
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
+      profile: (profile) => ({
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        image: profile.picture,
+        emailVerified: profile.email_verified,
+      }),
+    }),
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST,
+        port: process.env.EMAIL_SERVER_PORT,
+        auth: {
+          user: process.env.EMAIL_SERVER_USER,
+          pass: process.env.AUTH_RESEND_KEY,
+        },
+      },
+      from: process.env.EMAIL_FROM,
     }),
     Credentials({
       credentials: {

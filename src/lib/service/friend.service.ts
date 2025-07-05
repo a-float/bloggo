@@ -17,7 +17,6 @@ export async function areUsersFriends(
       ],
     },
   });
-  console.log(userA, userB, friendship);
   return !!friendship;
 }
 

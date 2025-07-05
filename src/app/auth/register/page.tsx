@@ -23,8 +23,8 @@ export default function Login() {
         toast.success("User created successfully");
         router.push("/auth/login");
       })
-      .catch(() => {
-        toast.error("Error creating user");
+      .catch((e) => {
+        toast.error(e.message || "Something went wrong");
       });
 
   return (
@@ -57,10 +57,10 @@ export default function Login() {
       <button type="submit" className="btn btn-primary mt-4 block w-full">
         {form.formState.isSubmitting ? <Spinner /> : "Register"}
       </button>
-      <p className="mt-4">
+      <p className="mt-4 text-sm text-base-content/60">
         Already have an account?{" "}
-        <a href="./login" className="text-primary hover:underline">
-          Sign in
+        <a href="./login" className="link hover:link-primary">
+          Log in
         </a>
       </p>
     </form>

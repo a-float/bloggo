@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <a href={`/blogs/${blog.slug}`}>
-      <div className="card card-sm card-side h-full bg-base-100 shadow-lg ">
+      <div className="card card-sm card-border card-side h-full bg-base-100 shadow-lg ">
         {blog.images.length > 0 ? (
           <figure className="flex-[0_0_96px] sm:flex-[0_0_128px] aspect-square">
             <Image

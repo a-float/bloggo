@@ -5,6 +5,7 @@ export function getUserDTO(user: User) {
   return {
     id: user.id,
     email: user.email,
+    hasVerifiedEmail: !!user.emailVerified,
     name: user.name,
     image: user.image,
     role: user.role,

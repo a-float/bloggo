@@ -7,8 +7,43 @@ import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import { Prisma, type User } from "@prisma/client";
 import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
+import { sendEmail } from "@/lib/email/sendEmail";
+import { Adapter } from "next-auth/adapters";
+import dayjs from "dayjs";
+import { createVerificationEmailMessage } from "@/lib/email/email.message.factory";
+import { emailTypeMapper } from "@/lib/email/email.type.mapper";
 
-const adapter = PrismaAdapter(prisma);
+function setQueryParam(
+  urlString: string,
+  param: string,
+  value: string
+): string {
+  const url = new URL(urlString);
+  url.searchParams.set(param, value);
+  return url.toString();
+}
+
+const customAdapter: Adapter = {
+  ...PrismaAdapter(prisma),
+  async createVerificationToken(data) {
+    const { type, email } = emailTypeMapper.decode(data.identifier);
+    const maxTokenAge = createVerificationEmailMessage(type, { url: "" }).getMaxAge();
+    return await prisma.verificationToken.create({
+      data: {
+        identifier: email,
+        type,
+        token: data.token,
+        expires: dayjs().add(maxTokenAge, "s").toDate(),
+      },
+    });
+  },
+};
+
+export const LOGIN_EMAIL_TYPE = {
+  login: "login",
+  verifyEmail: "email",
+  resetPassword: "pass",
+};
 
 export const authOptions = {
   secret: process.env.AUTH_SECRET,
@@ -38,11 +73,11 @@ export const authOptions = {
       };
     },
   },
-  adapter,
+  adapter: customAdapter,
   events: {
     linkAccount: async ({ user, profile }) => {
       if ("emailVerified" in profile) {
-        await adapter.updateUser?.({
+        await customAdapter.updateUser?.({
           id: user.id,
           emailVerified: profile.emailVerified ? new Date() : null,
         });
@@ -72,6 +107,17 @@ export const authOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+      async sendVerificationRequest(params) {
+        const { type, email } = emailTypeMapper.decode(params.identifier);
+        const url = setQueryParam(params.url, "email", email);
+        const message = createVerificationEmailMessage(type, { url });
+        await sendEmail({
+          to: email,
+          subject: message.getSubject(),
+          text: message.getText(),
+          html: await message.getHtml(),
+        });
+      },
     }),
     Credentials({
       credentials: {

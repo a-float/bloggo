@@ -8,6 +8,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import { FaLock } from "react-icons/fa6";
+import { VerificationTokenType } from "@prisma/client";
+import { emailTypeMapper } from "@/lib/email/email.type.mapper";
 
 const getRedirectUrl = () =>
   new URLSearchParams(location.search).get("callbackUrl") || "/";
@@ -47,7 +49,7 @@ export default function LoginForm() {
       }
     } else {
       await signIn("email", {
-        email: data.email,
+        email: emailTypeMapper.encode(VerificationTokenType.LOGIN, data.email),
         callbackUrl: getRedirectUrl(),
       });
     }

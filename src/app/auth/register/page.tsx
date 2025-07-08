@@ -3,6 +3,8 @@
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
+import { emailTypeMapper } from "@/lib/email/email.type.mapper";
+import { VerificationTokenType } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -23,7 +25,10 @@ export default function Login() {
       .then(() =>
         // the email flow handles verification of created user's email
         signIn("email", {
-          email: data.email,
+          email: emailTypeMapper.encode(
+            VerificationTokenType.VERIFY_EMAIL,
+            data.email
+          ),
           redirect: false,
           callbackUrl: "/",
         })

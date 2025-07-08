@@ -129,7 +129,14 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
+  type       VerificationTokenType @default(LOGIN)
 
   @@id([identifier, token])
   @@map("verification_token")
+}
+
+enum VerificationTokenType {
+  LOGIN
+  VERIFY_EMAIL
+  REST_PASSWORD
 }

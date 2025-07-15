@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { NextAuthOptions } from "next-auth";
+import NextAuth, { type NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
@@ -12,6 +12,7 @@ import { Adapter } from "next-auth/adapters";
 import dayjs from "dayjs";
 import { createVerificationEmailMessage } from "@/lib/email/email.message.factory";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
+import * as yup from "yup";
 
 function setQueryParam(
   urlString: string,
@@ -22,6 +23,12 @@ function setQueryParam(
   url.searchParams.set(param, value);
   return url.toString();
 }
+
+// TODO move to a schemas/validation file?
+const signInSchema = yup.object({
+  email: yup.string().min(1).required(),
+  password: yup.string().min(1).required(),
+});
 
 const customAdapter: Adapter = {
   ...PrismaAdapter(prisma),
@@ -41,7 +48,7 @@ const customAdapter: Adapter = {
   },
 };
 
-export const authOptions = {
+const authOptions = {
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: "/auth/login",
@@ -73,6 +80,10 @@ export const authOptions = {
   events: {
     linkAccount: async ({ user, profile }) => {
       if ("emailVerified" in profile) {
+        if (!user.id) {
+          console.warn("linkAccount failed: user has not id", user);
+          return;
+        }
         await customAdapter.updateUser?.({
           id: user.id,
           emailVerified: profile.emailVerified ? new Date() : null,
@@ -116,16 +127,12 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
+        const { email, password } = await signInSchema.cast(credentials);
         try {
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
-          });
+          const user = await prisma.user.findUnique({ where: { email } });
           if (!user || !user.password) return null;
-          const isValidPassword = await compare(
-            credentials.password,
-            user.password
-          );
+
+          const isValidPassword = await compare(password, user.password);
           if (!isValidPassword) return null;
           return getUserDTO(user);
         } catch (error) {
@@ -137,4 +144,6 @@ export const authOptions = {
       },
     }),
   ],
-} as const satisfies NextAuthOptions;
+} as const satisfies NextAuthConfig;
+
+export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);

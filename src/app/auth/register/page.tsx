@@ -3,7 +3,7 @@
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
-import { emailTypeMapper } from "@/lib/email/email.type.mapper";
+import { emailTypeMapper } from "@/lib/email/email-type-mapper";
 import { VerificationTokenType } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";

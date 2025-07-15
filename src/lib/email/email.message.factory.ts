@@ -2,7 +2,7 @@ import { VerificationTokenType } from "@prisma/client";
 import {
   type VerificationEmailMessageOptions,
   type VerificationEmailMessage,
-} from "./message/email.message";
+} from "./email.message";
 import { LoginMessage } from "./message/login.message";
 import { ResetPasswordMessage } from "./message/reset-password.message";
 import { VerifyEmailMessage } from "./message/verify-email.message";

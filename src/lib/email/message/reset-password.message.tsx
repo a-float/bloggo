@@ -1,11 +1,11 @@
 import { render } from "@react-email/render";
 import { Button, Section, Text } from "@react-email/components";
 import { EmailTemplate, styles } from "./template";
-import { VerificationEmailMessage } from "./email.message";
+import { VerificationEmailMessage } from "../email.message";
 
 export class ResetPasswordMessage extends VerificationEmailMessage {
   getMaxAge(): number {
-    return 10 * 60; // 10 minutes
+    return 10 * 60;
   }
   getSubject() {
     return `Reset your password`;
@@ -26,8 +26,8 @@ export class ResetPasswordMessage extends VerificationEmailMessage {
           The link will be valid for the next {this.getMaxAge() / 60} minutes.
         </Text>
         <Text style={styles.paragraph}>
-          If you don&apos;t want to change your password or didn&apos;t request this, just
-          ignore and delete this message.
+          If you don&apos;t want to change your password or didn&apos;t request
+          this, just ignore and delete this message.
         </Text>
         <Text style={styles.paragraph}>
           To keep your account secure, please don&apos;t forward this email to

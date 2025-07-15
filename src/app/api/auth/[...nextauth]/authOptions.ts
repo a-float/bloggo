@@ -7,11 +7,11 @@ import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
 import { Prisma, type User } from "@prisma/client";
 import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
-import { sendEmail } from "@/lib/email/sendEmail";
+import { createEmailChannel } from "@/lib/email/email.channel.factory";
 import { Adapter } from "next-auth/adapters";
 import dayjs from "dayjs";
 import { createVerificationEmailMessage } from "@/lib/email/email.message.factory";
-import { emailTypeMapper } from "@/lib/email/email.type.mapper";
+import { emailTypeMapper } from "@/lib/email/email-type-mapper";
 
 function setQueryParam(
   urlString: string,
@@ -27,7 +27,9 @@ const customAdapter: Adapter = {
   ...PrismaAdapter(prisma),
   async createVerificationToken(data) {
     const { type, email } = emailTypeMapper.decode(data.identifier);
-    const maxTokenAge = createVerificationEmailMessage(type, { url: "" }).getMaxAge();
+    const maxTokenAge = createVerificationEmailMessage(type, {
+      url: "",
+    }).getMaxAge();
     return await prisma.verificationToken.create({
       data: {
         identifier: email,
@@ -37,12 +39,6 @@ const customAdapter: Adapter = {
       },
     });
   },
-};
-
-export const LOGIN_EMAIL_TYPE = {
-  login: "login",
-  verifyEmail: "email",
-  resetPassword: "pass",
 };
 
 export const authOptions = {
@@ -111,12 +107,7 @@ export const authOptions = {
         const { type, email } = emailTypeMapper.decode(params.identifier);
         const url = setQueryParam(params.url, "email", email);
         const message = createVerificationEmailMessage(type, { url });
-        await sendEmail({
-          to: email,
-          subject: message.getSubject(),
-          text: message.getText(),
-          html: await message.getHtml(),
-        });
+        await createEmailChannel().send(email, message);
       },
     }),
     Credentials({

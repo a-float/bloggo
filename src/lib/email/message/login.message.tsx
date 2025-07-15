@@ -1,11 +1,11 @@
 import { render } from "@react-email/render";
 import { Button, Section, Text } from "@react-email/components";
 import { EmailTemplate, styles } from "./template";
-import { VerificationEmailMessage } from "./email.message";
+import { VerificationEmailMessage } from "../email.message";
 
 export class LoginMessage extends VerificationEmailMessage {
   getMaxAge(): number {
-    return 10 * 60; // 10 minutes
+    return 10 * 60;
   }
   getSubject() {
     return `Login to Bloggo`;

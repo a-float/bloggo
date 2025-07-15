@@ -89,7 +89,7 @@ export const styles = {
     backgroundColor: "#605dff",
     boxShadow: `0 0.5px 0 0.5px oklch(100% 0 0 / calc(1 * 6%)) inset, 0 3px 2px -2px
    color-mix(in oklab, #605dff calc(1 * 30%), #0000), 0 4px 3px -2px
-   color-mix(in oklab, #605dff calc(1 * 30%), #0000);`,
+   color-mix(in oklab, #605dff calc(1 * 30%), #0000)`,
     borderRadius: "4px",
     fontWeight: "600",
     color: "#fff",

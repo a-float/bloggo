@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import { FaLock } from "react-icons/fa6";
 import { VerificationTokenType } from "@prisma/client";
-import { emailTypeMapper } from "@/lib/email/email.type.mapper";
+import { emailTypeMapper } from "@/lib/email/email-type-mapper";
 
 const getRedirectUrl = () =>
   new URLSearchParams(location.search).get("callbackUrl") || "/";

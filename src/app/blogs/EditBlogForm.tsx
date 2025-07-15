@@ -16,7 +16,7 @@ import TagSelect from "@/components/TagSelect";
 import { type TagWithCount } from "@/types/common";
 import { BlogVisibility } from "@prisma/client";
 import { Select } from "@/components/form/Select";
-import { BlobManager } from "@/lib/blobManager";
+import { BlobManager } from "@/lib/blob/blob-manager";
 import { type ItemInterface, ReactSortable } from "react-sortablejs";
 import { LegendLabel } from "@/components/form/common";
 import { FaChevronLeft, FaXmark } from "react-icons/fa6";

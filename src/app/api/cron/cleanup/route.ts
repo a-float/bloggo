@@ -1,4 +1,4 @@
-import { getFileUploader } from "@/lib/blobUploader";
+import { createBlobStorage } from "@/lib/blob";
 import prisma from "@/lib/prisma";
 import type { NextRequest } from "next/server";
 
@@ -17,10 +17,10 @@ export async function GET(request: NextRequest) {
     where: { blogId: null },
   });
 
-  const uploader = getFileUploader();
+  const storage = createBlobStorage();
   await Promise.all(
     orphanedImages.map(async (image) => {
-      uploader.remove(image.url);
+      storage.remove(image.url);
     })
   );
 

@@ -2,7 +2,7 @@
 
 import { canUserEditBlog } from "@/data/access";
 import { getBlogById } from "@/lib/service/blog.service";
-import { getFileUploader } from "@/lib/blobUploader";
+import { createBlobStorage } from "@/lib/blob";
 import { getSession } from "@/lib/session";
 import prisma from "@/lib/prisma";
 import { Blog } from "@prisma/client";
@@ -21,7 +21,7 @@ export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
   if (!blog) return notFound();
   if (!canUserEditBlog(user, blog)) unauthorized();
 
-  const uploader = getFileUploader();
+  const storage = createBlobStorage();
 
   try {
     await prisma.blog.delete({
@@ -29,7 +29,7 @@ export async function deleteBlog(blogId: Blog["id"]): Promise<ActionState> {
       include: { images: true },
     });
     for (const image of blog.images) {
-      uploader.remove(image.url);
+      storage.remove(image.url);
     }
     revalidatePath(`/blogs/${blog.slug}`);
   } catch (e) {

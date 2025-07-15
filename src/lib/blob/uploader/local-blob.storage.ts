@@ -1,38 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
-import { put, del } from "@vercel/blob";
+import BlobStorage from "../blob-storage";
 
-interface FileUploader {
-  upload(file: File): Promise<string>;
-  remove(url: string): Promise<void>;
-}
-
-export function getFileUploader() {
-  if (process.env.NODE_ENV === "development") return new LocalFileUploader();
-  return new VercelFileUploader();
-}
-
-export class VercelFileUploader implements FileUploader {
-  constructor() {
-    if (!process.env.BLOB_READ_WRITE_TOKEN)
-      throw new Error(
-        "process.env.BLOB_READ_WRITE_TOKEN must be defined when using local uploader"
-      );
-  }
-  async upload(file: File): Promise<string> {
-    const response = await put(file.name, file, {
-      access: "public",
-      addRandomSuffix: true,
-    });
-    return response.url;
-  }
-
-  async remove(url: string): Promise<void> {
-    return await del(url);
-  }
-}
-
-export class LocalFileUploader implements FileUploader {
+export class LocalBlobStorage implements BlobStorage {
   constructor() {
     if (!process.env.LOCAL_STORAGE_PATH)
       throw new Error(

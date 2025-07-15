@@ -1,5 +1,5 @@
 import { uploadFiles } from "@/actions/upload-files.action";
-import { BlobManager } from "@/lib/blobManager";
+import { BlobManager } from "@/lib/blob/blob-manager";
 import { compressImage } from "@/lib/compressImage";
 
 const MAX_REQUEST_SIZE = 1 * 1024 * 1024; // 1MB

@@ -1,9 +1,7 @@
-import { Awaitable } from "next-auth";
-
 export abstract class EmailMessage {
   abstract getSubject(): string;
   abstract getText(): string;
-  abstract getHtml(): Awaitable<string>;
+  abstract getHtml(): string | Promise<string>;
 }
 
 export type VerificationEmailMessageOptions = {

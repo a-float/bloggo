@@ -48,10 +48,16 @@ export default function LoginForm() {
         router.refresh();
       }
     } else {
-      await signIn("email", {
+      const res = await signIn("email", {
+        redirect: false,
         email: emailTypeMapper.encode(VerificationTokenType.LOGIN, data.email),
         callbackUrl: getRedirectUrl(),
       });
+      if (res.error) {
+        toast.error("Email login failed. Please try again later.");
+      } else {
+        toast.success("Check your email for the login link!");
+      }
     }
   };
 
@@ -114,25 +120,31 @@ export default function LoginForm() {
             </>
           ) : (
             <button className="btn btn-primary w-full mt-4" type="submit">
-              <svg
-                aria-label="Email icon"
-                width="16"
-                height="16"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <g
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  fill="none"
-                  stroke="currentColor"
-                >
-                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                </g>
-              </svg>
-              Login with Email
+              {form.formState.isSubmitting ? (
+                <Spinner />
+              ) : (
+                <>
+                  <svg
+                    aria-label="Email icon"
+                    width="16"
+                    height="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <g
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      strokeWidth="2"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </g>
+                  </svg>
+                  Login with Email
+                </>
+              )}
             </button>
           )}
         </form>

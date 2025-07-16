@@ -15,7 +15,7 @@ export class ResetPasswordMessage extends VerificationEmailMessage {
   }
   async getHtml() {
     return await render(
-      <EmailTemplate heading="Password reset" options={this.options}>
+      <EmailTemplate heading="Password reset link" options={this.options}>
         <Section style={buttonContainer}>
           <Button style={styles.button} href={this.options.url}>
             Click here to reset your password

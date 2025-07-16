@@ -138,5 +138,5 @@ model VerificationToken {
 enum VerificationTokenType {
   LOGIN
   VERIFY_EMAIL
-  REST_PASSWORD
+  RESET_PASSWORD
 }

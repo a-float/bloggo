@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
   const form = useForm({
     defaultValues: {

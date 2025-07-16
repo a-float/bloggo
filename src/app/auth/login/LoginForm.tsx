@@ -2,11 +2,11 @@
 
 import React from "react";
 import { signIn } from "next-auth/react";
-import { Input } from "./form/TextInput";
+import { Input } from "../../../components/form/TextInput";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Spinner from "./Spinner";
+import Spinner from "../../../components/Spinner";
 import { FaLock } from "react-icons/fa6";
 import { VerificationTokenType } from "@prisma/client";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
@@ -63,10 +63,11 @@ export default function LoginForm() {
           <Input
             {...form.register("email")}
             label="Email"
-            type={usePassword ? "text" : "email"}
+            type="email"
             placeholder="Email"
             className="w-full"
             required
+            hideRequired
           />
           <div className="fieldset mt-2">
             <label className="label">
@@ -88,6 +89,7 @@ export default function LoginForm() {
                 type="password"
                 placeholder="Password"
                 required
+                hideRequired
                 className="w-full"
               />
 
@@ -101,10 +103,12 @@ export default function LoginForm() {
                   </>
                 )}
               </button>
-              <p className="mt-4 text-sm text-base-content/60">
-                Don&apos;t have an account?{" "}
-                <a href="./register" className="link hover:link-primary">
-                  Register here
+              <p className="mt-4 text-sm text-base-content/60 flex justify-between">
+                <a href="./register" className="link">
+                  Create an account
+                </a>
+                <a href="./reset-password" className="link">
+                  Forgot password?
                 </a>
               </p>
             </>

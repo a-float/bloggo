@@ -18,7 +18,7 @@ export function createVerificationEmailMessage(
     case VerificationTokenType.VERIFY_EMAIL:
       return new VerifyEmailMessage(options);
 
-    case VerificationTokenType.REST_PASSWORD:
+    case VerificationTokenType.RESET_PASSWORD:
       return new ResetPasswordMessage(options);
   }
 }

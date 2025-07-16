@@ -16,7 +16,7 @@ export const emailTypeMapper = {
     switch (type) {
       case VerificationTokenType.VERIFY_EMAIL:
       case VerificationTokenType.LOGIN:
-      case VerificationTokenType.REST_PASSWORD:
+      case VerificationTokenType.RESET_PASSWORD:
         return { type, email };
       default:
         throw Error(`Invalid identifier: ${identifier}`);

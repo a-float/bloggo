@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import LoginControl from "@/components/LoginControl";
 import { FaGithub } from "react-icons/fa6";
 import { ThemeController } from "@/components/ThemeController";
+import Providers from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -36,33 +37,35 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
-        <div className="navbar bg-base-100 shadow-sm">
-          <a href="/" className="btn btn-ghost text-xl">
-            Bloggo
-          </a>
-          <div className="flex-none">
-            <ul className="menu menu-horizontal px-1">
-              <li>
-                <a href="/blogs">Blogs</a>
-              </li>
-            </ul>
-          </div>
-          <div className="flex-1" />
-          <div className="flex gap-2 justify-between items-center">
-            <ThemeController />
-            <LoginControl />
-          </div>
-        </div>
-        {children}
-        <Toaster />
-        <footer className="footer sm:footer-horizontal footer-center p-4 mt-auto">
-          <aside className="flex justify-center items-center gap-2">
-            Created by Mati
-            <a href="https://github.com/a-float">
-              <FaGithub />
+        <Providers>
+          <div className="navbar bg-base-100 shadow-sm">
+            <a href="/" className="btn btn-ghost text-xl">
+              Bloggo
             </a>
-          </aside>
-        </footer>
+            <div className="flex-none">
+              <ul className="menu menu-horizontal px-1">
+                <li>
+                  <a href="/blogs">Blogs</a>
+                </li>
+              </ul>
+            </div>
+            <div className="flex-1" />
+            <div className="flex gap-2 justify-between items-center">
+              <ThemeController />
+              <LoginControl />
+            </div>
+          </div>
+          {children}
+          <Toaster />
+          <footer className="footer sm:footer-horizontal footer-center p-4 mt-auto">
+            <aside className="flex justify-center items-center gap-2">
+              Created by Mati
+              <a href="https://github.com/a-float">
+                <FaGithub />
+              </a>
+            </aside>
+          </footer>
+        </Providers>
       </body>
     </html>
   );

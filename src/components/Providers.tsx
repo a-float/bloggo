@@ -1,5 +1,6 @@
 "use client";
 
+import { SessionProvider } from "next-auth/react";
 import {
   isServer,
   QueryClient,
@@ -39,8 +40,14 @@ export default function Providers(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {props.children}
-    </QueryClientProvider>
+    <SessionProvider
+      refetchOnWindowFocus={false}
+      refetchInterval={0}
+      refetchWhenOffline={false}
+    >
+      <QueryClientProvider client={queryClient}>
+        {props.children}
+      </QueryClientProvider>
+    </SessionProvider>
   );
 }

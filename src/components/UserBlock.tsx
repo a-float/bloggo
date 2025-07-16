@@ -2,7 +2,6 @@ import { Drawer, DrawerToggle } from "./Drawer";
 import SignOutButton from "./SignOutButton";
 import { type UserDTO } from "@/data/user-dto.ts";
 import { FriendPanel } from "./FriendsPanel";
-import QueryProvider from "@/components/QueryProvider";
 import * as friendService from "@/lib/service/friend.service";
 import AvatarWithFallback from "./AvatarWithFallback";
 
@@ -23,11 +22,7 @@ export async function UserBlock(props: { user: UserDTO }) {
   return (
     <Drawer
       drawerId={drawerId}
-      drawerContent={
-        <QueryProvider>
-          <FriendPanel user={props.user} friends={friends} />
-        </QueryProvider>
-      }
+      drawerContent={<FriendPanel user={props.user} friends={friends} />}
       className="w-auto"
     >
       <div className="dropdown dropdown-end pr-2">
@@ -45,6 +40,9 @@ export async function UserBlock(props: { user: UserDTO }) {
           </div>
         </div>
         <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">
+          <li>
+            <a href="/account">Account</a>
+          </li>
           <li>
             <DrawerToggle drawerId={drawerId}>
               Friends

@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
-import NextAuth, { type NextAuthConfig } from "next-auth";
+import NextAuth, { AuthError, type NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
-import { Prisma, type User } from "@prisma/client";
+import { Prisma, VerificationTokenType, type User } from "@prisma/client";
 import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
 import { createEmailChannel } from "@/lib/email/email.channel.factory";
 import { Adapter } from "next-auth/adapters";
@@ -58,7 +58,12 @@ const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    jwt({ user, token }) {
+    jwt({ user, token, trigger, session }) {
+      if (trigger === "update" && session.name) {
+        // TODO fix any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (token.user as any).name = session.name;
+      }
       if (user) {
         // TODO figure out when the full user comes in. on first login?
         if ("password" in user) {
@@ -116,6 +121,12 @@ const authOptions = {
       from: process.env.EMAIL_FROM,
       async sendVerificationRequest(params) {
         const { type, email } = emailTypeMapper.decode(params.identifier);
+        if (
+          type === VerificationTokenType.RESET_PASSWORD &&
+          !(await customAdapter.getUserByEmail?.(email))
+        ) {
+          throw new AuthError("New user can't request password reset");
+        }
         const url = setQueryParam(params.url, "email", email);
         const message = createVerificationEmailMessage(type, { url });
         await createEmailChannel().send(email, message);

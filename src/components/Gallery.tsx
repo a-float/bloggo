@@ -81,7 +81,7 @@ export default function Gallery(props: GalleryProps) {
             <div className="embla__container">
               {images.map((src, idx) => (
                 <div key={idx} className="grid place-items-center">
-                  <img src={src} className="max-w-[70%]" alt="" />
+                  <img src={src} className="max-w-[70%] max-h-[80vh]" alt="" />
                 </div>
               ))}
             </div>

@@ -20,7 +20,7 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
             />
           </figure>
         ) : null}
-        <div className="card-body">
+        <div className="card-body overflow-hidden">
           <h2 className="card-title">{blog.title}</h2>
           <span className="text-xs whitespace-pre text-base-content/60">
             {dayjs(blog.date ?? blog.createdAt).format("MMMM D, YYYY")}

@@ -24,7 +24,7 @@ type TextareaProps = BaseProps & React.ComponentProps<"textarea">;
 export function Textarea(props: TextareaProps) {
   const { label, error, hideRequired, hideLabel, ...rest } = props;
   return (
-    <fieldset className="fieldset flex flex-col flex-1">
+    <fieldset className="fieldset">
       <LegendLabel {...props}>{label}</LegendLabel>
       <textarea
         aria-invalid={!!error}

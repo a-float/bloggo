@@ -156,7 +156,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                   <Textarea
                     required
                     label="Content"
-                    className="textarea w-full resize-none flex-1 min-h-[64px] md:min-h-[256px] field-sizing-content"
+                    className="textarea w-full resize-none flex-1 min-h-[64px] md:min-h-[256px] max-h-[455px] field-sizing-content"
                     {...field}
                   />
                   {/* <ForwardRefMDXEditor

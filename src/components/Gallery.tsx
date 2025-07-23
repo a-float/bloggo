@@ -60,8 +60,7 @@ export default function Gallery(props: GalleryProps) {
       </div>
 
       <div
-        // modal-open DaisyUI handles root overflow and gutter
-        className={`fixed inset-0 z-50 flex items-center justify-center modal-open ${
+        className={`not-prose fixed inset-0 z-50 flex items-center justify-center ${
           isOpen ? "" : "hidden"
         }`}
       >
@@ -81,7 +80,7 @@ export default function Gallery(props: GalleryProps) {
             <div className="embla__container">
               {images.map((src, idx) => (
                 <div key={idx} className="grid place-items-center">
-                  <img src={src} className="max-w-[70%] max-h-[80vh]" alt="" />
+                  <img src={src} className="max-w-[70%] max-h-[75vh]" alt="" />
                 </div>
               ))}
             </div>

@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently 'next dev -p 5000' 'npm run tw:watch'",
+    "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "tw:watch": "npx @tailwindcss/cli -i ./src/app/globals.css -o ./.next/static/css/app/layout.css --watch",
     "type:check": "tsc --noEmit",
     "db:push": "prisma generate && prisma db push",
     "db:reset": "prisma generate && prisma db push --force-reset && prisma db seed",
@@ -52,7 +51,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/cli": "^4.1.10",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcrypt": "^5.0.2",
@@ -63,7 +61,6 @@
     "@types/react-day-picker": "^5.3.0",
     "@types/react-dom": "^19",
     "@types/sortablejs": "^1.15.8",
-    "concurrently": "^9.1.2",
     "daisyui": "^5.0.43",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",

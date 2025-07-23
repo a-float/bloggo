@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 public/blobs
+# This is where db container storage volume is mounted.
+# Lack of read access to this directory made next.js silently fail to process tailwind classnames.
+# Adding it to .gitignore finally fixed this issue.
+data
 
 # dependencies
 /node_modules

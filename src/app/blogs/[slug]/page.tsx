@@ -1,13 +1,12 @@
 import React from "react";
 import { notFound, unauthorized } from "next/navigation";
-import { micromark } from "micromark";
-import { gfm, gfmHtml } from "micromark-extension-gfm";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
 import { getSession } from "@/lib/session";
 import Gallery from "@/components/Gallery";
 import dayjs from "dayjs";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
+import MarkdownRenderer from "@/components/md/MarkdownRenderer";
 
 export default async function BlogPage({
   params,
@@ -20,11 +19,6 @@ export default async function BlogPage({
   if (!blog) return notFound();
   const canSeeBlog = await canUserSeeBlog(user, blog);
   if (!canSeeBlog) return unauthorized();
-
-  const content = micromark(blog.content, {
-    extensions: [gfm()],
-    htmlExtensions: [gfmHtml()],
-  });
 
   return (
     <>
@@ -63,11 +57,7 @@ export default async function BlogPage({
             imageClassName="max-h-[128px] md:max-h-[196px] h-full w-full object-cover rounded-md cursor-pointer hover:scale-102 transition-transform"
           />
         )}
-        <div
-          className="prose"
-          style={{ wordWrap: "break-word" }}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <MarkdownRenderer markdown={blog.content} />
       </div>
     </>
   );

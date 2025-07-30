@@ -2,14 +2,13 @@
 
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-// import { type MDXEditorMethods } from "@mdxeditor/editor";
-// import { ForwardRefMDXEditor } from "@/components/mdx/ForwardRefMDXEditor";
+import MarkdownEditor from "@/components/md/MarkdownEditor";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
 import { createBlog } from "@/actions/edit-create-blog.action";
 import { useRouter } from "next/navigation";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
-import { Textarea, Input } from "@/components/form/TextInput";
+import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { BlogDTO } from "@/data/blog-dto";
 import TagSelect from "@/components/TagSelect";
@@ -140,7 +139,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
         className="flex flex-col flex-1"
       >
         <div className="lg:flex gap-8 lg:[&_fieldset:not(:last-child)]:mb-1">
-          <div className="flex flex-col flex-[1.5]">
+          <div className="flex flex-col flex-[2]">
             <Input
               {...form.register("title")}
               defaultValue={blog?.title ?? ""}
@@ -152,24 +151,14 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
               name="content"
               control={form.control}
               render={({ field, fieldState }) => (
-                <>
-                  <Textarea
-                    required
-                    label="Content"
-                    className="textarea w-full resize-none flex-1 min-h-[64px] md:min-h-[256px] max-h-[455px] field-sizing-content"
-                    {...field}
-                  />
-                  {/* <ForwardRefMDXEditor
-                  ref={editorRef}
-                  markdown={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  contentEditableClassName="prose mdx-prose-fix bg-base-200 max-w-none"
-                /> */}
-                  {fieldState.error ? (
-                    <p className="text-error">{fieldState.error?.message}</p>
-                  ) : null}
-                </>
+                <MarkdownEditor
+                  label="Content"
+                  required
+                  onChange={(val) => form.setValue(field.name, val)}
+                  defaultValue={blog?.content ?? ""}
+                  value={field.value}
+                  error={fieldState.error}
+                />
               )}
             />
           </div>

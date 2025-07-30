@@ -4,6 +4,58 @@
   themes: all;
 }
 
+/* TODO group with scss or split into multiple files */
+.ProseMirror.editor {
+  outline: none;
+}
+
+.input-border {
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}
+
+.input-border-radius {
+  border-radius: var(--radius-field);
+}
+
+.tab {
+  border: 1px solid transparent;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+  position: relative;
+}
+
+.tab.tab-active {
+  border-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}
+
+.tab.tab-active::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 100%;
+  position: absolute;
+  top: calc(100% - 1px);
+  background-color: var(--color-base-100);
+}
+
+.ProseMirror.editor *:first-child {
+  margin-top: 0;
+}
+.prose *:last-child,
+.ProseMirror.editor *:last-child {
+  margin-bottom: 0;
+}
+
+.prose blockquote p::before,
+.prose blockquote p::after {
+  content: "";
+}
+
+.prose hr {
+  margin: 2em 0;
+}
+
 .embla {
   overflow: hidden;
 }

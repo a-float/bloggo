@@ -21,7 +21,7 @@ export default function SimpleMarkdownEditor(
         <div className="flex-1" />
         <Toolbar onChange={props.onChange} textarea={textareaRef.current} />
       </div>
-      <div className="input-border input-border-radius !rounded-tl-none">
+      <div className="border border-base-content/20 rounded-input !rounded-tl-none !rounded-tr-sm">
         {/* Keep textarea edit history */}
         <div className={activeTab !== "Edit" ? "hidden" : ""}>
           <textarea

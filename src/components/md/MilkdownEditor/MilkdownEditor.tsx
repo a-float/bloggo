@@ -36,7 +36,7 @@ export default function MilkdownEditor(
   }, []);
 
   return (
-    <div className="px-3 max-h-[350px] overflow-auto input-border input-border-radius">
+    <div className="px-3 overflow-auto border border-base-content/20 rounded-input">
       <div className="prose py-3">
         <Milkdown />
       </div>

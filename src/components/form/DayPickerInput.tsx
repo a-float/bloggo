@@ -1,6 +1,7 @@
 import React from "react";
 import { DayPicker, DayPickerProps } from "react-day-picker";
 import { BaseProps, LegendLabel } from "./common";
+import clsx from "clsx";
 
 type DayPickerInputProps = BaseProps &
   Omit<React.ComponentProps<"input">, "onChange"> & {
@@ -20,7 +21,7 @@ export function DayPickerInput(props: DayPickerInputProps) {
       <button
         type="button"
         popoverTarget="rdp-popover"
-        className={rest.className + " input input-border"}
+        className={clsx(rest.className, "input")}
         style={{ anchorName: "--rdp" } as React.CSSProperties}
       >
         {selected ? selected.toDateString() : "Pick a date"}

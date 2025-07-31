@@ -1,0 +1,14 @@
+.prose {
+  & *:last-child {
+    margin-bottom: 0;
+  }
+
+  & blockquote p::before,
+  & blockquote p::after {
+    content: "";
+  }
+
+  hr {
+    margin: 2em 0;
+  }
+}

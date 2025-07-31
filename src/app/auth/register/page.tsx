@@ -50,7 +50,7 @@ export default function Register() {
         type="email"
         placeholder="Enter your email"
         required
-        className="input input-bordered"
+        className="input"
       />
       <Input
         {...form.register("name")}
@@ -58,7 +58,7 @@ export default function Register() {
         label="Name"
         placeholder="Enter your display name"
         required
-        className="input input-bordered"
+        className="input"
       />
       <Input
         {...form.register("password")}
@@ -66,7 +66,7 @@ export default function Register() {
         label="Password"
         placeholder="Enter your password"
         required
-        className="input input-bordered"
+        className="input"
       />
 
       <button type="submit" className="btn btn-primary mt-4 block w-full">

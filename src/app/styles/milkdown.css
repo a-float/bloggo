@@ -1,0 +1,9 @@
+.milkdown {
+  .ProseMirror.editor {
+    outline: none;
+  }
+
+  .ProseMirror.editor *:first-child {
+    margin-top: 0;
+  }
+}

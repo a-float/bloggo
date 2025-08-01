@@ -1,3 +1,4 @@
+import React from "react";
 import { commonmark } from "@milkdown/kit/preset/commonmark";
 import { defaultValueCtx, Editor, rootCtx } from "@milkdown/kit/core";
 import { EditorProps } from "../MarkdownEditor";
@@ -7,7 +8,8 @@ import { listener, listenerCtx } from "@milkdown/kit/plugin/listener";
 import { Milkdown, useEditor } from "@milkdown/react";
 import { replaceAll } from "@milkdown/utils";
 import { tableBlock } from "@milkdown/components/table-block";
-import React from "react";
+
+import { tableConfig } from "./plugins/table";
 
 export default function MilkdownEditor(
   props: Pick<EditorProps, "defaultValue" | "onChange" | "value">
@@ -17,6 +19,7 @@ export default function MilkdownEditor(
       .config((ctx) => {
         ctx.set(rootCtx, root);
         ctx.set(defaultValueCtx, props.value || props.defaultValue || "");
+
         const listener = ctx.get(listenerCtx);
         listener.markdownUpdated((_, markdown, prevMarkdown) => {
           if (markdown !== prevMarkdown) {
@@ -24,6 +27,7 @@ export default function MilkdownEditor(
           }
         });
       })
+      .config(tableConfig)
       .use(commonmark)
       .use(gfm)
       .use(tableBlock)
@@ -36,8 +40,8 @@ export default function MilkdownEditor(
   }, []);
 
   return (
-    <div className="px-3 overflow-auto border border-base-content/20 rounded-input">
-      <div className="prose py-3">
+    <div className="p-3 lg:p-6 overflow-auto border border-base-content/20 rounded-input">
+      <div className="prose">
         <Milkdown />
       </div>
     </div>

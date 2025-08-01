@@ -11,4 +11,10 @@
   hr {
     margin: 2em 0;
   }
+
+  table tr th,
+  table tr td {
+    padding: 0.5em 0.75em;
+    min-width: 50px;
+  }
 }

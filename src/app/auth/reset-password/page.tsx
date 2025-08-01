@@ -22,7 +22,6 @@ export default function ResetPassword() {
       redirect: false,
       callbackUrl: "/account",
     });
-    console.log("signIn result", res);
     if (!res.error) {
       toast.success("Reset password email sent successfully!");
     } else {

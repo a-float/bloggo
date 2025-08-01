@@ -1,12 +1,12 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
-@plugin "daisyui" {
-  themes: all;
-}
 @import "./styles/tag-select.css";
 @import "./styles/embla.css";
 @import "./styles/prose.css";
 @import "./styles/milkdown.css";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+  themes: all;
+}
 
 .rounded-input {
   border-radius: var(--radius-field);

@@ -1,12 +1,13 @@
 import { markdownToHtml } from "@/lib/markdown";
 
-type MarkdownRendererProps = { className?: string } & (
-  | { html: string; markdown?: never }
-  | { html?: never; markdown: string }
-);
+type MarkdownRendererProps = {
+  className?: string;
+  trusted?: boolean;
+} & ({ html: string; markdown?: never } | { html?: never; markdown: string });
 
 export default function MarkdownRenderer(props: MarkdownRendererProps) {
-  const content = props.html ?? markdownToHtml(props.markdown);
+  const content =
+    props.html ?? markdownToHtml(props.markdown, { trusted: !!props.trusted });
   return (
     <div
       className={"prose " + (props.className ?? "")}

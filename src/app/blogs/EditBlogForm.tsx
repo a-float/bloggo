@@ -204,7 +204,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 className="file-input w-full"
                 key={imagePreviews.length}
                 name="imageFiles"
-                accept="image/png, image/jpeg"
+                accept="image/*"
                 multiple
                 onChange={(e) => {
                   const files = Array.from(e.target.files ?? []);

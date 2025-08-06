@@ -1,5 +1,6 @@
-import { tableBlockConfig } from "@milkdown/components/table-block";
 import { Ctx } from "@milkdown/kit/ctx";
+import { Editor } from "@milkdown/kit/core";
+import { tableBlock, tableBlockConfig } from "@milkdown/components/table-block";
 import {
   FaPlus,
   FaTrash,
@@ -11,7 +12,7 @@ import {
 } from "react-icons/fa6";
 import { iconToString } from "../../utils";
 
-export const tableConfig = (ctx: Ctx) => {
+const configureTablePlugin = (ctx: Ctx) => {
   ctx.update(tableBlockConfig.key, (defaultConfig) => ({
     ...defaultConfig,
     renderButton: (renderType) => {
@@ -38,3 +39,7 @@ export const tableConfig = (ctx: Ctx) => {
     },
   }));
 };
+
+export function setupTable(editor: Editor) {
+  editor.config(configureTablePlugin).use(tableBlock);
+}

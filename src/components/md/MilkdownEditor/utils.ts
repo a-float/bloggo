@@ -1,4 +1,5 @@
 import { IconType } from "react-icons/lib";
+import type { Selection } from "@milkdown/kit/prose/state";
 
 export const iconToString = (Icon: IconType): string => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,3 +15,13 @@ export const iconToString = (Icon: IconType): string => {
       <g><path d="${d}"/></g>
     </svg>`;
 };
+
+export function isInCodeBlock(selection: Selection) {
+  const type = selection.$from.parent.type;
+  return type.name === "code_block";
+}
+
+export function isInList(selection: Selection) {
+  const type = selection.$from.node(selection.$from.depth - 1)?.type;
+  return type?.name === "list_item";
+}

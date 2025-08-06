@@ -3,9 +3,52 @@
     outline: none;
   }
 
+  /* .prosemirror-virtual-cursor + *, */
   & .ProseMirror.editor *:first-child {
     margin-top: 0;
   }
+}
+
+.milkdown-tooltip {
+  svg {
+    fill: var(--color-base-content);
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.milkdown .drag-handle {
+  @apply absolute btn btn-xs btn-square btn-soft;
+  @apply hidden md:flex;
+  transition: all 0.15s ease-in-out;
+
+  &[data-show="false"]:not(:focus-within) {
+    opacity: 0;
+  }
+
+  & svg {
+    fill: var(--color-base-content);
+    width: 9px;
+  }
+}
+
+.prosemirror-virtual-cursor {
+  @apply absolute;
+}
+
+.milkdown .slash-menu {
+  @apply absolute;
+
+  &[data-show="false"] {
+    display: none;
+  }
+}
+
+.milkdown .placeholder::before {
+  pointer-events: none;
+  white-space: pre;
+  content: attr(data-placeholder);
+  opacity: 0.6;
 }
 
 .milkdown .milkdown-table-block {

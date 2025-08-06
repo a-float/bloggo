@@ -36,7 +36,7 @@ export default function MarkdownEditor(props: EditorProps) {
         />
         <span>Visual</span>
       </div>
-      {editorType === "visual" ? (
+      <div className={editorType === "simple" ? "hidden" : ""}>
         <MilkdownProvider>
           <MilkdownEditor
             defaultValue={props.defaultValue}
@@ -44,13 +44,20 @@ export default function MarkdownEditor(props: EditorProps) {
             value={props.value}
           />
         </MilkdownProvider>
-      ) : (
+      </div>
+      {/* No idea why, overflow-auto here fixes toolbar overflow */}
+      {/* Padding + margin fixes textarea outline */}
+      <div
+        className={
+          editorType === "visual" ? "hidden" : "overflow-auto p-1 -m-1"
+        }
+      >
         <TextareaMarkdownEditor
           onChange={props.onChange}
           defaultValue={props.defaultValue}
           value={props.value}
         />
-      )}
+      </div>
       {!!props.error?.message && (
         <p className="text-error">{props.error.message}</p>
       )}

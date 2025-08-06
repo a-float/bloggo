@@ -1,3 +1,4 @@
+/* TODO should respect not-prose class */
 .prose {
   & *:last-child {
     margin-bottom: 0;
@@ -8,12 +9,12 @@
     content: "";
   }
 
-  hr {
+  & hr {
     margin: 2em 0;
   }
 
-  table tr th,
-  table tr td {
+  & table tr th,
+  & table tr td {
     padding: 0.5em 0.75em;
     min-width: 50px;
   }

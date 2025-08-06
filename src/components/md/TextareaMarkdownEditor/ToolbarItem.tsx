@@ -5,12 +5,9 @@ export function ToolbarItem(props: {
   action: ToolbarAction;
   createClickHandler: (action: EditorAction) => () => void;
 }) {
-  if (props.action === "|") {
-    return <span key="separator" className="w-[1px] h-5 bg-base-content/20" />;
-  }
   if (props.action.action) {
     return (
-      <div className="lg:tooltip" data-tip={props.action.tip}>
+      <div className="md:tooltip" data-tip={props.action.tip}>
         <button
           className={clsx("btn btn-soft btn-xs btn-square")}
           type="button"
@@ -23,7 +20,7 @@ export function ToolbarItem(props: {
   }
   return (
     <div className="dropdown dropdown-center">
-      <div className="lg:tooltip" data-tip={props.action.tip}>
+      <div className="md:tooltip" data-tip={props.action.tip}>
         <div
           tabIndex={0}
           role="button"

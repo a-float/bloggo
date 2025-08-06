@@ -11,14 +11,13 @@ export default function SimpleMarkdownEditor(
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
 
   return (
-    <div>
-      <div className="flex">
+    <>
+      <div className="flex justify-between max-w-full">
         <Tabs
           tabs={["Edit", "Preview"]}
           activeTab={activeTab}
           onTabChange={(tab) => setActiveTab(tab)}
         />
-        <div className="flex-1" />
         <Toolbar onChange={props.onChange} textarea={textareaRef.current} />
       </div>
       <div className="border border-base-content/20 rounded-input !rounded-tl-none !rounded-tr-sm">
@@ -39,6 +38,6 @@ export default function SimpleMarkdownEditor(
           />
         )}
       </div>
-    </div>
+    </>
   );
 }

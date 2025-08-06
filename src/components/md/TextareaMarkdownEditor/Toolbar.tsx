@@ -15,6 +15,7 @@ import { EditorProps } from "../MarkdownEditor";
 import React from "react";
 import { BlobManager } from "@/lib/blob/blob-manager";
 import { ToolbarItem } from "./ToolbarItem";
+import HeadingIcon from "@/components/HeadingIcon";
 
 type HeadingLevel = 1 | 2 | 3 | 4;
 
@@ -35,56 +36,51 @@ export type ToolbarSubAction = {
   action: EditorAction;
 };
 
-export type ToolbarAction =
-  | "|"
-  | ({
-      icon: React.ReactNode;
-      tip: string;
-    } & (
-      | { action?: never; children: ToolbarSubAction[] }
-      | { action: EditorAction; children?: never }
-    ));
-
-const HeadingIcon = (props: { level: HeadingLevel }) => (
-  <div className="w-6">
-    <FaHeading className="inline-block" />
-    <sub>{props.level}</sub>
-  </div>
+export type ToolbarAction = {
+  icon: React.ReactNode;
+  tip: string;
+} & (
+  | { action?: never; children: ToolbarSubAction[] }
+  | { action: EditorAction; children?: never }
 );
 
-const toolbarActions: ToolbarAction[] = [
-  {
-    icon: <FaHeading />,
-    tip: "Headings",
-    children: [
-      { icon: <HeadingIcon level={1} />, label: "Heading 1", action: "h1" },
-      {
-        icon: <HeadingIcon level={2} />,
-        label: "Heading 2",
-        action: "h2",
-      },
-      {
-        icon: <HeadingIcon level={3} />,
-        label: "Heading 3",
-        action: "h3",
-      },
-      {
-        icon: <HeadingIcon level={4} />,
-        label: "Heading 4",
-        action: "h4",
-      },
-    ],
-  },
-  { icon: <FaBold />, action: "bold", tip: "Bold" },
-  { icon: <FaItalic />, action: "italic", tip: "Italic" },
-  "|",
-  { icon: <FaQuoteLeft />, action: "quote", tip: "Quote" },
-  { icon: <FaCode />, action: "code", tip: "Code" },
-  { icon: <FaImage />, action: "image", tip: "Image" },
-  "|",
-  { icon: <FaListUl />, action: "ul", tip: "Unordered List" },
-  { icon: <FaListOl />, action: "ol", tip: "Ordered List" },
-  { icon: <FaLink />, action: "link", tip: "Link" },
+const toolbarActionGroups: ToolbarAction[][] = [
+  [
+    {
+      icon: <FaHeading />,
+      tip: "Headings",
+      children: [
+        { icon: <HeadingIcon level={1} />, label: "Heading 1", action: "h1" },
+        {
+          icon: <HeadingIcon level={2} />,
+          label: "Heading 2",
+          action: "h2",
+        },
+        {
+          icon: <HeadingIcon level={3} />,
+          label: "Heading 3",
+          action: "h3",
+        },
+        {
+          icon: <HeadingIcon level={4} />,
+          label: "Heading 4",
+          action: "h4",
+        },
+      ],
+    },
+    { icon: <FaBold />, action: "bold", tip: "Bold" },
+    { icon: <FaItalic />, action: "italic", tip: "Italic" },
+  ],
+  [
+    { icon: <FaQuoteLeft />, action: "quote", tip: "Quote" },
+    { icon: <FaCode />, action: "code", tip: "Code" },
+    { icon: <FaImage />, action: "image", tip: "Image" },
+  ],
+  [
+    { icon: <FaListUl />, action: "ul", tip: "Unordered List" },
+    { icon: <FaListOl />, action: "ol", tip: "Ordered List" },
+    { icon: <FaLink />, action: "link", tip: "Link" },
+  ],
 ];
 
 /**
@@ -209,14 +205,23 @@ export function Toolbar(props: {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      {toolbarActions.map((action, idx) => (
-        <ToolbarItem
-          key={idx}
-          action={action}
-          createClickHandler={createClickHandler}
-        />
-      ))}
+    <div className="ml-10 overflow-auto xs:max-w-auto scrollbar-hide">
+      <div className="flex gap-2 pb-1.5 items-center">
+        {toolbarActionGroups.map((group, groupIdx) => (
+          <div
+            key={groupIdx}
+            className="flex gap-2 border-l-1 border-l-base-content/10 pl-2 first:border-l-0 first:pl-0"
+          >
+            {group.map((action, idx) => (
+              <ToolbarItem
+                key={idx}
+                action={action}
+                createClickHandler={createClickHandler}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
       <input
         type="file"
         ref={fileInputRef}

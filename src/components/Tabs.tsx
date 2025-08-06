@@ -9,7 +9,7 @@ type TabsProps<T extends string> = {
 
 export default function Tabs<T extends string>(props: TabsProps<T>) {
   return (
-    <div role="tablist" className="tabs tabs-sm">
+    <div role="tablist" className="tabs tabs-sm flex-nowrap self-end">
       {props.tabs.map((tab) => (
         <button
           key={tab}

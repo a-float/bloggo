@@ -116,7 +116,7 @@ export function FriendPanel(props: {
         />
       </fieldset>
       {!!pendingFriendships?.length && (
-        <section className="">
+        <section>
           <h3 className="text-xl mb-3">Friend requests</h3>
           <ul className="list">
             {pendingFriendships

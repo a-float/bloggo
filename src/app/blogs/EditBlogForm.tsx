@@ -154,7 +154,10 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 <MarkdownEditor
                   label="Content"
                   required
-                  onChange={(val) => form.setValue(field.name, val)}
+                  onChange={(md) => {
+                    // for formState.isDirty
+                    field.onChange({ target: { value: md } });
+                  }}
                   defaultValue={blog?.content ?? ""}
                   value={field.value}
                   error={fieldState.error}

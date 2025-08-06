@@ -8,6 +8,24 @@
   themes: all;
 }
 
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
 .rounded-input {
   border-radius: var(--radius-field);
+}
+
+.ProseMirror {
+  white-space: pre-wrap;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

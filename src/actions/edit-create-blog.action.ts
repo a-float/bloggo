@@ -40,7 +40,7 @@ const capitalize = (str: string) =>
 
 // Wish I could return 401 for unauthorized access and 404 for not found, but Next.js doesn't let me do that :(
 
-export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
+export async function createOrUpdateBlog(input: CreateBlogInput): Promise<ActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
   const errors: ActionState["errors"] = [];

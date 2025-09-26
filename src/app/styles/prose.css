@@ -18,4 +18,20 @@
     padding: 0.5em 0.75em;
     min-width: 50px;
   }
+
+  & table td,
+  & table th {
+    &[align="right"] {
+      text-align: right;
+    }
+
+    &[align="center"] {
+      text-align: center;
+    }
+  }
+
+  img {
+    /* transform: scale(attr(data-scale type(<number>), 0.5)); */
+    margin-inline: auto;
+  }
 }

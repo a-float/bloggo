@@ -64,13 +64,17 @@ export const MenuApp = (props: {
       ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [activeIdx]);
 
+  React.useEffect(() => {
+    setActiveIdx(-1);
+  }, [show]);
+
   if (!show) return null;
 
   let flatIdx = -1;
 
   return (
     <div
-      className="menu not-prose bg-base-200 rounded-box w-42 max-h-[300px] overflow-auto"
+      className="menu not-prose bg-base-200 rounded-box w-42 max-h-[300px] overflow-auto z-1"
       ref={menuRef}
     >
       <ul>

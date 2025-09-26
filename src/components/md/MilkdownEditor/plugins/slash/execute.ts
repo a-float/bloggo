@@ -1,6 +1,8 @@
 import { commandsCtx } from "@milkdown/kit/core";
 import { Ctx } from "@milkdown/kit/ctx";
+import { imageBlockSchema } from "@milkdown/components/image-block";
 import {
+  addBlockTypeCommand,
   headingSchema,
   clearTextInCurrentBlockCommand,
   setBlockTypeCommand,
@@ -49,6 +51,15 @@ export function executeCommand(ctx: Ctx, cmd: string) {
     commands.call(clearTextInCurrentBlockCommand.key);
     commands.call(wrapInBlockTypeCommand.key, {
       nodeType: blockquote,
+    });
+  }
+
+  if (cmd === "image") {
+    const imageBlock = imageBlockSchema.type(ctx);
+
+    commands.call(clearTextInCurrentBlockCommand.key);
+    commands.call(addBlockTypeCommand.key, {
+      nodeType: imageBlock,
     });
   }
 

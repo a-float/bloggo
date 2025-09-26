@@ -109,7 +109,7 @@ export function Toolbar(props: {
 }) {
   const textarea = props.textarea;
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const blobManagerRef = React.useRef(new BlobManager());
+  const blobManagerRef = React.useRef(BlobManager.getInstance());
 
   const prependSelectedLines = (prefix: string, mode: "all" | "first") => {
     if (!textarea) return;
@@ -227,6 +227,7 @@ export function Toolbar(props: {
         ref={fileInputRef}
         className="hidden"
         accept="image/*"
+        multiple
         onInput={handleImageUpload}
       />
     </div>

@@ -5,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import MarkdownEditor from "@/components/md/MarkdownEditor";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
-import { createBlog } from "@/actions/edit-create-blog.action";
+import { createOrUpdateBlog } from "@/actions/edit-create-blog.action";
 import { useRouter } from "next/navigation";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
 import { Input } from "@/components/form/TextInput";
@@ -20,6 +20,7 @@ import { type ItemInterface, ReactSortable } from "react-sortablejs";
 import { LegendLabel } from "@/components/form/common";
 import { FaChevronLeft, FaXmark } from "react-icons/fa6";
 import { uploadNewImages } from "./uploadNewImages";
+import { uploadNewContentImages } from "./uploadNewContentImages";
 
 type FormValues = {
   id: number | null;
@@ -39,7 +40,7 @@ type SortableImage = ItemInterface & { name: string; url: string };
 
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
-  const blobManagerRef = React.useRef(new BlobManager());
+  const blobManagerRef = React.useRef(BlobManager.getInstance());
 
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
@@ -63,15 +64,20 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const body = {
       ...data,
+      // TODO reference content images in db
+      content: await uploadNewContentImages(
+        data.content,
+        blobManagerRef.current
+      ),
       images: await uploadNewImages(imagePreviews, blobManagerRef.current),
     };
-    await createBlog(body).then((res) => {
+    await createOrUpdateBlog(body).then((res) => {
       res.errors?.forEach((err) => {
         if (err.field === "id") return;
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
-        form.reset(form.getValues());
+        form.reset(body);
         if (!data.id && res.data) {
           // If this is a new blog, redirect to the new blog page
           setWaitingForRedirect(true);

@@ -39,6 +39,7 @@ export default function MarkdownEditor(props: EditorProps) {
       <div className={editorType === "simple" ? "hidden" : ""}>
         <MilkdownProvider>
           <MilkdownEditor
+            disabled={editorType === "simple"}
             defaultValue={props.defaultValue}
             onChange={props.onChange}
             value={props.value}

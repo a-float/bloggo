@@ -9,9 +9,9 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         {blog.images.length > 0 ? (
           <figure className="flex-[0_0_96px] sm:flex-[0_0_128px] aspect-square">
             <Image
-              className="object-cover w-full"
-              width={125}
-              height={150}
+              className="object-cover w-full object-center"
+              width={250}
+              height={300}
               src={
                 blog.images.at(0)?.url ||
                 `https://picsum.photos/seed/${blog.title}/600/300`
@@ -26,13 +26,13 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
             {dayjs(blog.date ?? blog.createdAt).format("MMMM D, YYYY")}
             {blog.author?.name ? ` by ${blog.author.name}` : null}
           </span>
-          <p
+          {/* <p
             className={`${
               blog.tags.length > 0 ? "line-clamp-1" : "line-clamp-2"
             } flex-none`}
           >
             {blog.content}
-          </p>
+          </p> */}
           {blog.tags.length > 0 && (
             <div className="flex gap-1 flex-wrap justify-end">
               {blog.tags.map((tag) => (

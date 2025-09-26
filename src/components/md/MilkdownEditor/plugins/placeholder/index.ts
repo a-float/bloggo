@@ -12,7 +12,7 @@ interface PlaceholderConfig {
 
 const placeholderConfig = $ctx(
   {
-    text: "Please write...",
+    text: "Please write or type / to view commands...",
     mode: "block",
   } as PlaceholderConfig,
   "placeholderConfigCtx"

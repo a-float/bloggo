@@ -15,7 +15,7 @@ class MenuView implements PluginView {
 
   constructor(ctx: Ctx) {
     this.#content = document.createElement("div");
-    this.#content.className = "slash-menu";
+    this.#content.className = "slash-menu z-1";
     this.#root = createRoot(this.#content);
     const ref = React.createRef<{ setShow: (value: boolean) => void }>();
 
@@ -24,6 +24,10 @@ class MenuView implements PluginView {
 
     const provider: SlashProvider = new SlashProvider({
       content: this.#content,
+      debounce: 20,
+      // middleware: [
+      //   flip({ fallbackPlacements: ["top-start"] }), // flip if not enough space
+      // ],
       shouldShow(view) {
         if (
           isInCodeBlock(view.state.selection) ||
@@ -64,8 +68,10 @@ class MenuView implements PluginView {
 
   destroy = () => {
     this.#slashProvider.destroy();
-    this.#root.unmount();
-    this.#content.remove();
+    setTimeout(() => {
+      this.#root.unmount();
+      this.#content.remove();
+    });
   };
 }
 

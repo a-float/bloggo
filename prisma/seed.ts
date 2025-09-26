@@ -31,7 +31,7 @@ async function getUsers() {
   }));
 
   users.push({
-    email: "matt",
+    email: "matt@bloggo.fun",
     name: "matt",
     password: await hash("mati123", 10),
     role: Role.ADMIN,

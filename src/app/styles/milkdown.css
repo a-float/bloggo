@@ -9,6 +9,10 @@
   }
 }
 
+.milkdown .selected img {
+  @apply opacity-80;
+}
+
 .milkdown-tooltip {
   svg {
     fill: var(--color-base-content);
@@ -122,6 +126,85 @@
 
   & .line-handle[data-role="x-line-drag-handle"] {
     height: 1px;
+  }
+}
+
+.milkdown .milkdown-image-block {
+  position: relative;
+  margin: 2rem 0 2rem 0;
+  img {
+    @apply min-h-[100px] min-w-[100px];
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .image-wrapper {
+    @apply w-fit relative mx-auto my-0 bg-primary-content/10 rounded;
+  }
+
+  .operation {
+    position: absolute;
+    right: 0.25rem;
+    z-index: 1;
+
+    .operation-item {
+      @apply btn btn-square btn-soft btn-xs;
+      svg {
+        fill: currentColor;
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+
+  .image-resize-handle {
+    @apply w-3/4 max-w-48 absolute left-1/2 -translate-y-0.5 -translate-x-1/2 h-[4px] bg-base-content rounded opacity-0 hover:opacity-0 transition-opacity;
+    cursor: row-resize;
+  }
+  &:hover .image-resize-handle {
+    @apply opacity-50;
+  }
+
+  .caption-input {
+    outline: none;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.milkdown .image-edit {
+  @apply flex items-center p-4 bg-base-200 rounded gap-2;
+
+  svg {
+    fill: var(--color-base-content);
+  }
+
+  .link-importer {
+    @apply relative flex-1;
+
+    .uploader {
+      @apply font-bold cursor-pointer hover:underline transition-colors;
+    }
+
+    &.focus .uploader {
+      @apply text-base-content/50 pointer-events-none;
+    }
+
+    .link-input-area {
+      @apply w-full px-2;
+    }
+
+    span.text {
+      @apply ml-1 text-base-content/50;
+    }
+
+    .placeholder {
+      @apply absolute top-0 bottom-0 left-0 cursor-text;
+    }
+  }
+
+  .confirm {
+    @apply btn btn-primary btn-sm;
   }
 }
 

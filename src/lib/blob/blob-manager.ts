@@ -1,4 +1,11 @@
 export class BlobManager {
+  private static instance: BlobManager | null = null;
+
+  static getInstance() {
+    this.instance ??= new BlobManager();
+    return this.instance;
+  }
+
   blobs: Record<string, Blob | null> = {};
 
   createObjectURL(blob: Blob) {

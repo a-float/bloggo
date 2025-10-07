@@ -1,8 +1,8 @@
 /* TODO should respect not-prose class */
 .prose {
-  & *:last-child {
+  /* & *:last-child {
     margin-bottom: 0;
-  }
+  } */
 
   & blockquote p::before,
   & blockquote p::after {
@@ -31,6 +31,7 @@
   }
 
   img {
+    @apply rounded-md;
     /* transform: scale(attr(data-scale type(<number>), 0.5)); */
     margin-inline: auto;
   }

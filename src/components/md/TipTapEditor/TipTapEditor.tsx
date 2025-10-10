@@ -5,8 +5,8 @@ import { EditorProps } from "../MarkdownEditor";
 import { Markdown } from "tiptap-markdown";
 import { TableKit } from "@tiptap/extension-table";
 import { Image } from "@tiptap/extension-image";
-import { MyFloatingMenu } from "./FloatingMenu";
-import MyBubbleMenu from "./BubbleMenu";
+import { SlashFloatingMenu } from "./SlashFloatingMenu";
+import MarkBubbleMenu from "./MarkBubbleMenu";
 
 export default function TipTapEditor(
   props: Omit<EditorProps, "label"> & {
@@ -46,8 +46,8 @@ export default function TipTapEditor(
     <div className="p-2 flex flex-col gap-4">
       {editor && (
         <>
-          <MyBubbleMenu editor={editor} />
-          <MyFloatingMenu editor={editor} />
+          <MarkBubbleMenu editor={editor} />
+          <SlashFloatingMenu editor={editor} />
         </>
       )}
       <EditorContent

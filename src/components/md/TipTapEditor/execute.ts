@@ -8,8 +8,19 @@ export type Command =
   | "image"
   | "hr";
 
-export function executeCommand(editor: Editor, cmd: Command) {
-  console.log("executing", cmd);
+export function insertImage(editor: Editor, src: string, alt?: string) {
+  return editor
+    .chain()
+    .focus()
+    .setImage({ src, alt: alt || "Image" })
+    .run();
+}
+
+export function executeCommand(
+  editor: Editor,
+  cmd: Command,
+  options?: { onImageInsert?: () => void }
+) {
   switch (cmd) {
     case "h1":
       return editor.chain().focus().setHeading({ level: 1 }).run();
@@ -33,9 +44,9 @@ export function executeCommand(editor: Editor, cmd: Command) {
       return editor.chain().focus().toggleBlockquote().run();
 
     case "image":
-      // For now, just log. You can implement image upload later
-      console.log("insert image");
-      return true;
+      // Trigger the image insertion modal
+      options?.onImageInsert?.();
+      break;
 
     case "hr":
       return editor.chain().focus().setHorizontalRule().run();

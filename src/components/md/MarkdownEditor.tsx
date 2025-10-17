@@ -1,7 +1,4 @@
-import { MilkdownProvider } from "@milkdown/react";
 import React from "react";
-// TODO import dynamically?
-import MilkdownEditor from "./MilkdownEditor";
 import TextareaMarkdownEditor from "./TextareaMarkdownEditor";
 import { LegendLabel } from "../form/common";
 import TipTapEditor from "./TipTapEditor/TipTapEditor";
@@ -50,14 +47,6 @@ export default function MarkdownEditor(props: EditorProps) {
           //     onChange={props.onChange}
           //     value={props.value}
         />
-        {/* <MilkdownProvider>
-          <MilkdownEditor
-            disabled={editorType === "simple"}
-            defaultValue={props.defaultValue}
-            onChange={props.onChange}
-            value={props.value}
-          />
-        </MilkdownProvider> */}
       </div>
       {/* No idea why, overflow-auto here fixes toolbar overflow */}
       {/* Padding + margin fixes textarea outline */}

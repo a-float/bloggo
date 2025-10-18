@@ -16,10 +16,7 @@ import { type TagWithCount } from "@/types/common";
 import { BlogVisibility } from "@prisma/client";
 import { Select } from "@/components/form/Select";
 import { BlobManager } from "@/lib/blob/blob-manager";
-import { type ItemInterface, ReactSortable } from "react-sortablejs";
-import { LegendLabel } from "@/components/form/common";
-import { FaChevronLeft, FaXmark } from "react-icons/fa6";
-import { uploadNewImages } from "./uploadNewImages";
+import { FaChevronLeft } from "react-icons/fa6";
 import { uploadNewContentImages } from "./uploadNewContentImages";
 
 type FormValues = {
@@ -36,17 +33,12 @@ type EditBlogFormProps = {
   tagCounts: TagWithCount[];
 };
 
-type SortableImage = ItemInterface & { name: string; url: string };
-
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
   const blobManagerRef = React.useRef(BlobManager.getInstance());
 
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
-  const [imagePreviews, setImagePreviews] = React.useState<SortableImage[]>(
-    blog?.images ?? []
-  );
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -62,15 +54,22 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const { content, images: contentImages } = await uploadNewContentImages(
+      data.content,
+      blobManagerRef.current
+    );
+
+    const prevImages = blog?.images || [];
+    const prevImagesStillInContent = prevImages.filter((img) =>
+      content.match(new RegExp(img.url, "g"))
+    );
+
     const body = {
       ...data,
-      // TODO reference content images in db
-      content: await uploadNewContentImages(
-        data.content,
-        blobManagerRef.current
-      ),
-      images: await uploadNewImages(imagePreviews, blobManagerRef.current),
+      content,
+      images: [...prevImagesStillInContent, ...contentImages],
     };
+
     await createOrUpdateBlog(body).then((res) => {
       res.errors?.forEach((err) => {
         if (err.field === "id") return;
@@ -206,52 +205,6 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 </>
               )}
             />
-            <fieldset className="fieldset">
-              <LegendLabel>Attach images</LegendLabel>
-              <input
-                type="file"
-                className="file-input w-full"
-                key={imagePreviews.length}
-                name="imageFiles"
-                accept="image/*"
-                multiple
-                onChange={(e) => {
-                  const files = Array.from(e.target.files ?? []);
-                  if (!files.length) return;
-                  const newFiles = files.map((file) => {
-                    const url = blobManagerRef.current.createObjectURL(file);
-                    return { name: file.name, url, id: url };
-                  });
-                  setImagePreviews((prev) => [...newFiles, ...prev]);
-                }}
-              />
-              <ReactSortable list={imagePreviews} setList={setImagePreviews}>
-                {imagePreviews.map((item) => (
-                  <div key={item.id}>
-                    <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
-                      <img
-                        className="h-[36px] w-[36px] text-info rounded-sm object-cover"
-                        alt=""
-                        src={item.url}
-                      />
-                      <span>{item.name}</span>
-                      <div className="flex-1" />
-                      <button
-                        className="btn btn-xs btn-soft btn-error btn-square"
-                        onClick={() =>
-                          setImagePreviews((prev) =>
-                            prev.filter((x) => x.url !== item.url)
-                          )
-                        }
-                      >
-                        <FaXmark />
-                        <span className="sr-only">Remove image</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </ReactSortable>
-            </fieldset>
             <Controller
               name="tags"
               control={form.control}

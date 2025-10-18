@@ -20,8 +20,7 @@ export async function uploadNewContentImages(
 
   let newContent = content;
   for (let i = 0; i < toUpload.length; i++) {
-    console.log("replacing", toUpload[i], "with", uploaded[i]);
     newContent = newContent.replaceAll(toUpload[i].url, uploaded[i].url);
   }
-  return newContent;
+  return { content: newContent, images: uploaded };
 }

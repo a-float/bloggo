@@ -19,7 +19,6 @@ export async function uploadFiles(
     await prisma.image.create({
       data: {
         ...data,
-        order: 0,
         owner: { connect: { id: user.id } },
       },
     });

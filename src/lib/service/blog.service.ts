@@ -8,7 +8,7 @@ import { type UserDTO } from "@/data/user-dto.ts";
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({
     where: { id },
-    include: { images: { orderBy: { order: "asc" } }, author: true },
+    include: { images: true, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -59,7 +59,7 @@ function getBlogWhereForUser(user: UserDTO | null): Prisma.BlogWhereInput {
 export async function getBlogsForUser(user: UserDTO | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
-    include: { images: { orderBy: { order: "asc" } }, author: true },
+    include: { images: true, author: true },
     orderBy: { createdAt: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));

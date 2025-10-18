@@ -44,7 +44,6 @@ model Image {
   url       String   @unique
   owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   String
-  order     Int      @default(0)
   createdAt DateTime @default(now())
 
   @@map("image")

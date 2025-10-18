@@ -22,12 +22,7 @@ const CreateBlogSchema = yup.object({
   content: yup.string().required().trim().min(1),
   images: yup
     .array()
-    .of(
-      yup.object({
-        url: yup.string().required(),
-        order: yup.number().required(),
-      })
-    )
+    .of(yup.object({ url: yup.string().required() }))
     .required(),
   visibility: yup.string().oneOf(Object.values(BlogVisibility)).required(),
   date: yup.date().nullable(),
@@ -67,29 +62,18 @@ export async function createOrUpdateBlog(input: CreateBlogInput): Promise<Action
     url: image.url,
   }));
 
-  const updateImagesOrder = () =>
-    images.map((image) =>
-      prisma.image.update({
-        data: { order: image.order },
-        where: { url: image.url },
-      })
-    );
-
   if (!id) {
     // Creating a new blog
     if (!canUserCreateBlog(user)) {
       return { success: false, message: "Access denied." };
     }
-    const [blog] = await prisma.$transaction([
-      prisma.blog.create({
-        data: {
-          ...data,
-          images: { connect: imagesWhere },
-          author: { connect: { id: user.id } },
-        },
-      }),
-      ...updateImagesOrder(),
-    ]);
+    const blog = await prisma.blog.create({
+      data: {
+        ...data,
+        images: { connect: imagesWhere },
+        author: { connect: { id: user.id } },
+      },
+    });
 
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);
@@ -104,13 +88,10 @@ export async function createOrUpdateBlog(input: CreateBlogInput): Promise<Action
       return { success: false, message: "Access denied." };
     }
 
-    const [blog] = await prisma.$transaction([
-      prisma.blog.update({
-        where: { id },
-        data: { ...data, images: { set: imagesWhere } },
-      }),
-      ...updateImagesOrder(),
-    ]);
+    const blog = await prisma.blog.update({
+      where: { id },
+      data: { ...data, images: { set: imagesWhere } },
+    });
 
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);

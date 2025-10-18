@@ -18,6 +18,8 @@ import { Select } from "@/components/form/Select";
 import { BlobManager } from "@/lib/blob/blob-manager";
 import { FaChevronLeft } from "react-icons/fa6";
 import { uploadNewContentImages } from "./uploadNewContentImages";
+import SortableImageInput, { SortableImage } from "./SortableImageInput";
+import { uploadNewImages } from "./uploadNewImages";
 
 type FormValues = {
   id: number | null;
@@ -39,6 +41,8 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
+  const [coverImagePreview, setCoverImagePreview] =
+    React.useState<SortableImage | null>(blog?.coverImage ?? null);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -59,6 +63,10 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
       blobManagerRef.current
     );
 
+    const [coverImage] = coverImagePreview
+      ? await uploadNewImages([coverImagePreview], blobManagerRef.current)
+      : [undefined];
+
     const prevImages = blog?.images || [];
     const prevImagesStillInContent = prevImages.filter((img) =>
       content.match(new RegExp(img.url, "g"))
@@ -67,6 +75,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
     const body = {
       ...data,
       content,
+      coverImage,
       images: [...prevImagesStillInContent, ...contentImages],
     };
 
@@ -204,6 +213,11 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                   ) : null}
                 </>
               )}
+            />
+            <SortableImageInput
+              images={coverImagePreview ? [coverImagePreview] : []}
+              setImages={(images) => setCoverImagePreview(images[0])}
+              blobManagerRef={blobManagerRef}
             />
             <Controller
               name="tags"

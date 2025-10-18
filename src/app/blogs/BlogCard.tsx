@@ -6,14 +6,14 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <a href={`/blogs/${blog.slug}`}>
       <div className="card card-sm card-border card-side h-full bg-base-100 shadow-lg ">
-        {blog.images.length > 0 ? (
+        {blog.coverImage ? (
           <figure className="flex-[0_0_96px] sm:flex-[0_0_128px] aspect-square">
             <Image
               className="object-cover w-full object-center"
               width={250}
               height={300}
               src={
-                blog.images.at(0)?.url ||
+                blog.coverImage.url ||
                 `https://picsum.photos/seed/${blog.title}/600/300`
               }
               alt=""

@@ -9,24 +9,23 @@ export default function SortableImageInput({
   images,
   setImages,
   blobManagerRef,
+  singleFile,
 }: {
   images: SortableImage[];
   setImages: (images: SortableImage[]) => void;
   blobManagerRef: React.RefObject<BlobManager>;
+  singleFile?: boolean;
 }) {
   return (
     <fieldset className="fieldset">
-      <LegendLabel>Gallery images</LegendLabel>
-      <span className="text-base-content/75">
-        These images will be shown in a gallery at the end of the blog post.
-      </span>
+      <LegendLabel>Cover image</LegendLabel>
       <input
         type="file"
         className="file-input w-full"
         key={images.length}
         name="imageFiles"
         accept="image/*"
-        multiple
+        multiple={!singleFile}
         onChange={(e) => {
           const files = Array.from(e.target.files ?? []);
           if (!files.length) return;

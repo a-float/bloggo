@@ -3,7 +3,6 @@ import { notFound, unauthorized } from "next/navigation";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
 import { getSession } from "@/lib/session";
-import Gallery from "@/components/Gallery";
 import dayjs from "dayjs";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
 import MarkdownRenderer from "@/components/md/MarkdownRenderer";

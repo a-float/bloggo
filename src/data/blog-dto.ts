@@ -1,8 +1,9 @@
 import { Prisma } from "@prisma/client";
 import { getUserDTO } from "./user-dto.ts";
 
+// TODO do not always query for images?
 type FullBlog = Prisma.BlogGetPayload<{
-  include: { images: true; author: true };
+  include: { coverImage: true; images: true; author: true };
 }>;
 
 export function getBlogDTO(blog: FullBlog) {
@@ -16,6 +17,7 @@ export function getBlogDTO(blog: FullBlog) {
     visibility: blog.visibility,
     createdAt: blog.createdAt,
     updatedAt: blog.updatedAt,
+    coverImage: blog.coverImage,
     images: blog.images.map((image) => ({
       id: image.id,
       url: image.url,

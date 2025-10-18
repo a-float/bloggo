@@ -14,18 +14,20 @@ datasource db {
 }
 
 model Blog {
-  id         Int            @id @default(autoincrement())
-  slug       String         @unique @default(uuid())
-  title      String         @unique
-  content    String
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  date       DateTime?
-  images     Image[]
-  tags       String[]       @default([])
-  author     User?          @relation(fields: [authorId], references: [id])
-  authorId   String?
-  visibility BlogVisibility @default(PRIVATE)
+  id           Int            @id @default(autoincrement())
+  slug         String         @unique @default(uuid())
+  title        String         @unique
+  content      String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  date         DateTime?
+  images       Image[]
+  coverImage   Image?         @relation("coverImage", fields: [coverImageId], references: [id])
+  coverImageId Int?           @unique
+  tags         String[]       @default([])
+  author       User?          @relation(fields: [authorId], references: [id])
+  authorId     String?
+  visibility   BlogVisibility @default(PRIVATE)
 
   @@map("blog")
 }
@@ -45,6 +47,7 @@ model Image {
   owner     User     @relation(fields: [ownerId], references: [id])
   ownerId   String
   createdAt DateTime @default(now())
+  coverFor  Blog?    @relation("coverImage")
 
   @@map("image")
 }

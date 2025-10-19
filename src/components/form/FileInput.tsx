@@ -7,8 +7,8 @@ type FileInputProps = BaseProps & {
 } & React.ComponentProps<"input">;
 
 export default function FileInput(props: FileInputProps) {
-  const { label, error, onClear, ...rest } = props;
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const { label, error, onClear, ref, ...rest } = props;
+  // const inputRef = React.useRef<HTMLInputElement>(null);
 
   // const clearInput = () => {
   //   if (inputRef.current) {
@@ -21,7 +21,7 @@ export default function FileInput(props: FileInputProps) {
     <fieldset className="fieldset">
       <LegendLabel {...rest}>{label}</LegendLabel>
       <div className="flex flex-row">
-        <input {...rest} ref={inputRef} type="file" className="file-input" />
+        <input {...rest} ref={ref} type="file" className="file-input" />
         {/* <button className="btn btn-ghost" type="button" onClick={clearInput}>
           Clear
         </button> */}

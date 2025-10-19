@@ -15,20 +15,15 @@ export type ActionState = {
   errors?: { field: string; message: string }[];
 };
 
+const imageSchema = yup.object({ url: yup.string().required() });
+
 const CreateBlogSchema = yup.object({
   id: yup.number().nullable(),
   title: yup.string().required().trim().min(1),
   tags: yup.array().of(yup.string().trim().required()),
   content: yup.string().required().trim().min(1),
-  images: yup
-    .array()
-    .of(
-      yup.object({
-        url: yup.string().required(),
-        order: yup.number().required(),
-      })
-    )
-    .required(),
+  coverImage: imageSchema.optional(),
+  images: yup.array().of(imageSchema).required(),
   visibility: yup.string().oneOf(Object.values(BlogVisibility)).required(),
   date: yup.date().nullable(),
 });
@@ -40,7 +35,9 @@ const capitalize = (str: string) =>
 
 // Wish I could return 401 for unauthorized access and 404 for not found, but Next.js doesn't let me do that :(
 
-export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
+export async function createOrUpdateBlog(
+  input: CreateBlogInput
+): Promise<ActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
   const errors: ActionState["errors"] = [];
@@ -56,7 +53,7 @@ export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
 
   if (errors.length > 0 || !parsedInput) return { success: false, errors };
 
-  const { id, tags, images, ...rest } = parsedInput;
+  const { id, tags, coverImage, images, ...rest } = parsedInput;
 
   const data: Prisma.BlogCreateInput = {
     ...rest,
@@ -67,29 +64,19 @@ export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
     url: image.url,
   }));
 
-  const updateImagesOrder = () =>
-    images.map((image) =>
-      prisma.image.update({
-        data: { order: image.order },
-        where: { url: image.url },
-      })
-    );
-
   if (!id) {
     // Creating a new blog
     if (!canUserCreateBlog(user)) {
       return { success: false, message: "Access denied." };
     }
-    const [blog] = await prisma.$transaction([
-      prisma.blog.create({
-        data: {
-          ...data,
-          images: { connect: imagesWhere },
-          author: { connect: { id: user.id } },
-        },
-      }),
-      ...updateImagesOrder(),
-    ]);
+    const blog = await prisma.blog.create({
+      data: {
+        ...data,
+        coverImage: { connect: coverImage },
+        images: { connect: imagesWhere },
+        author: { connect: { id: user.id } },
+      },
+    });
 
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);
@@ -104,13 +91,14 @@ export async function createBlog(input: CreateBlogInput): Promise<ActionState> {
       return { success: false, message: "Access denied." };
     }
 
-    const [blog] = await prisma.$transaction([
-      prisma.blog.update({
-        where: { id },
-        data: { ...data, images: { set: imagesWhere } },
-      }),
-      ...updateImagesOrder(),
-    ]);
+    const blog = await prisma.blog.update({
+      where: { id },
+      data: {
+        ...data,
+        coverImage: { connect: coverImage },
+        images: { set: imagesWhere },
+      },
+    });
 
     revalidatePath("/blogs");
     revalidatePath(`/blogs/${blog.slug}`);

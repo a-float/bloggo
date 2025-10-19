@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   const orphanedImages = await prisma.image.findMany({
-    where: { blogId: null },
+    where: { OR: [{ blogId: null }, { coverFor: null }] },
   });
 
   const storage = createBlobStorage();

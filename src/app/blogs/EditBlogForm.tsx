@@ -5,7 +5,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import MarkdownEditor from "@/components/md/MarkdownEditor";
 import toast from "react-hot-toast";
 import { deleteBlog } from "@/actions/delete-blog.action";
-import { createBlog } from "@/actions/edit-create-blog.action";
+import { createOrUpdateBlog } from "@/actions/edit-create-blog.action";
 import { useRouter } from "next/navigation";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
 import { Input } from "@/components/form/TextInput";
@@ -16,9 +16,9 @@ import { type TagWithCount } from "@/types/common";
 import { BlogVisibility } from "@prisma/client";
 import { Select } from "@/components/form/Select";
 import { BlobManager } from "@/lib/blob/blob-manager";
-import { type ItemInterface, ReactSortable } from "react-sortablejs";
-import { LegendLabel } from "@/components/form/common";
-import { FaChevronLeft, FaXmark } from "react-icons/fa6";
+import { FaChevronLeft } from "react-icons/fa6";
+import { uploadNewContentImages } from "./uploadNewContentImages";
+import SortableImageInput, { SortableImage } from "./SortableImageInput";
 import { uploadNewImages } from "./uploadNewImages";
 
 type FormValues = {
@@ -35,17 +35,14 @@ type EditBlogFormProps = {
   tagCounts: TagWithCount[];
 };
 
-type SortableImage = ItemInterface & { name: string; url: string };
-
 export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const router = useRouter();
-  const blobManagerRef = React.useRef(new BlobManager());
+  const blobManagerRef = React.useRef(BlobManager.getInstance());
 
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [waitingForRedirect, setWaitingForRedirect] = React.useState(false);
-  const [imagePreviews, setImagePreviews] = React.useState<SortableImage[]>(
-    blog?.images ?? []
-  );
+  const [coverImagePreview, setCoverImagePreview] =
+    React.useState<SortableImage | null>(blog?.coverImage ?? null);
 
   const form = useForm<FormValues>({
     defaultValues: {
@@ -61,17 +58,34 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const { content, images: contentImages } = await uploadNewContentImages(
+      data.content,
+      blobManagerRef.current
+    );
+
+    const [coverImage] = coverImagePreview
+      ? await uploadNewImages([coverImagePreview], blobManagerRef.current)
+      : [undefined];
+
+    const prevImages = blog?.images || [];
+    const prevImagesStillInContent = prevImages.filter((img) =>
+      content.match(new RegExp(img.url, "g"))
+    );
+
     const body = {
       ...data,
-      images: await uploadNewImages(imagePreviews, blobManagerRef.current),
+      content,
+      coverImage,
+      images: [...prevImagesStillInContent, ...contentImages],
     };
-    await createBlog(body).then((res) => {
+
+    await createOrUpdateBlog(body).then((res) => {
       res.errors?.forEach((err) => {
         if (err.field === "id") return;
         form.setError(err.field as keyof FormValues, { message: err.message });
       });
       if (res.success) {
-        form.reset(form.getValues());
+        form.reset(body);
         if (!data.id && res.data) {
           // If this is a new blog, redirect to the new blog page
           setWaitingForRedirect(true);
@@ -200,52 +214,11 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
                 </>
               )}
             />
-            <fieldset className="fieldset">
-              <LegendLabel>Attach images</LegendLabel>
-              <input
-                type="file"
-                className="file-input w-full"
-                key={imagePreviews.length}
-                name="imageFiles"
-                accept="image/*"
-                multiple
-                onChange={(e) => {
-                  const files = Array.from(e.target.files ?? []);
-                  if (!files.length) return;
-                  const newFiles = files.map((file) => {
-                    const url = blobManagerRef.current.createObjectURL(file);
-                    return { name: file.name, url, id: url };
-                  });
-                  setImagePreviews((prev) => [...newFiles, ...prev]);
-                }}
-              />
-              <ReactSortable list={imagePreviews} setList={setImagePreviews}>
-                {imagePreviews.map((item) => (
-                  <div key={item.id}>
-                    <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
-                      <img
-                        className="h-[36px] w-[36px] text-info rounded-sm object-cover"
-                        alt=""
-                        src={item.url}
-                      />
-                      <span>{item.name}</span>
-                      <div className="flex-1" />
-                      <button
-                        className="btn btn-xs btn-soft btn-error btn-square"
-                        onClick={() =>
-                          setImagePreviews((prev) =>
-                            prev.filter((x) => x.url !== item.url)
-                          )
-                        }
-                      >
-                        <FaXmark />
-                        <span className="sr-only">Remove image</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </ReactSortable>
-            </fieldset>
+            <SortableImageInput
+              images={coverImagePreview ? [coverImagePreview] : []}
+              setImages={(images) => setCoverImagePreview(images[0])}
+              blobManagerRef={blobManagerRef}
+            />
             <Controller
               name="tags"
               control={form.control}

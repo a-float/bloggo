@@ -1,8 +1,8 @@
 /* TODO should respect not-prose class */
 .prose {
-  & *:last-child {
+  /* & *:last-child {
     margin-bottom: 0;
-  }
+  } */
 
   & blockquote p::before,
   & blockquote p::after {
@@ -17,5 +17,22 @@
   & table tr td {
     padding: 0.5em 0.75em;
     min-width: 50px;
+  }
+
+  & table td,
+  & table th {
+    &[align="right"] {
+      text-align: right;
+    }
+
+    &[align="center"] {
+      text-align: center;
+    }
+  }
+
+  img {
+    @apply rounded-md;
+    /* transform: scale(attr(data-scale type(<number>), 0.5)); */
+    margin-inline: auto;
   }
 }

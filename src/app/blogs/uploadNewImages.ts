@@ -37,8 +37,7 @@ export async function uploadNewImages(
   await uploadBatch();
 
   let i = 0;
-  return images.map((image, idx) => ({
-    order: idx,
+  return images.map((image) => ({
     name: image.name,
     url: blobManager.getObjectForUrl(image.url) ? uploaded[i++].url : image.url,
   }));

@@ -8,7 +8,7 @@ import { type UserDTO } from "@/data/user-dto.ts";
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({
     where: { id },
-    include: { images: { orderBy: { order: "asc" } }, author: true },
+    include: { coverImage: true, images: true, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -16,7 +16,7 @@ export async function getBlogById(id: number) {
 export async function getBlogBySlug(slug: string) {
   const blog = await prisma.blog.findUnique({
     where: { slug },
-    include: { images: true, author: true },
+    include: { coverImage: true, images: true, author: true },
   });
   return blog ? getBlogDTO(blog) : null;
 }
@@ -59,7 +59,7 @@ function getBlogWhereForUser(user: UserDTO | null): Prisma.BlogWhereInput {
 export async function getBlogsForUser(user: UserDTO | null) {
   const blogs = await prisma.blog.findMany({
     where: getBlogWhereForUser(user),
-    include: { images: { orderBy: { order: "asc" } }, author: true },
+    include: { coverImage: true, images: true, author: true },
     orderBy: { createdAt: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));
@@ -91,9 +91,12 @@ export async function getBlogTagCountsForUser(
     select: { tags: true },
   });
   const flatTags = blogs.flatMap((blog) => blog.tags);
-  const tagCounts = flatTags.reduce((acc, tag) => {
-    acc[tag] = (acc[tag] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const tagCounts = flatTags.reduce(
+    (acc, tag) => {
+      acc[tag] = (acc[tag] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
   return Object.entries(tagCounts).map(([tag, count]) => ({ tag, count }));
 }

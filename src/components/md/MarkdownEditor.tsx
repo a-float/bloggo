@@ -1,9 +1,7 @@
-import { MilkdownProvider } from "@milkdown/react";
 import React from "react";
-// TODO import dynamically?
-import MilkdownEditor from "./MilkdownEditor";
 import TextareaMarkdownEditor from "./TextareaMarkdownEditor";
 import { LegendLabel } from "../form/common";
+import TipTapEditor from "./TipTapEditor/TipTapEditor";
 
 type EditorType = "simple" | "visual";
 
@@ -17,7 +15,7 @@ export type EditorProps = {
 };
 
 export default function MarkdownEditor(props: EditorProps) {
-  const [editorType, setEditorType] = React.useState<EditorType>("simple");
+  const [editorType, setEditorType] = React.useState<EditorType>("visual");
 
   return (
     // legend and fieldset paddings acting weirdly, pt-0 as an easy fix
@@ -37,13 +35,18 @@ export default function MarkdownEditor(props: EditorProps) {
         <span>Visual</span>
       </div>
       <div className={editorType === "simple" ? "hidden" : ""}>
-        <MilkdownProvider>
-          <MilkdownEditor
-            defaultValue={props.defaultValue}
-            onChange={props.onChange}
-            value={props.value}
-          />
-        </MilkdownProvider>
+        <TipTapEditor
+          defaultValue={props.defaultValue}
+          value={props.value}
+          onChange={props.onChange}
+          disabled={editorType === "simple"}
+
+          // TODO
+          // disabled={editorType === "simple"}
+          //     defaultValue={props.defaultValue}
+          //     onChange={props.onChange}
+          //     value={props.value}
+        />
       </div>
       {/* No idea why, overflow-auto here fixes toolbar overflow */}
       {/* Padding + margin fixes textarea outline */}

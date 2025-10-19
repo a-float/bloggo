@@ -3,7 +3,6 @@ import { notFound, unauthorized } from "next/navigation";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
 import { getSession } from "@/lib/session";
-import Gallery from "@/components/Gallery";
 import dayjs from "dayjs";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
 import MarkdownRenderer from "@/components/md/MarkdownRenderer";
@@ -50,13 +49,16 @@ export default async function BlogPage({
           {dayjs(blog.createdAt).format("MMMM D, YYYY")}
         </div>
         <div className="divider" />
-        {blog.images.length > 0 && (
-          <Gallery
-            images={blog.images.map((image) => image.url)}
-            className="grid grid-cols-[repeat(auto-fill,minmax(128px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(196px,1fr))] gap-2 md:gap-4 w-full not-prose"
-            imageClassName="max-h-[128px] md:max-h-[196px] h-full w-full object-cover rounded-md cursor-pointer hover:scale-102 transition-transform"
-          />
-        )}
+        {/* {blog.images.length > 0 && (
+          <section className="prose">
+            <h2 className="mt-[2em] text-2xl">Gallery</h2>
+            <Gallery
+              images={blog.images.map((image) => image.url)}
+              className="grid grid-cols-[repeat(auto-fill,minmax(128px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(196px,1fr))] gap-2 md:gap-4 w-full not-prose"
+              imageClassName="max-h-[128px] md:max-h-[196px] h-full w-full object-cover rounded-md cursor-pointer hover:scale-102 transition-transform"
+            />
+          </section>
+        )} */}
         <MarkdownRenderer markdown={blog.content} />
       </div>
     </>

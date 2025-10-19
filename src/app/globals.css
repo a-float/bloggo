@@ -2,7 +2,7 @@
 @import "./styles/tag-select.css";
 @import "./styles/embla.css";
 @import "./styles/prose.css";
-@import "./styles/milkdown.css";
+@import "./styles/tiptap.css";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
   themes: all;

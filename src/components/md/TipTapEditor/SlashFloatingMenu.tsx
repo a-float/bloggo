@@ -129,10 +129,11 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
   return (
     <>
       <FloatingMenu
+        appendTo={document.body} // fix z-index overlap with inputs
         options={{ placement: "bottom-start", offset: 8 }}
         editor={props.editor}
         className={clsx(
-          "menu not-prose bg-base-200 rounded-box w-48 max-h-[300px] overflow-auto z-50 shadow-lg",
+          "menu not-prose bg-base-200 rounded-box w-48 max-h-[300px] overflow-auto shadow-lg",
           !show && "hidden"
         )}
         ref={menuRef}

@@ -10,3 +10,7 @@
 .tiptap img.ProseMirror-selectednode {
   outline: solid 2px var(--color-primary);
 }
+
+.tiptap.ProseMirror *:first-child {
+  margin-top: 0 !important;
+}

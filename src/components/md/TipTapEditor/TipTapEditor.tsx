@@ -36,9 +36,9 @@ export default function TipTapEditor(
     if (!props.disabled) {
       editor?.commands.setContent(props.value || "");
     }
-  }, [props.disabled]);
+  }, [props.disabled, editor]);
 
-  if (!editor?.isInitialized) {
+  if (!editor) {
     return <div className="skeleton h-[50vh] w-full"></div>;
   }
 

@@ -19,4 +19,8 @@ export class VercelBlobStorage implements BlobStorage {
   async remove(url: string): Promise<void> {
     return await del(url);
   }
+
+  async removeMany(urls: string[]): Promise<void> {
+    return await del(urls);
+  }
 }

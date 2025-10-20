@@ -14,19 +14,17 @@ export async function GET(request: NextRequest) {
   }
 
   const orphanedImages = await prisma.image.findMany({
-    where: { OR: [{ blogId: null }, { coverFor: null }] },
+    where: { blogId: null, coverFor: null },
   });
 
   const storage = createBlobStorage();
-  await Promise.all(
-    orphanedImages.map(async (image) => {
-      storage.remove(image.url);
-    })
-  );
 
+  await storage.removeMany(orphanedImages.map((img) => img.url));
   await prisma.image.deleteMany({
-    where: { blogId: null },
+    where: { id: { in: orphanedImages.map((img) => img.id) } },
   });
+
+  console.log(`Deleted ${orphanedImages.length} orphaned images`);
 
   return Response.json({ success: true, count: orphanedImages.length });
 }

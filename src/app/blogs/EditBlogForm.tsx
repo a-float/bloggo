@@ -65,7 +65,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
     const [coverImage] = coverImagePreview
       ? await uploadNewImages([coverImagePreview], blobManagerRef.current)
-      : [undefined];
+      : [null];
 
     const prevImages = blog?.images || [];
     const prevImagesStillInContent = prevImages.filter((img) =>

@@ -25,11 +25,15 @@ export class LocalBlobStorage implements BlobStorage {
   }
 
   async remove(url: string): Promise<void> {
-    if (url.endsWith(".jpg") || url.endsWith(".png") || url.endsWith(".jpeg")) {
-      const fullUrl = path.join(process.cwd(), "public", url);
-      await fs.unlink(fullUrl);
-    } else {
-      console.warn("Removing local files other than images is not supported");
+    const pathToPublic = path.join(process.cwd(), "public");
+    const fullUrl = path.join(pathToPublic, url);
+    if (!fullUrl.startsWith(pathToPublic)) {
+      throw new Error(`Invalid path: "${fullUrl}"`);
     }
+    await fs.unlink(fullUrl);
+  }
+
+  async removeMany(urls: string[]): Promise<void> {
+    await Promise.all(urls.map(this.remove));
   }
 }

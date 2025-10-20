@@ -22,7 +22,7 @@ const CreateBlogSchema = yup.object({
   title: yup.string().required().trim().min(1),
   tags: yup.array().of(yup.string().trim().required()),
   content: yup.string().required().trim().min(1),
-  coverImage: imageSchema.optional(),
+  coverImage: imageSchema.nullable().optional(),
   images: yup.array().of(imageSchema).required(),
   visibility: yup.string().oneOf(Object.values(BlogVisibility)).required(),
   date: yup.date().nullable(),
@@ -72,7 +72,7 @@ export async function createOrUpdateBlog(
     const blog = await prisma.blog.create({
       data: {
         ...data,
-        coverImage: { connect: coverImage },
+        coverImage: coverImage ? { connect: coverImage } : undefined,
         images: { connect: imagesWhere },
         author: { connect: { id: user.id } },
       },
@@ -95,7 +95,7 @@ export async function createOrUpdateBlog(
       where: { id },
       data: {
         ...data,
-        coverImage: { connect: coverImage },
+        coverImage: coverImage ? { connect: coverImage } : { disconnect: true },
         images: { set: imagesWhere },
       },
     });

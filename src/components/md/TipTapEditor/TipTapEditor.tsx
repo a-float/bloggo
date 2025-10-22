@@ -8,6 +8,30 @@ import { Image } from "@tiptap/extension-image";
 import { SlashFloatingMenu } from "./SlashFloatingMenu";
 import MarkBubbleMenu from "./MarkBubbleMenu";
 
+const ScalableImage = Image.extend({
+  addStorage() {
+    return {
+      markdown: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        serialize(state: any, node: any) {
+          const { src, title, width, height } = node.attrs;
+          const alt = node.attrs.alt || "";
+
+          if (width || height) {
+            state.write(
+              `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""} />`
+            );
+          } else if (title) {
+            state.write(`![${alt}](${src} "${title}")`);
+          } else {
+            state.write(`![${alt}](${src})`);
+          }
+        },
+      },
+    };
+  },
+});
+
 export default function TipTapEditor(
   props: Omit<EditorProps, "label"> & {
     disabled?: boolean;
@@ -19,7 +43,7 @@ export default function TipTapEditor(
       StarterKit,
       Markdown,
       TableKit,
-      Image,
+      ScalableImage,
       // Placeholder.configure({
       //   placeholder: "Write something or type '/' for commands",
       // }),

@@ -14,7 +14,7 @@ export async function UserBlock(props: { user: UserDTO }) {
 
   const friendNotificationIndicator =
     pendingFriendRequests > 0 ? (
-      <span className="indicator-item badge badge-secondary badge-xs px-1">
+      <span className="indicator-item aspect-square badge badge-secondary badge-xs px-1">
         {pendingFriendRequests}
       </span>
     ) : null;

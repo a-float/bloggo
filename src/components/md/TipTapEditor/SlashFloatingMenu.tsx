@@ -5,6 +5,7 @@ import {
   FaQuoteLeft,
   FaImage,
   FaRulerHorizontal,
+  FaTable,
 } from "react-icons/fa6";
 import React from "react";
 import clsx from "clsx";
@@ -31,6 +32,7 @@ const menuItemGroups: SlashMenuItem[][] = [
     { icon: <FaListOl />, label: "Ordered List", command: "ordered" },
   ],
   [
+    { label: "Table", icon: <FaTable />, command: "table" },
     { label: "Quote", icon: <FaQuoteLeft />, command: "quote" },
     { label: "Image", icon: <FaImage />, command: "image" },
     { label: "Divider", icon: <FaRulerHorizontal />, command: "hr" },

@@ -6,14 +6,17 @@ export type Command =
   | "ordered"
   | "quote"
   | "image"
-  | "hr";
+  | "hr"
+  | "table";
 
 export function insertImage(editor: Editor, src: string, alt?: string) {
-  return editor
+  editor
     .chain()
     .focus()
     .setImage({ src, alt: alt || "Image" })
     .run();
+
+  console.log(editor.getJSON());
 }
 
 export function executeCommand(
@@ -50,6 +53,14 @@ export function executeCommand(
 
     case "hr":
       return editor.chain().focus().setHorizontalRule().run();
+
+    case "table":
+      return editor
+        .chain()
+        .focus()
+        .insertTable({ cols: 3, rows: 3, withHeaderRow: true })
+        .run();
+
     default:
       console.warn("Invalid command", cmd);
   }

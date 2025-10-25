@@ -1,4 +1,4 @@
-import { Editor } from "@tiptap/react";
+import { Editor, findParentNode, posToDOMRect } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import clsx from "clsx";
 import React from "react";
@@ -117,14 +117,22 @@ export default function TableBubbleMenu({ editor }: { editor: Editor }) {
       editor={editor}
       options={{ placement: "top", offset: 8, flip: true }}
       className="z-50 bg-base-200 p-1 shadow-md rounded"
+      pluginKey="table-bubble-menu"
       getReferencedVirtualElement={() => {
-        const from = editor.state.selection.from;
-        const $pos = editor.$pos(from);
-        try {
-          return $pos.element?.closest("table") ?? null;
-        } catch {
-          return null;
-        }
+        // example from https://tiptap.dev/docs/editor/extensions/functionality/bubble-menu
+        const parentNode = findParentNode((node) => node.type.name === "table")(
+          editor.state.selection
+        );
+        if (!parentNode) return null;
+        const domRect = posToDOMRect(
+          editor.view,
+          parentNode.start,
+          parentNode.start + parentNode.node.nodeSize
+        );
+        return {
+          getBoundingClientRect: () => domRect,
+          getClientRects: () => [domRect],
+        };
       }}
       shouldShow={({ editor }) =>
         editor.isActive("table") ||

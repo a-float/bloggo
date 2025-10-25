@@ -8,6 +8,7 @@ import { Image } from "@tiptap/extension-image";
 import { SlashFloatingMenu } from "./SlashFloatingMenu";
 import MarkBubbleMenu from "./MarkBubbleMenu";
 import TableBubbleMenu from "./TableBubbleMenu";
+import ImageBubbleMenu from "./ImageBubbleMenu";
 
 // Added newline so that it doesn't break next element
 // Probably breaks images in tables
@@ -22,12 +23,12 @@ const ScalableImage = Image.extend({
 
           if (width || height) {
             state.write(
-              `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""} />\n`
+              `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""} />\n\n`
             );
           } else if (title) {
-            state.write(`![${alt}](${src} "${title}")\n`);
+            state.write(`![${alt}](${src} "${title}")\n\n`);
           } else {
-            state.write(`![${alt}](${src})\n`);
+            state.write(`![${alt}](${src})\n\n`);
           }
         },
       },
@@ -75,6 +76,7 @@ export default function TipTapEditor(
         <>
           <MarkBubbleMenu editor={editor} />
           <TableBubbleMenu editor={editor} />
+          <ImageBubbleMenu editor={editor} />
           <SlashFloatingMenu editor={editor} />
         </>
       )}

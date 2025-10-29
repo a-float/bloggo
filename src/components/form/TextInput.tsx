@@ -28,8 +28,10 @@ export function Textarea(props: TextareaProps) {
       <LegendLabel {...props}>{label}</LegendLabel>
       <textarea
         aria-invalid={!!error}
-        className="textarea h-24 w-full"
         {...rest}
+        className={
+          "textarea " + props.className + (error ? " textarea-error" : "")
+        }
         autoComplete="off"
       />
       {error && <p className="text-error">{error}</p>}

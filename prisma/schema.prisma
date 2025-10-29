@@ -38,6 +38,44 @@ enum BlogVisibility {
   PRIVATE
 }
 
+model Goal {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String?
+  owner       User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId     String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  tags        String[]       @default([])
+  visibility  GoalVisibility @default(PRIVATE)
+  items       GoalItem[]
+  unit        String?
+  target      Float
+  type        GoalType       @default(COUNT)
+}
+
+enum GoalType {
+  COUNT
+  MAX
+  SUM
+}
+
+model GoalItem {
+  id        Int      @id @default(autoincrement())
+  value     Float
+  message   String?
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  goalId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum GoalVisibility {
+  PUBLIC
+  FRIENDS
+  PRIVATE
+}
+
 model Image {
   id        Int      @id @default(autoincrement())
   blog      Blog?    @relation(fields: [blogId], references: [id], onDelete: Cascade)
@@ -68,6 +106,7 @@ model User {
   friends       Friendship[] @relation("friends")
   friendOf      Friendship[] @relation("friendOf")
   images        Image[]
+  Goal          Goal[]
 
   @@map("user")
 }

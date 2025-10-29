@@ -2,6 +2,7 @@ import { BlogVisibility, Role } from "@prisma/client";
 import { type BlogDTO } from "./blog-dto";
 import { type UserDTO } from "./user-dto.ts";
 import * as friendService from "@/lib/service/friend.service";
+import { GoalDto } from "./goal-dto";
 
 export async function canUserSeeBlog(
   user: UserDTO | null,
@@ -30,4 +31,24 @@ export function canUserEditBlog(user: UserDTO | null, blog: BlogDTO): boolean {
 
 export function canUserCreateBlog(user: UserDTO | null): boolean {
   return !!(user && user.hasVerifiedEmail);
+}
+
+export function canUserCreateGoal(user: UserDTO | null): boolean {
+  return !!(user && user.hasVerifiedEmail);
+}
+
+// TODO support for friends' goals?
+export function canUserSeeGoal(user: UserDTO | null, goal: GoalDto): boolean {
+  if (goal.owner && goal.owner?.id === user?.id) return true;
+  return false;
+}
+
+export function canUserEditGoal(
+  user: UserDTO | null,
+  goal: { ownerId: string }
+): boolean {
+  if (!user || !user.hasVerifiedEmail) return false;
+  if (user.role === Role.ADMIN) return true;
+  if (goal.ownerId === user.id) return true;
+  return false;
 }

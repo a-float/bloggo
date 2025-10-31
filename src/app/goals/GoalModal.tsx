@@ -213,6 +213,7 @@ export default function GoalModal(props: GoalModalProps) {
                   required
                   placeholder="The value you aim to reach"
                   error={form.formState.errors.target?.message}
+                  {...form.register("target")}
                 />
 
                 {goalType !== GoalType.COUNT ? (

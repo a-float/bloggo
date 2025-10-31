@@ -75,7 +75,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
         ? goal.items.reduce((max, item) => Math.max(max, item.value), 0)
         : goal.items.length;
 
-  const progress = (totalValue / goal.target) * 100;
+  const progress = Math.round((totalValue / goal.target) * 100);
 
   return (
     <div className="card card-sm card-border bg-base-100 shadow-lg">
@@ -188,7 +188,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
               placeholder="What you did..."
               className="input-sm w-full min-h-0"
               disabled={isSubmitting}
-              rows={2}
+              rows={1}
             />
             <div className="flex gap-2 mt-2 justify-end">
               <button

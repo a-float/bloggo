@@ -7,10 +7,15 @@ import localeData from "dayjs/plugin/localeData";
 
 dayjs.extend(localeData);
 
-type CalendarProps = {
+type CalendarChartProps = {
   from: Date;
   to: Date;
-  items: { createdAt: Date }[];
+  items: { value: number; createdAt: Date }[];
+  showY?: boolean;
+  showX?: boolean;
+  showLegend?: boolean;
+  className?: string;
+  size?: "sm" | "md";
 };
 
 type TooltipState = {
@@ -37,7 +42,7 @@ const getMonthNames = (from: Date, to: Date) => {
   return months;
 };
 
-export default function Calendar(props: CalendarProps) {
+export default function CalendarChart(props: CalendarChartProps) {
   const [tooltip, setTooltip] = React.useState<TooltipState>({
     visible: false,
     x: 0,
@@ -49,7 +54,7 @@ export default function Calendar(props: CalendarProps) {
     const map = new Map<string, number>();
     props.items.forEach((item) => {
       const key = dateToDateKey(item.createdAt);
-      map.set(key, (map.get(key) || 0) + 1);
+      map.set(key, (map.get(key) || 0) + item.value);
     });
     return map;
   }, [props.items]);
@@ -66,6 +71,8 @@ export default function Calendar(props: CalendarProps) {
 
   const getOpacityForDate = (date: Date) => {
     const key = dateToDateKey(date);
+    if (maxItemsPerDay === 0) return 0.1;
+
     const ratio = (itemDayMap.get(key) ?? 0) / maxItemsPerDay;
     return ratio * 0.9 + 0.1;
   };
@@ -73,6 +80,7 @@ export default function Calendar(props: CalendarProps) {
   const totalTimeMs = props.to.getTime() - props.from.getTime();
   const totalDays = Math.ceil(totalTimeMs / (1000 * 60 * 60 * 24));
   const firstDay = props.from.getDay();
+  const cellSize = props.size === "sm" ? "w-2 h-2" : "w-2.5 h-2.5";
 
   const months = getMonthNames(props.from, props.to);
 
@@ -94,50 +102,61 @@ export default function Calendar(props: CalendarProps) {
   const tooltipItems = itemDayMap.get(dateToDateKey(tooltip.date));
 
   return (
-    <div className="relative mx-auto mt-6">
-      <div className="text-xs text-base-content/70">
-        {/* Day legend */}
-        <div className="flex flex-col justify-between absolute h-full left-0 transform -translate-x-full pr-2">
-          <span>Mon</span>
-          <span>Thu</span>
-          <span>Sun</span>
-        </div>
+    <div className={props.className}>
+      <div className="grid gap-2 grid-cols-[auto,1fr] grid-rows-[auto,1fr,auto]">
+        <div />
+
         {/* Month legend */}
-        <div className="flex justify-between absolute w-full top-0 transform -translate-y-full pb-2">
-          {months.map((month, idx) => (
-            <span key={idx}>{month}</span>
-          ))}
+        {props.showX !== false && (
+          <div className="text-xs text-base-content/70 flex justify-between row-start-1 col-start-2">
+            {months.map((month, idx) => (
+              <span key={idx}>{month}</span>
+            ))}
+          </div>
+        )}
+
+        {/* Day legend */}
+        {props.showY !== false && (
+          <div className="text-xs text-base-content/70 flex flex-col justify-between row-start-2 col-start-1">
+            <span>Mon</span>
+            <span>Thu</span>
+            <span>Sun</span>
+          </div>
+        )}
+
+        {/* Days */}
+        <div className="grid grid-rows-7 gap-1 grid-flow-col row-start-2 col-start-2">
+          {firstDay > 0 && <div style={{ gridRow: `1/${firstDay + 1}` }} />}
+          {Array.from({ length: totalDays })
+            .map((_, index) => dayjs(props.from).add(index, "days").toDate())
+            .map((date, index) => (
+              <div
+                key={index}
+                className={clsx(
+                  cellSize,
+                  "bg-primary hover:bg-primary transition-colors rounded-xs"
+                )}
+                style={{ opacity: getOpacityForDate(date) }}
+                onMouseEnter={(e) => handleMouseEnter(e, date)}
+                onMouseLeave={handleMouseLeave}
+              />
+            ))}
         </div>
+
         {/* Scale */}
-        <div className="flex items-center gap-1 justify-end absolute w-full bottom-0 transform translate-y-full pt-2">
-          <span>Less</span>
-          {Array.from({ length: 4 }).map((_, idx) => (
-            <div
-              className="w-2.5 h-2.5 bg-primary rounded-xs"
-              key={idx}
-              style={{ opacity: (idx / 4) * 0.9 + 0.1 }}
-            />
-          ))}
-          <span>More</span>
-        </div>
-      </div>
-      <div className="grid grid-rows-7 gap-1 grid-flow-col ">
-        {Array.from({ length: firstDay }).map((_, index) => (
-          <div key={`empty-${index}`} />
-        ))}
-        {Array.from({ length: totalDays })
-          .map((_, index) => dayjs(props.from).add(index, "days").toDate())
-          .map((date, index) => (
-            <div
-              className="w-2.5 h-2.5 bg-primary hover:bg-primary transition-colors rounded-xs cursor-pointer"
-              style={{
-                opacity: getOpacityForDate(date),
-              }}
-              key={index}
-              onMouseEnter={(e) => handleMouseEnter(e, date)}
-              onMouseLeave={handleMouseLeave}
-            />
-          ))}
+        {props.showLegend !== false && (
+          <div className="text-xs text-base-content/70 col-span-2 flex items-center gap-1 justify-end w-full row-start-3">
+            <span>Less</span>
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div
+                className={clsx(cellSize, "bg-primary rounded-xs")}
+                key={idx}
+                style={{ opacity: (idx / 4) * 0.9 + 0.1 }}
+              />
+            ))}
+            <span>More</span>
+          </div>
+        )}
       </div>
 
       <div

@@ -43,7 +43,7 @@ function getGoalWhereForUser(user: UserDTO | null): Prisma.GoalWhereInput {
 export async function getGoalsForUser(user: UserDTO | null) {
   const goals = await prisma.goal.findMany({
     where: getGoalWhereForUser(user),
-    include: { items: true, owner: true },
+    include: { items: { orderBy: { createdAt: "desc" } }, owner: true },
     orderBy: { createdAt: "desc" },
   });
   return goals.map((goal) => getGoalDTO(goal));
@@ -52,7 +52,7 @@ export async function getGoalsForUser(user: UserDTO | null) {
 export async function getGoalById(id: number) {
   const goal = await prisma.goal.findUnique({
     where: { id },
-    include: { items: true, owner: true },
+    include: { items: { orderBy: { createdAt: "desc" } }, owner: true },
   });
   return goal ? getGoalDTO(goal) : null;
 }

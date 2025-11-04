@@ -30,3 +30,11 @@
   scrollbar-width: none; /* Firefox */
   scrollbar-height: none;
 }
+
+.ltr {
+  direction: ltr;
+}
+
+.rtl {
+  direction: rtl;
+}

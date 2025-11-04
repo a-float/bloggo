@@ -6,6 +6,9 @@ import dayjs from "dayjs";
 import { unauthorized } from "next/navigation";
 import EditGoalButton from "./EditGoalButton";
 import CalendarChart from "./CalendarChart";
+import BarChart from "./BarChart";
+import { GoalStats } from "./GoalStats";
+import GoalItemsTable from "./GoalItemsTable";
 
 // const getRandomItems = (count: number) => {
 //   const items = [];
@@ -40,38 +43,34 @@ export default async function GoalPage({
       </div>
       <p className="text-base-content/70">{goal.description}</p>
 
+      <h2 className="text-2xl mt-4 mb-2">Overall progress</h2>
+
+      <GoalStats goal={goal} />
+
+      <h2 className="text-2xl mt-4 mb-2">Latest progress</h2>
+
+      <div className="w-1/2 mx-auto">
+        <BarChart
+          items={Array.from({ length: 7 }).map((_, idx) => ({
+            createdAt: dayjs().subtract(idx, "days").toDate(),
+            value: Math.floor(Math.random() * 10),
+          }))}
+        />
+      </div>
+
       <h2 className="text-2xl mt-4 mb-2">Activity over time</h2>
 
-      <CalendarChart
-        items={goal.items}
-        from={dayjs().subtract(364, "days").toDate()}
-        to={dayjs().toDate()}
-      />
+      <div className="mx-auto max-w-full overflow-x-auto">
+        <CalendarChart
+          items={goal.items}
+          from={dayjs().subtract(365, "days").toDate()}
+          to={dayjs().add(1, "day").toDate()}
+        />
+      </div>
 
       <h2 className="text-2xl mt-4 mb-2">Items</h2>
 
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Idx</th>
-            <th>Message</th>
-            <th>Value</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {goal.items.map((item, index) => (
-            <tr key={item.id}>
-              <th>{index + 1}</th>
-              <td>{item.message || "-"}</td>
-              <td>
-                {item.value} {goal.unit}s
-              </td>
-              <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <GoalItemsTable goal={goal} />
     </div>
   );
 }

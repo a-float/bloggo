@@ -59,7 +59,8 @@ export default async function BlogPage({
             />
           </section>
         )} */}
-        <MarkdownRenderer markdown={blog.content} />
+        {/* TODO consider restricting trust */}
+        <MarkdownRenderer markdown={blog.content} trusted />
       </div>
     </>
   );

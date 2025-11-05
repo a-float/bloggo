@@ -25,7 +25,14 @@ export function Textarea(props: TextareaProps) {
   const { label, error, hideRequired, hideLabel, ...rest } = props;
   return (
     <fieldset className="fieldset">
-      <LegendLabel {...props}>{label}</LegendLabel>
+      <div className="flex justify-between items-center">
+        <LegendLabel {...props}>{label}</LegendLabel>
+        {!!rest.maxLength && (
+          <span className="text-xs text-base-content/50">
+            {rest.value ? rest.value.toString().length : 0}/{rest.maxLength}
+          </span>
+        )}
+      </div>
       <textarea
         aria-invalid={!!error}
         {...rest}

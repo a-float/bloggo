@@ -14,7 +14,7 @@ type AddGoalItemModalProps = {
   editingItem?: GoalItemType;
 };
 
-export default function AddGoalItemModal(props: AddGoalItemModalProps) {
+export default function GoalItemModal(props: AddGoalItemModalProps) {
   const [newValue, setNewValue] = React.useState(
     props.editingItem?.value?.toString() || ""
   );
@@ -104,9 +104,9 @@ export default function AddGoalItemModal(props: AddGoalItemModalProps) {
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
         placeholder="What you did..."
-        className="w-full min-h-0"
+        maxLength={256}
+        className="w-full field-sizing-content"
         disabled={isSubmitting}
-        rows={1}
       />
       <div className="flex gap-2 mt-4 justify-end">
         <button

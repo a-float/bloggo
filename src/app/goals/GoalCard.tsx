@@ -7,7 +7,7 @@ import BadgeRow from "@/components/BadgeRow";
 import { FaEdit } from "react-icons/fa";
 import { FaEllipsis, FaTrash } from "react-icons/fa6";
 import Link from "next/link";
-import AddGoalItemModal from "./AddGoalItemModal";
+import GoalItemModal from "./GoalItemModal";
 import CalendarChart from "./[slug]/CalendarChart";
 import dayjs from "dayjs";
 import Progress from "@/components/Progress";
@@ -99,7 +99,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
             <h3 className="font-bold text-lg mb-4">
               Add Progress to {goal.title}
             </h3>
-            <AddGoalItemModal
+            <GoalItemModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
               goal={goal}

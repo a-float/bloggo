@@ -71,10 +71,10 @@ export default function CalendarChart(props: CalendarChartProps) {
 
   const getOpacityForDate = (date: Date) => {
     const key = dateToDateKey(date);
-    if (maxItemsPerDay === 0) return 0.1;
+    if (maxItemsPerDay === 0) return 0.2;
 
     const ratio = (itemDayMap.get(key) ?? 0) / maxItemsPerDay;
-    return ratio * 0.9 + 0.1;
+    return ratio * 0.9 + 0.2;
   };
 
   const totalTimeMs = props.to.getTime() - props.from.getTime();

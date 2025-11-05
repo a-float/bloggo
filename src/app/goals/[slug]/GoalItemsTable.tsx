@@ -4,7 +4,7 @@ import { useState } from "react";
 import { GoalDto } from "@/data/goal-dto";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import dayjs from "dayjs";
-import AddGoalItemModal from "../AddGoalItemModal";
+import GoalItemModal from "../GoalItemModal";
 import { deleteGoalItem } from "@/actions/delete-goal-item.action";
 import toast from "react-hot-toast";
 
@@ -83,10 +83,10 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
                 </td>
                 <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
                 <td>
-                  <div className="join">
+                  <div>
                     <button
                       type="button"
-                      className="join-item btn btn-sm btn-square"
+                      className="btn btn-sm btn-ghost btn-square"
                       onClick={() => handleEditItem(item)}
                       title="Edit item"
                     >
@@ -94,7 +94,7 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
                     </button>
                     <button
                       type="button"
-                      className="join-item btn btn-sm btn-square text-error hover:bg-error hover:text-error-content"
+                      className="btn btn-sm btn-square btn-ghost btn-error"
                       onClick={() => handleDeleteItem(item.id)}
                       disabled={isDeleting === item.id}
                       title="Delete item"
@@ -121,7 +121,7 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
                 ? `Edit Progress for ${goal.title}`
                 : `Add Progress to ${goal.title}`}
             </h3>
-            <AddGoalItemModal
+            <GoalItemModal
               isOpen={isModalOpen}
               onClose={handleCloseModal}
               goal={goal}

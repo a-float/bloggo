@@ -102,8 +102,8 @@ export default function CalendarChart(props: CalendarChartProps) {
   const tooltipItems = itemDayMap.get(dateToDateKey(tooltip.date));
 
   return (
-    <div className={props.className}>
-      <div className="grid gap-2 grid-cols-[auto,1fr] grid-rows-[auto,1fr,auto]">
+    <>
+      <div className="overflow-x-auto scrollbar-hide grid gap-2 grid-cols-[auto,1fr] grid-rows-[auto,1fr]">
         <div />
 
         {/* Month legend */}
@@ -126,7 +126,7 @@ export default function CalendarChart(props: CalendarChartProps) {
 
         {/* Days */}
         <div className="grid grid-rows-7 gap-1 grid-flow-col row-start-2 col-start-2">
-          {firstDay > 0 && <div style={{ gridRow: `1/${firstDay + 1}` }} />}
+          {firstDay > 0 && <div style={{ gridRow: `1/${firstDay}` }} />}
           {Array.from({ length: totalDays })
             .map((_, index) => dayjs(props.from).add(index, "days").toDate())
             .map((date, index) => (
@@ -142,11 +142,13 @@ export default function CalendarChart(props: CalendarChartProps) {
               />
             ))}
         </div>
+      </div>
 
-        {/* Scale */}
-        {props.showLegend !== false && (
-          <div className="text-xs text-base-content/70 col-span-2 flex items-center gap-1 justify-end w-full row-start-3">
-            <span>Less</span>
+      {/* Scale */}
+      {props.showLegend !== false && (
+        <div className="text-sm text-base-content/70 col-span-2 flex items-center gap-2 justify-end w-full">
+          <span>Less</span>
+          <div className="flex gap-1">
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 className={clsx(cellSize, "bg-primary rounded-xs")}
@@ -154,10 +156,10 @@ export default function CalendarChart(props: CalendarChartProps) {
                 style={{ opacity: (idx / 4) * 0.9 + 0.1 }}
               />
             ))}
-            <span>More</span>
           </div>
-        )}
-      </div>
+          <span>More</span>
+        </div>
+      )}
 
       <div
         className={clsx(
@@ -173,6 +175,6 @@ export default function CalendarChart(props: CalendarChartProps) {
         {dateToDateKey(tooltip.date)}
         {tooltipItems ? ` - ${tooltipItems} item(s)` : " - No items"}
       </div>
-    </div>
+    </>
   );
 }

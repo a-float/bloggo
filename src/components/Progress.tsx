@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 type ProgressProps = {
-  progress: number;
+  value: number;
   className?: string;
 };
 
@@ -9,11 +9,11 @@ export default function Progress(props: ProgressProps) {
   return (
     <div
       className={clsx("radial-progress", props.className)}
-      style={{ "--value": props.progress } as React.CSSProperties}
-      aria-valuenow={props.progress}
+      style={{ "--value": props.value } as React.CSSProperties}
+      aria-valuenow={props.value}
       role="progressbar"
     >
-      {props.progress}%
+      {props.value}%
     </div>
   );
 }

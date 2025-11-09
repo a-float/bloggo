@@ -66,9 +66,8 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
         <>
           {/* <GoalStats goal={goal} /> */}
           <div className="flex justify-around items-center mb-2 gap-6">
-            <div className="overflow-auto scrollbar-hide rtl">
+            <div className="overflow-auto scrollbar-hide">
               <CalendarChart
-                className="ltr"
                 from={dayjs().subtract(140, "days").toDate()}
                 to={dayjs().toDate()}
                 items={goal.items}
@@ -78,7 +77,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
                 size="sm"
               />
             </div>
-            <Progress progress={94} className="text-primary aspect-square" />
+            <Progress value={94} className="text-primary aspect-square" />
           </div>
 
           {goal.tags.length > 0 && <BadgeRow tags={goal.tags} />}

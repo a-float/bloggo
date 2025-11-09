@@ -5,30 +5,36 @@ type BarChartProps = {
 };
 
 export default function BarChart(props: BarChartProps) {
-  const minValue = Math.min(...props.items.map((item) => item.value));
+  const minValue = 0;
   const maxValue = Math.max(...props.items.map((item) => item.value));
 
   return (
-    <div className="flex h-36 items-end justify-center gap-4">
+    <div
+      className="grid h-36 justify-center gap-4"
+      style={{
+        gridTemplateColumns: `repeat(${props.items.length}, minmax(20px, 35px)`,
+      }}
+    >
       {props.items.map((item, index) => {
         const heightPercent =
           maxValue === minValue
             ? 100
             : ((item.value - minValue) / (maxValue - minValue)) * 100;
         return (
-          <div
-            key={index}
-            className="bg-primary"
-            style={{
-              minWidth: 20,
-              maxWidth: 30,
-              width: `${100 / props.items.length}%`,
-              height: `${heightPercent}%`,
-            }}
-            title={`${item.value} on ${dayjs(item.createdAt).format(
-              "MMM DD, YYYY"
-            )}`}
-          ></div>
+          <div key={index} className="flex flex-col items-center">
+            <div
+              className="bg-primary mt-auto w-full rounded-md"
+              style={{
+                height: `${heightPercent}%`,
+              }}
+              title={`${item.value} on ${dayjs(item.createdAt).format(
+                "MMM DD, YYYY"
+              )}`}
+            />
+            <span className="text-sm">
+              {dayjs(item.createdAt).format("MM/DD")}
+            </span>
+          </div>
         );
       })}
     </div>

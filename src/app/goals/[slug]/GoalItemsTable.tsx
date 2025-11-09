@@ -62,8 +62,8 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-md border border-base-content/5">
-        <table className="table table-zebra">
+      <div className="overflow-x-auto rounded-md">
+        <table className="table min-w-[600px]">
           <thead>
             <tr className="bg-base-200">
               <th className="sr-only">Index</th>

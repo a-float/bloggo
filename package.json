@@ -45,6 +45,7 @@
     "react-icons": "^5.5.0",
     "react-select": "^5.10.1",
     "react-sortablejs": "^6.1.4",
+    "recharts": "^3.3.0",
     "resend": "^4.6.0",
     "sass": "^1.89.2",
     "sortablejs": "^1.15.6",

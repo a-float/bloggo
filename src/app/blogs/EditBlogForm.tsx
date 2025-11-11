@@ -33,9 +33,14 @@ type FormValues = {
 type EditBlogFormProps = {
   blog?: BlogDTO;
   tagCounts: TagWithCount[];
+  canCreatePublicBlog: boolean;
 };
 
-export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
+export default function EditBlogForm({
+  blog,
+  tagCounts,
+  canCreatePublicBlog,
+}: EditBlogFormProps) {
   const router = useRouter();
   const blobManagerRef = React.useRef(BlobManager.getInstance());
 
@@ -187,8 +192,10 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
               className="w-full"
               required
             >
-              <option value={BlogVisibility.PUBLIC}>🌍 Everyone</option>
-              <option value={BlogVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends only</option>
+              {canCreatePublicBlog && (
+                <option value={BlogVisibility.PUBLIC}>🌍 Everyone</option>
+              )}
+              <option value={BlogVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends</option>
               <option value={BlogVisibility.PRIVATE}>🔒 Just me</option>
             </Select>
             <Controller

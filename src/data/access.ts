@@ -37,18 +37,19 @@ export function canUserCreateGoal(user: UserDTO | null): boolean {
   return !!(user && user.hasVerifiedEmail);
 }
 
+export function canUserCreatePublicGoal(user: UserDTO | null): boolean {
+  return !!(user && user.hasVerifiedEmail && user.role === Role.ADMIN);
+}
+
 // TODO support for friends' goals?
 export function canUserSeeGoal(user: UserDTO | null, goal: GoalDto): boolean {
   if (goal.owner && goal.owner?.id === user?.id) return true;
   return false;
 }
 
-export function canUserEditGoal(
-  user: UserDTO | null,
-  goal: { ownerId: string }
-): boolean {
+export function canUserEditGoal(user: UserDTO | null, goal: GoalDto): boolean {
   if (!user || !user.hasVerifiedEmail) return false;
   if (user.role === Role.ADMIN) return true;
-  if (goal.ownerId === user.id) return true;
+  if (goal.owner && goal.owner.id === user.id) return true;
   return false;
 }

@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import * as yup from "yup";
-import { Blog, BlogVisibility, Prisma } from "@prisma/client";
+import { Blog, BlogVisibility, Prisma, Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/session";
 import { getBlogById } from "@/lib/service/blog.service";
@@ -63,6 +63,9 @@ export async function createOrUpdateBlog(
   const imagesWhere: Prisma.ImageWhereUniqueInput[] = images.map((image) => ({
     url: image.url,
   }));
+  if (user.role !== Role.ADMIN && data.visibility === BlogVisibility.PUBLIC) {
+    return { success: false, message: "Only admins can make public blogs." };
+  }
 
   if (!id) {
     // Creating a new blog

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { GoalDto } from "@/data/goal-dto";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { TbPlus } from "react-icons/tb";
 import dayjs from "dayjs";
 import GoalItemModal from "../GoalItemModal";
 import { deleteGoalItem } from "@/actions/delete-goal-item.action";
@@ -17,7 +18,7 @@ type GoalItemsTableProps = {
 export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GoalItemType | undefined>(
-    undefined
+    undefined,
   );
   const [isDeleting, setIsDeleting] = useState<number | null>(null);
 
@@ -55,33 +56,47 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
     }
   };
 
+  const handleCreateNewItem = () => {
+    setIsModalOpen(true);
+    setEditingItem(undefined);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingItem(undefined);
   };
 
   return (
-    <>
+    <section className="bg-base-100 shadow-sm p-4">
+      <div className="flex justify-between gap-4 flex-wrap items-center mb-2">
+        <h2 className="card-title">Progress entries</h2>
+        <button
+          type="button"
+          onClick={handleCreateNewItem}
+          className="btn btn-soft btn-xs"
+        >
+          <TbPlus />
+          Add progress
+        </button>
+      </div>
       <div className="overflow-x-auto rounded-md">
         <table className="table min-w-[600px]">
           <thead>
             <tr className="bg-base-200">
-              <th className="sr-only">Index</th>
+              <th>Date</th>
               <th>Message</th>
               <th>Value</th>
-              <th>Date</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {goal.items.map((item, index) => (
               <tr key={item.id}>
-                <th>{index + 1}</th>
-                <td className="whitespace-pre-line">{item.message || "-"}</td>
+                <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
+                <td className="whitespace-pre-line">{item.message || "N/A"}</td>
                 <td>
                   {item.value} {goal.unit}
                 </td>
-                <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
                 <td>
                   <div>
                     <button
@@ -113,24 +128,12 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
         </table>
       </div>
 
-      {isModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg mb-4">
-              {editingItem
-                ? `Edit Progress for ${goal.title}`
-                : `Add Progress to ${goal.title}`}
-            </h3>
-            <GoalItemModal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              goal={goal}
-              editingItem={editingItem}
-            />
-          </div>
-          <div className="modal-backdrop" onClick={handleCloseModal} />
-        </div>
-      )}
-    </>
+      <GoalItemModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        goal={goal}
+        editingItem={editingItem}
+      />
+    </section>
   );
 }

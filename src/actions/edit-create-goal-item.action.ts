@@ -26,11 +26,11 @@ const capitalize = (str: string) =>
   str.slice(0, 1).toUpperCase() + str.slice(1);
 
 export async function createOrUpdateGoalItem(
-  input: GoalItemInput
+  input: GoalItemInput,
 ): Promise<GoalItemActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
-  
+
   const errors: GoalItemActionState["errors"] = [];
 
   const parsedInput = await GoalItemSchema.validate(input, {
@@ -75,8 +75,8 @@ export async function createOrUpdateGoalItem(
       });
 
       revalidatePath(`/goals/${goalId}`);
-      revalidatePath('/goals');
-      
+      revalidatePath("/goals");
+
       return {
         success: true,
         message: "Goal item added successfully.",
@@ -107,7 +107,7 @@ export async function createOrUpdateGoalItem(
       });
 
       revalidatePath(`/goals/${goalId}`);
-      revalidatePath('/goals');
+      revalidatePath("/goals");
 
       return {
         success: true,
@@ -119,7 +119,7 @@ export async function createOrUpdateGoalItem(
     console.error("Error creating/updating goal item:", error);
     return {
       success: false,
-      message: `Failed to ${id ? 'update' : 'add'} goal item.`,
+      message: `Failed to ${id ? "update" : "add"} goal item.`,
     };
   }
 }

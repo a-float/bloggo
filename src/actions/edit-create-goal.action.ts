@@ -5,8 +5,8 @@ import * as yup from "yup";
 import { Goal, GoalType, GoalVisibility, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/session";
-import { getBlogById } from "@/lib/service/blog.service";
-import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
+import { getGoalById } from "@/lib/service/goal.service";
+import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
 
 export type ActionState = {
   success: boolean;
@@ -32,7 +32,7 @@ const capitalize = (str: string) =>
   str.slice(0, 1).toUpperCase() + str.slice(1);
 
 export async function createOrUpdateGoal(
-  input: CreateBlogInput
+  input: CreateBlogInput,
 ): Promise<ActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
@@ -58,8 +58,8 @@ export async function createOrUpdateGoal(
   };
 
   if (!id) {
-    // Creating a new blog
-    if (!canUserCreateBlog(user)) {
+    // Creating a new goal
+    if (!canUserCreateGoal(user)) {
       return { success: false, message: "Access denied." };
     }
     const goal = await prisma.goal.create({ data });
@@ -67,12 +67,13 @@ export async function createOrUpdateGoal(
     revalidatePath("/goals");
     return { success: true, message: "Blog updated successfully.", data: goal };
   } else {
-    // Editing an existing blog
-    const oldBlog = await getBlogById(id);
-    if (!oldBlog) {
+    // Editing an existing goal
+    const oldGoal = await getGoalById(id);
+    if (!oldGoal) {
       return { success: false, message: "Blog not found." };
     }
-    if (!canUserEditBlog(user, oldBlog)) {
+
+    if (!canUserEditGoal(user, oldGoal)) {
       return { success: false, message: "Access denied." };
     }
 

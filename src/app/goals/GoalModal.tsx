@@ -80,7 +80,7 @@ export default function GoalModal(props: GoalModalProps) {
         props.onSave?.();
         toast.success(
           result.message ||
-            `Goal ${isEditMode ? "updated" : "created"} successfully`
+            `Goal ${isEditMode ? "updated" : "created"} successfully`,
         );
       } else {
         // Handle validation errors
@@ -98,7 +98,7 @@ export default function GoalModal(props: GoalModalProps) {
       toast.error(`Failed to ${isEditMode ? "update" : "create"} goal`);
       console.error(
         `Error ${isEditMode ? "updating" : "creating"} goal:`,
-        error
+        error,
       );
     }
   };
@@ -106,7 +106,7 @@ export default function GoalModal(props: GoalModalProps) {
   const handleClose = () => {
     if (form.formState.isDirty) {
       const confirmClose = window.confirm(
-        "You have unsaved changes. Are you sure you want to close?"
+        "You have unsaved changes. Are you sure you want to close?",
       );
       if (!confirmClose) return;
     }
@@ -167,7 +167,7 @@ export default function GoalModal(props: GoalModalProps) {
               required
             >
               <option value={GoalVisibility.PRIVATE}>🔒 Just me</option>
-              <option value={GoalVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends only</option>
+              <option value={GoalVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends</option>
               {/* <option value={GoalVisibility.PUBLIC}>🌍 Everyone</option> */}
             </Select>
 
@@ -195,7 +195,7 @@ export default function GoalModal(props: GoalModalProps) {
                   {
                     label: "Sum",
                     description:
-                      "Track the total amount accumulated (e.g., hours, pages).",
+                      "Track the total amount accumulated (e.g., hour, page).",
                     value: GoalType.SUM,
                   },
                   {
@@ -209,6 +209,7 @@ export default function GoalModal(props: GoalModalProps) {
                 <Input
                   label="Goal target"
                   type="number"
+                  step={0.001}
                   className="input"
                   required
                   placeholder="The value you aim to reach"

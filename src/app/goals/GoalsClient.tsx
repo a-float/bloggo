@@ -45,7 +45,7 @@ export default function GoalsClient(props: GoalsClientProps) {
           {props.canCreate ? (
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn"
               onClick={handleCreateGoal}
             >
               Create new goal

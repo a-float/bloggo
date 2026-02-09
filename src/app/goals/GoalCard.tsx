@@ -11,6 +11,7 @@ import GoalItemModal from "./GoalItemModal";
 import CalendarChart from "./[slug]/CalendarChart";
 import dayjs from "dayjs";
 import Progress from "@/components/Progress";
+import { getGoalMetrics } from "./getGoalMetrics";
 
 type GoalCardProps = {
   goal: GoalDto;
@@ -20,8 +21,10 @@ type GoalCardProps = {
 export default function GoalCard({ goal, onEdit }: GoalCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const metrics = getGoalMetrics(goal);
+
   return (
-    <div className="card card-sm card-border bg-base-100 shadow-lg">
+    <div className="card card-sm card-border bg-base-100 shadow-sm">
       <div className="card-body">
         <div className="dropdown dropdown-end absolute top-2 right-2">
           <div tabIndex={0} role="button" className="btn btn-circle btn-ghost">
@@ -29,7 +32,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
           </div>
           <ul
             tabIndex={-1}
-            className="dropdown-content menu bg-base-200 rounded-box z-1 w-32 p-2 shadow-sm"
+            className="dropdown-content menu bg-base-200 rounded-box z-1 w-32 p-2 shadow-md"
           >
             <li>
               <a
@@ -56,20 +59,14 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
           </ul>
         </div>
         <Link href={`/goals/${goal.id}`}>
-          <h2 className="card-title">{goal.title}</h2>
+          <h2 className="card-title text-lg">{goal.title}</h2>
         </Link>
-        {/* <div className="h-12">
-          {goal.description && (
-            <p className="text-base-content/70 text-sm">{goal.description}</p>
-          )}
-        </div> */}
         <>
-          {/* <GoalStats goal={goal} /> */}
           <div className="flex justify-around items-center mb-2 gap-6">
             <div className="overflow-auto scrollbar-hide">
               <CalendarChart
-                from={dayjs().subtract(140, "days").toDate()}
-                to={dayjs().toDate()}
+                from={dayjs().subtract(126, "days").toDate()}
+                to={dayjs().subtract(1, "day").toDate()}
                 items={goal.items}
                 showLegend={false}
                 showX={false}
@@ -77,39 +74,30 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
                 size="sm"
               />
             </div>
-            <Progress value={94} className="text-primary aspect-square" />
+            <Progress
+              value={metrics.progressPercent}
+              className="aspect-square"
+            />
           </div>
 
           {goal.tags.length > 0 && <BadgeRow tags={goal.tags} />}
+
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
-            className="btn btn-soft btn-sm mt-2"
+            className="btn btn-sm mt-2"
           >
             <TbPlus />
             Add progress
           </button>
+
+          <GoalItemModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            goal={goal}
+          />
         </>
       </div>
-
-      {isModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg mb-4">
-              Add Progress to {goal.title}
-            </h3>
-            <GoalItemModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              goal={goal}
-            />
-          </div>
-          <div
-            className="modal-backdrop"
-            onClick={() => setIsModalOpen(false)}
-          />
-        </div>
-      )}
     </div>
   );
 }

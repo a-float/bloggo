@@ -35,7 +35,6 @@ const getMonthNames = (from: Date, to: Date) => {
 
   while (current.isBefore(end)) {
     months.push(current.format("MMM"));
-    console.log(current.format("MMM DD"));
     current = current.add(1, "month");
   }
 
@@ -71,10 +70,11 @@ export default function CalendarChart(props: CalendarChartProps) {
 
   const getOpacityForDate = (date: Date) => {
     const key = dateToDateKey(date);
-    if (maxItemsPerDay === 0) return 0.2;
+    const minOpacity = 0.05;
+    if (maxItemsPerDay === 0) return minOpacity;
 
     const ratio = (itemDayMap.get(key) ?? 0) / maxItemsPerDay;
-    return ratio * 0.9 + 0.2;
+    return ratio * 0.9 + minOpacity;
   };
 
   const totalTimeMs = props.to.getTime() - props.from.getTime();
@@ -103,7 +103,7 @@ export default function CalendarChart(props: CalendarChartProps) {
 
   return (
     <>
-      <div className="overflow-x-auto scrollbar-hide grid gap-2 grid-cols-[auto,1fr] grid-rows-[auto,1fr]">
+      <div className="overflow-x-auto scrollbar-hide grid gap-2 grid-rows-[auto_1fr] mx-auto">
         <div />
 
         {/* Month legend */}
@@ -127,14 +127,14 @@ export default function CalendarChart(props: CalendarChartProps) {
         {/* Days */}
         <div className="grid grid-rows-7 gap-1 grid-flow-col row-start-2 col-start-2">
           {firstDay > 0 && <div style={{ gridRow: `1/${firstDay}` }} />}
-          {Array.from({ length: totalDays })
+          {Array.from({ length: totalDays + 1 })
             .map((_, index) => dayjs(props.from).add(index, "days").toDate())
             .map((date, index) => (
               <div
                 key={index}
                 className={clsx(
                   cellSize,
-                  "bg-primary hover:bg-primary transition-colors rounded-xs"
+                  "bg-base-content transition-colors rounded-xs",
                 )}
                 style={{ opacity: getOpacityForDate(date) }}
                 onMouseEnter={(e) => handleMouseEnter(e, date)}
@@ -151,7 +151,7 @@ export default function CalendarChart(props: CalendarChartProps) {
           <div className="flex gap-1">
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
-                className={clsx(cellSize, "bg-primary rounded-xs")}
+                className={clsx(cellSize, "bg-base-content rounded-xs")}
                 key={idx}
                 style={{ opacity: (idx / 4) * 0.9 + 0.1 }}
               />
@@ -165,7 +165,7 @@ export default function CalendarChart(props: CalendarChartProps) {
         className={clsx(
           "fixed z-50 bg-base-300 text-base-content text-xs px-2 py-1 rounded pointer-events-none transform -translate-x-1/2 -translate-y-full",
           !tooltip.visible && "opacity-0",
-          "transition-opacity duration-200"
+          "transition-opacity duration-200",
         )}
         style={{
           left: tooltip.x,

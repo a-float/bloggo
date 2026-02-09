@@ -43,7 +43,10 @@ function getGoalWhereForUser(user: UserDTO | null): Prisma.GoalWhereInput {
 export async function getGoalsForUser(user: UserDTO | null) {
   const goals = await prisma.goal.findMany({
     where: getGoalWhereForUser(user),
-    include: { items: { orderBy: { createdAt: "desc" } }, owner: true },
+    include: {
+      items: { orderBy: { createdAt: "desc" } },
+      owner: true,
+    },
     orderBy: { createdAt: "desc" },
   });
   return goals.map((goal) => getGoalDTO(goal));
@@ -52,13 +55,16 @@ export async function getGoalsForUser(user: UserDTO | null) {
 export async function getGoalById(id: number) {
   const goal = await prisma.goal.findUnique({
     where: { id },
-    include: { items: { orderBy: { createdAt: "desc" } }, owner: true },
+    include: {
+      items: { orderBy: { createdAt: "desc" } },
+      owner: true,
+    },
   });
   return goal ? getGoalDTO(goal) : null;
 }
 
 export async function getGoalTagCounts(
-  user: UserDTO | null
+  user: UserDTO | null,
 ): Promise<TagWithCount[]> {
   const goals = await prisma.goal.findMany({
     where: getGoalWhereForUser(user),
@@ -73,4 +79,18 @@ export async function getGoalTagCounts(
   return Array.from(tagCounts.entries())
     .map(([tag, count]) => ({ tag, count }))
     .sort((a, b) => b.count - a.count);
+}
+
+export async function getTotalGoalProgress(goalId: number) {
+  const result = await prisma.goalItem.aggregate({
+    where: { goalId },
+    _sum: { value: true },
+    _count: { value: true },
+    _max: { value: true },
+  });
+  return {
+    sum: result._sum.value || 0,
+    count: result._count.value || 0,
+    max: result._max.value || 0,
+  };
 }

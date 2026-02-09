@@ -4,6 +4,7 @@ import Spinner from "@/components/Spinner";
 import { GoalDto } from "@/data/goal-dto";
 import React from "react";
 import toast from "react-hot-toast";
+import { FaXmark } from "react-icons/fa6";
 
 type GoalItemType = GoalDto["items"][0];
 
@@ -86,49 +87,66 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
     }
   };
 
+  if (!props.isOpen) return null;
+
   return (
-    <form onSubmit={handleSubmit} className="">
-      <Input
-        label="Value"
-        required
-        type="number"
-        step="any"
-        value={newValue}
-        onChange={(e) => setNewValue(e.target.value)}
-        placeholder={`Value${props.goal.unit ? ` (${props.goal.unit})` : ""}`}
-        className="w-full"
-        disabled={isSubmitting}
-      />
-      <Textarea
-        label="Message"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="What you did..."
-        maxLength={256}
-        className="w-full field-sizing-content"
-        disabled={isSubmitting}
-      />
-      <div className="flex gap-2 mt-4 justify-end">
+    <div className="modal modal-open">
+      <div className="modal-backdrop" onClick={props.onClose} />
+      <div className="modal-box">
+        <h3 className="font-bold text-lg mb-4">
+          Add Progress to {props.goal.title}
+        </h3>
         <button
           type="button"
-          onClick={() => {
-            setNewValue("");
-            setNewMessage("");
-            props.onClose();
-          }}
-          className="btn btn-ghost btn-sm w-16"
-          disabled={isSubmitting}
+          onClick={props.onClose}
+          className="btn btn-ghost btn-circle absolute top-4 right-4"
         >
-          Cancel
+          <FaXmark />
         </button>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="btn btn-primary btn-sm w-16"
-        >
-          {isSubmitting ? <Spinner /> : isEditing ? "Update" : "Add"}
-        </button>
+        <form onSubmit={handleSubmit}>
+          <Input
+            label="Value"
+            required
+            type="number"
+            step="any"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            placeholder={`Value${props.goal.unit ? ` (${props.goal.unit})` : ""}`}
+            className="w-full"
+            disabled={isSubmitting}
+          />
+          <Textarea
+            label="Message"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="What you did..."
+            maxLength={256}
+            className="w-full field-sizing-content"
+            disabled={isSubmitting}
+          />
+          <div className="flex gap-2 mt-4 justify-end">
+            <button
+              type="button"
+              onClick={() => {
+                setNewValue("");
+                setNewMessage("");
+                props.onClose();
+              }}
+              className="btn btn-ghost btn-sm w-16"
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn btn-primary btn-sm w-16"
+            >
+              {isSubmitting ? <Spinner /> : isEditing ? "Update" : "Add"}
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }

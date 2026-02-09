@@ -41,12 +41,12 @@ export default function GoalBarChart(props: BarChartProps) {
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="30%"
-                stopColor="var(--color-primary)"
+                stopColor="var(--color-base-content)"
                 stopOpacity={1}
               />
               <stop
                 offset="100%"
-                stopColor="var(--color-primary)"
+                stopColor="var(--color-base-content)"
                 stopOpacity={0.3}
               />
             </linearGradient>
@@ -63,7 +63,7 @@ export default function GoalBarChart(props: BarChartProps) {
             dataKey="progress"
             fill="url(#colorUv)"
             radius={4}
-            barSize={`${60 / props.daysPast}%`}
+            barSize={24}
           />
         </BarChart>
       </div>

@@ -51,7 +51,14 @@ model Goal {
   items       GoalItem[]
   unit        String?
   target      Float
-  type        GoalType       @default(COUNT)
+  type        GoalType
+  status      GoalStatus     @default(ACTIVE)
+  completedAt DateTime?
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
 }
 
 enum GoalType {

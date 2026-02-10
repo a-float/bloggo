@@ -5,7 +5,10 @@ import * as yup from "yup";
 import { Goal, GoalType, GoalVisibility, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/session";
-import { getGoalById } from "@/lib/service/goal.service";
+import {
+  getGoalById,
+  markGoalAsCompletedIfNeeded,
+} from "@/lib/service/goal.service";
 import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
 
 export type ActionState = {
@@ -22,17 +25,17 @@ const CreateGoalSchema = yup.object({
   tags: yup.array().of(yup.string().trim().required()).default([]),
   visibility: yup.string().oneOf(Object.values(GoalVisibility)).required(),
   unit: yup.string().nullable().optional(),
-  target: yup.number().min(0).required(),
+  target: yup.number().moreThan(0).required(),
   type: yup.string().oneOf(Object.values(GoalType)).required(),
 });
 
-type CreateBlogInput = yup.InferType<typeof CreateGoalSchema>;
+type CreateGoalInput = yup.InferType<typeof CreateGoalSchema>;
 
 const capitalize = (str: string) =>
   str.slice(0, 1).toUpperCase() + str.slice(1);
 
 export async function createOrUpdateGoal(
-  input: CreateBlogInput,
+  input: CreateGoalInput,
 ): Promise<ActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
@@ -65,21 +68,37 @@ export async function createOrUpdateGoal(
     const goal = await prisma.goal.create({ data });
 
     revalidatePath("/goals");
-    return { success: true, message: "Blog updated successfully.", data: goal };
+    return { success: true, message: "Goal updated successfully.", data: goal };
   } else {
     // Editing an existing goal
     const oldGoal = await getGoalById(id);
     if (!oldGoal) {
-      return { success: false, message: "Blog not found." };
+      return { success: false, message: "Goal not found." };
     }
 
     if (!canUserEditGoal(user, oldGoal)) {
       return { success: false, message: "Access denied." };
     }
 
+    if (!oldGoal) {
+      return { success: false, message: "Goal not found." };
+    }
+    if (oldGoal.status === "COMPLETED") {
+      return { success: false, message: "Cannot edit a completed goal." };
+    }
+    if (oldGoal.type !== data.type) {
+      return {
+        success: false,
+        message: "Cannot change the type of an existing goal.",
+      };
+    }
+
     const goal = await prisma.goal.update({ where: { id }, data });
+    markGoalAsCompletedIfNeeded(goal);
 
     revalidatePath("/goals");
-    return { success: true, message: "Blog updated successfully.", data: goal };
+    revalidatePath(`/goals/${goal.id}`);
+
+    return { success: true, message: "Goal updated successfully.", data: goal };
   }
 }

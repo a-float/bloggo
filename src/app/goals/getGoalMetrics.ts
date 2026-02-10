@@ -11,7 +11,7 @@ export function getGoalMetrics(goal: GoalDto) {
   const totalDone = goal.items.reduce((acc, item) => acc + item.value, 0);
   const progressPercent =
     currentTarget > 0 ? niceFloat((100 * totalDone) / currentTarget) : 0;
-  const toDo = niceFloat(currentTarget - totalDone);
+  const toDo = Math.max(0, niceFloat(currentTarget - totalDone));
   const avg = totalDone / Math.max(dayjs().diff(firstTime, "day"), 1);
 
   return {

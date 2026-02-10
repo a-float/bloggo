@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { GoalItem } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/lib/session";
+import { markGoalAsCompletedIfNeeded } from "@/lib/service/goal.service";
 
 export type GoalItemActionState = {
   success: boolean;
@@ -50,9 +51,7 @@ export async function createOrUpdateGoalItem(
 
   try {
     // Check if the goal exists and user has access
-    const goal = await prisma.goal.findUnique({
-      where: { id: goalId },
-    });
+    const goal = await prisma.goal.findUnique({ where: { id: goalId } });
 
     if (!goal) {
       return { success: false, message: "Goal not found." };
@@ -62,17 +61,17 @@ export async function createOrUpdateGoalItem(
       return { success: false, message: "Access denied." };
     }
 
-    let goalItem: GoalItem;
-
     if (!id) {
       // Creating a new goal item
-      goalItem = await prisma.goalItem.create({
+      const goalItem = await prisma.goalItem.create({
         data: {
           goalId,
           value,
           message: message || null,
         },
       });
+
+      markGoalAsCompletedIfNeeded(goal);
 
       revalidatePath(`/goals/${goalId}`);
       revalidatePath("/goals");
@@ -84,27 +83,20 @@ export async function createOrUpdateGoalItem(
       };
     } else {
       // Editing an existing goal item
-      const existingItem = await prisma.goalItem.findUnique({
-        where: { id },
-        include: { goal: true },
-      });
+      const existingItem = await prisma.goalItem.findUnique({ where: { id } });
 
       if (!existingItem) {
         return { success: false, message: "Goal item not found." };
       }
 
-      // Verify user owns the goal
-      if (existingItem.goal.ownerId !== user.id) {
-        return { success: false, message: "Access denied." };
-      }
-
-      goalItem = await prisma.goalItem.update({
+      const goalItem = await prisma.goalItem.update({
         where: { id },
         data: {
           value,
           message: message || null,
         },
       });
+      markGoalAsCompletedIfNeeded(goal);
 
       revalidatePath(`/goals/${goalId}`);
       revalidatePath("/goals");
@@ -116,7 +108,7 @@ export async function createOrUpdateGoalItem(
       };
     }
   } catch (error) {
-    console.error("Error creating/updating goal item:", error);
+    console.error(`Error ${id ? "updating" : "creating"} goal item:`, error);
     return {
       success: false,
       message: `Failed to ${id ? "update" : "add"} goal item.`,

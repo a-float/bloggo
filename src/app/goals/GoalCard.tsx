@@ -12,6 +12,7 @@ import CalendarChart from "./[slug]/CalendarChart";
 import dayjs from "dayjs";
 import Progress from "@/components/Progress";
 import { getGoalMetrics } from "./getGoalMetrics";
+import GoalStatusBadge from "./GoalStatusBadge";
 
 type GoalCardProps = {
   goal: GoalDto;
@@ -58,7 +59,7 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
             </li>
           </ul>
         </div>
-        <Link href={`/goals/${goal.id}`}>
+        <Link href={`/goals/${goal.id}`} className="flex gap-2">
           <h2 className="card-title text-lg">{goal.title}</h2>
         </Link>
         <>
@@ -80,17 +81,23 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
             />
           </div>
 
-          {goal.tags.length > 0 && <BadgeRow tags={goal.tags} />}
-
-          <button
-            type="button"
-            onClick={() => setIsModalOpen(true)}
-            className="btn btn-sm mt-2"
-          >
-            <TbPlus />
-            Add progress
-          </button>
-
+          {goal.tags.length > 0 ? (
+            <BadgeRow tags={goal.tags} />
+          ) : (
+            <div className="flex-1" />
+          )}
+          {goal.status === "COMPLETED" ? (
+            <GoalStatusBadge goal={goal} className="self-center" />
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="btn btn-sm mt-2"
+            >
+              <TbPlus />
+              Add progress
+            </button>
+          )}
           <GoalItemModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}

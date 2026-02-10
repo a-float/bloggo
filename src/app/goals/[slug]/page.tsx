@@ -11,6 +11,7 @@ import Progress from "@/components/Progress";
 import GoalItemsTable from "./GoalItemsTable";
 import { getGoalMetrics } from "../getGoalMetrics";
 import { FaCalendarDay } from "react-icons/fa6";
+import GoalStatusBadge from "../GoalStatusBadge";
 
 export default async function GoalPage({
   params,
@@ -31,7 +32,10 @@ export default async function GoalPage({
   return (
     <div className="self-center w-full flex-1 flex flex-col">
       <div className="flex justify-between gap-4">
-        <h1 className="text-3xl">{goal.title}</h1>
+        <div className="flex gap-4 items-center">
+          <h1 className="text-3xl">{goal.title}</h1>
+          <GoalStatusBadge goal={goal} />
+        </div>
         <EditGoalButton goal={goal} className="self-center" />
       </div>
       <p className="mt-2 mb-4 text-base-content/70">{goal.description}</p>

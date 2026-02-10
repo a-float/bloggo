@@ -3,7 +3,9 @@ import { Prisma, Role, FriendshipStatus, GoalVisibility } from "@prisma/client";
 import prisma from "../prisma";
 import { type UserDTO } from "@/data/user-dto.ts";
 import { type TagWithCount } from "@/types/common";
-import { getGoalDTO } from "@/data/goal-dto";
+import { getGoalDTO, GoalDto } from "@/data/goal-dto";
+import { Asul } from "next/font/google";
+import { revalidatePath } from "next/cache";
 
 // Duplicated blog logic
 function getGoalWhereForUser(user: UserDTO | null): Prisma.GoalWhereInput {
@@ -81,9 +83,9 @@ export async function getGoalTagCounts(
     .sort((a, b) => b.count - a.count);
 }
 
-export async function getTotalGoalProgress(goalId: number) {
+export async function getTotalGoalProgress(goal: Pick<GoalDto, "id">) {
   const result = await prisma.goalItem.aggregate({
-    where: { goalId },
+    where: { goalId: goal.id },
     _sum: { value: true },
     _count: { value: true },
     _max: { value: true },
@@ -93,4 +95,37 @@ export async function getTotalGoalProgress(goalId: number) {
     count: result._count.value || 0,
     max: result._max.value || 0,
   };
+}
+
+export async function isGoalCompleted(
+  goal: Pick<GoalDto, "id" | "type" | "target">,
+) {
+  const progress = await getTotalGoalProgress(goal);
+  switch (goal.type) {
+    case "COUNT":
+      return progress.count >= goal.target;
+    case "SUM":
+      return progress.sum >= goal.target;
+    case "MAX":
+      return progress.max >= goal.target;
+  }
+}
+
+export async function markGoalAsCompleted(goalId: number) {
+  await prisma.goal.update({
+    where: { id: goalId },
+    data: { status: "COMPLETED", completedAt: new Date() },
+  });
+}
+
+export async function markGoalAsCompletedIfNeeded(
+  goal: Pick<GoalDto, "id" | "type" | "target" | "status">,
+) {
+  if (goal.status === "COMPLETED") return;
+  if (await isGoalCompleted(goal)) {
+    await markGoalAsCompleted(goal.id);
+  }
+
+  revalidatePath("/goals");
+  revalidatePath(`/goals/${goal.id}`);
 }

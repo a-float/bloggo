@@ -67,7 +67,7 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
   };
 
   return (
-    <section className="bg-base-100 shadow-sm p-4">
+    <section className="py-4">
       <div className="flex justify-between gap-4 flex-wrap items-center mb-2">
         <h2 className="card-title">Progress entries</h2>
         <button

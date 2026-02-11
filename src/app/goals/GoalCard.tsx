@@ -62,48 +62,44 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
         <Link href={`/goals/${goal.id}`} className="flex gap-2">
           <h2 className="card-title text-lg">{goal.title}</h2>
         </Link>
-        <>
-          <div className="flex justify-around items-center mb-2 gap-6">
-            <div className="overflow-auto scrollbar-hide">
-              <CalendarChart
-                from={dayjs().subtract(126, "days").toDate()}
-                to={dayjs().subtract(1, "day").toDate()}
-                items={goal.items}
-                showLegend={false}
-                showX={false}
-                showY={false}
-                size="sm"
-              />
-            </div>
-            <Progress
-              value={metrics.progressPercent}
-              className="aspect-square"
+        <div className="flex justify-around items-center mb-2 gap-6">
+          <div className="overflow-auto scrollbar-hide">
+            <CalendarChart
+              from={dayjs().subtract(126, "days").toDate()}
+              to={dayjs().subtract(1, "day").toDate()}
+              items={goal.items}
+              showLegend={false}
+              showX={false}
+              showY={false}
+              size="sm"
             />
           </div>
+          <Progress value={metrics.progressPercent} className="aspect-square" />
+        </div>
 
-          {goal.tags.length > 0 ? (
-            <BadgeRow tags={goal.tags} />
-          ) : (
-            <div className="flex-1" />
-          )}
+        {goal.tags.length > 0 && <BadgeRow tags={goal.tags} />}
+
+        <div className="mt-auto">
           {goal.status === "COMPLETED" ? (
-            <GoalStatusBadge goal={goal} className="self-center" />
+            <div className="flex-1 grid place-items-center h-8">
+              <GoalStatusBadge goal={goal} className="self-center" />
+            </div>
           ) : (
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="btn btn-sm mt-2"
+              className="btn btn-sm mt-2 w-full"
             >
               <TbPlus />
               Add progress
             </button>
           )}
-          <GoalItemModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            goal={goal}
-          />
-        </>
+        </div>
+        <GoalItemModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          goal={goal}
+        />
       </div>
     </div>
   );

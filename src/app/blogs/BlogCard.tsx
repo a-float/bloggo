@@ -34,6 +34,7 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
           >
             {blog.content}
           </p> */}
+          <div className="flex-1" />
           {blog.tags.length > 0 && (
             <BadgeRow tags={blog.tags} className="justify-end" />
           )}

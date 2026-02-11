@@ -12,6 +12,7 @@ export type GoalItemActionState = {
   message?: string;
   data?: GoalItem;
   errors?: { field: string; message: string }[];
+  goalCompleted?: boolean;
 };
 
 const GoalItemSchema = yup.object({
@@ -71,7 +72,7 @@ export async function createOrUpdateGoalItem(
         },
       });
 
-      markGoalAsCompletedIfNeeded(goal);
+      const goalCompleted = await markGoalAsCompletedIfNeeded(goal);
 
       revalidatePath(`/goals/${goalId}`);
       revalidatePath("/goals");
@@ -80,6 +81,7 @@ export async function createOrUpdateGoalItem(
         success: true,
         message: "Goal item added successfully.",
         data: goalItem,
+        goalCompleted,
       };
     } else {
       // Editing an existing goal item
@@ -96,7 +98,7 @@ export async function createOrUpdateGoalItem(
           message: message || null,
         },
       });
-      markGoalAsCompletedIfNeeded(goal);
+      const goalCompleted = await markGoalAsCompletedIfNeeded(goal);
 
       revalidatePath(`/goals/${goalId}`);
       revalidatePath("/goals");
@@ -105,6 +107,7 @@ export async function createOrUpdateGoalItem(
         success: true,
         message: "Goal item updated successfully.",
         data: goalItem,
+        goalCompleted,
       };
     }
   } catch (error) {

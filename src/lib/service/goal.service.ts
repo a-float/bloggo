@@ -120,12 +120,15 @@ export async function markGoalAsCompleted(goalId: number) {
 
 export async function markGoalAsCompletedIfNeeded(
   goal: Pick<GoalDto, "id" | "type" | "target" | "status">,
-) {
-  if (goal.status === "COMPLETED") return;
+): Promise<boolean> {
+  if (goal.status === "COMPLETED") return false;
+
   if (await isGoalCompleted(goal)) {
     await markGoalAsCompleted(goal.id);
+    revalidatePath("/goals");
+    revalidatePath(`/goals/${goal.id}`);
+    return true;
   }
 
-  revalidatePath("/goals");
-  revalidatePath(`/goals/${goal.id}`);
+  return false;
 }

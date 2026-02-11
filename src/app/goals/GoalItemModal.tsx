@@ -17,13 +17,12 @@ type AddGoalItemModalProps = {
 
 export default function GoalItemModal(props: AddGoalItemModalProps) {
   const [newValue, setNewValue] = React.useState(
-    props.editingItem?.value?.toString() || ""
+    props.editingItem?.value?.toString() || "",
   );
   const [newMessage, setNewMessage] = React.useState(
-    props.editingItem?.message || ""
+    props.editingItem?.message || "",
   );
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const isEditing = !!props.editingItem;
 
   React.useEffect(() => {
@@ -62,11 +61,16 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
       if (result.success) {
         setNewValue("");
         setNewMessage("");
-        toast.success(
-          result.message ||
-            `Goal item ${isEditing ? "updated" : "added"} successfully`
-        );
         props.onClose();
+
+        if (result.goalCompleted) {
+          toast.success("🎉 Goal completed!");
+        } else {
+          toast.success(
+            result.message ||
+              `Goal item ${isEditing ? "updated" : "added"} successfully`,
+          );
+        }
       } else {
         if (result.message) {
           toast.error(result.message);
@@ -80,7 +84,7 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
       toast.error(`Failed to ${isEditing ? "update" : "add"} goal item`);
       console.error(
         `Error ${isEditing ? "updating" : "adding"} goal item:`,
-        error
+        error,
       );
     } finally {
       setIsSubmitting(false);

@@ -65,7 +65,7 @@ export default function EditBlogForm({
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const { content, images: contentImages } = await uploadNewContentImages(
       data.content,
-      blobManagerRef.current
+      blobManagerRef.current,
     );
 
     const [coverImage] = coverImagePreview
@@ -74,7 +74,7 @@ export default function EditBlogForm({
 
     const prevImages = blog?.images || [];
     const prevImagesStillInContent = prevImages.filter((img) =>
-      content.match(new RegExp(img.url, "g"))
+      content.match(new RegExp(img.url, "g")),
     );
 
     const body = {

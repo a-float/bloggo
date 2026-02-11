@@ -43,11 +43,7 @@ export default function GoalsClient(props: GoalsClientProps) {
         <div className="flex justify-between mb-6">
           <h1 className="text-3xl">Goals</h1>
           {props.canCreate ? (
-            <button
-              type="button"
-              className="btn"
-              onClick={handleCreateGoal}
-            >
+            <button type="button" className="btn" onClick={handleCreateGoal}>
               Create new goal
             </button>
           ) : null}

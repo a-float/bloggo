@@ -83,7 +83,10 @@ export async function createOrUpdateGoal(
     if (!oldGoal) {
       return { success: false, message: "Goal not found." };
     }
-    if (oldGoal.status === "COMPLETED") {
+    if (
+      oldGoal.status === "COMPLETED" &&
+      (oldGoal.type !== data.type || oldGoal.target !== data.target)
+    ) {
       return { success: false, message: "Cannot edit a completed goal." };
     }
     if (oldGoal.type !== data.type) {

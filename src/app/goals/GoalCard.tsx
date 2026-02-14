@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import Progress from "@/components/Progress";
 import { getGoalMetrics } from "./getGoalMetrics";
 import GoalStatusBadge from "./GoalStatusBadge";
+import Spinner from "@/components/Spinner";
+import useGoalDeleteMutation from "./useGoalDeleteMutation";
 
 type GoalCardProps = {
   goal: GoalDto;
@@ -21,7 +23,7 @@ type GoalCardProps = {
 
 export default function GoalCard({ goal, onEdit }: GoalCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { isLoading, handleDelete } = useGoalDeleteMutation();
   const metrics = getGoalMetrics(goal);
 
   return (
@@ -47,14 +49,9 @@ export default function GoalCard({ goal, onEdit }: GoalCardProps) {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                onClick={() => {
-                  (document.activeElement as HTMLElement).blur();
-                  console.log("todo");
-                }}
-              >
-                <FaTrash /> Delete
+              <a href="#" onClick={() => handleDelete(goal.id)}>
+                {isLoading ? <Spinner className="w-3.5" /> : <FaTrash />}
+                Delete
               </a>
             </li>
           </ul>

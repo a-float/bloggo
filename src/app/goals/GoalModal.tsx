@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { createOrUpdateGoal } from "@/actions/edit-create-goal.action";
 import { FaXmark } from "react-icons/fa6";
 import RadioGroup from "@/components/RadioGroup";
+import useGoalDeleteMutation from "./useGoalDeleteMutation";
 
 type FormValues = {
   id: number | null;
@@ -64,6 +65,8 @@ export default function GoalModal(props: GoalModalProps) {
   const form = useForm<FormValues>({
     defaultValues: getDefaultValues(props.goal),
   });
+
+  const { isLoading: isDeleting, handleDelete } = useGoalDeleteMutation();
 
   // Reset form when goal changes (important for switching between create/edit)
   React.useEffect(() => {
@@ -240,7 +243,19 @@ export default function GoalModal(props: GoalModalProps) {
               )}
             />
 
-            <div className="flex justify-between gap-2 pt-4">
+            <div className="flex gap-2 pt-4">
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (props.goal) handleDelete(props.goal.id);
+                  }}
+                  className="btn btn-soft btn-error"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? <Spinner /> : "Delete"}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleClose}
@@ -251,7 +266,7 @@ export default function GoalModal(props: GoalModalProps) {
               <button
                 type="submit"
                 disabled={form.formState.isSubmitting}
-                className="btn btn-primary"
+                className="btn btn-primary ml-auto"
               >
                 {form.formState.isSubmitting ? (
                   <Spinner />

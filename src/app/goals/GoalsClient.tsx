@@ -50,11 +50,7 @@ export default function GoalsClient(props: GoalsClientProps) {
         </div>
         <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
           {props.goals.map((goal) => (
-            <GoalCard
-              key={goal.id}
-              goal={goal}
-              onEdit={() => handleEditGoal(goal)}
-            />
+            <GoalCard key={goal.id} goal={goal} onEdit={handleEditGoal} />
           ))}
         </section>
       </div>

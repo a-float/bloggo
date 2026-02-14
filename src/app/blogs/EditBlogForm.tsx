@@ -107,6 +107,13 @@ export default function EditBlogForm({
 
   const onDelete = () => {
     if (!blog?.id) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this blog? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
     setIsDeleting(true);
     deleteBlog(blog.id)
       .then((res) => {

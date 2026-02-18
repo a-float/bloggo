@@ -54,6 +54,8 @@ model Goal {
   type        GoalType
   status      GoalStatus     @default(ACTIVE)
   completedAt DateTime?
+
+  @@map("goal")
 }
 
 enum GoalStatus {
@@ -75,6 +77,8 @@ model GoalItem {
   goalId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("goal_item")
 }
 
 enum GoalVisibility {

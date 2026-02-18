@@ -3,7 +3,7 @@ public/blobs
 # This is where db container storage volume is mounted.
 # Lack of read access to this directory made next.js silently fail to process tailwind classnames.
 # Adding it to .gitignore finally fixed this issue.
-data
+./data
 
 # dependencies
 /node_modules

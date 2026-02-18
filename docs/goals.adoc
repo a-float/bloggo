@@ -27,13 +27,14 @@
 - Goal completion timestamp is recorded (completedAt)
 - Once marked COMPLETED, goal remains COMPLETED even if progress is edited below target
 - Users can continue logging progress to completed goals (overcompletion)
-- Completed goals cannot be edited or reopened
+- Completed goals cannot be uncompleted
 
 ### Organization & Discovery
 - Goals are organized via tags (no hierarchy/parent-child relationships)
 
 ### Visibility & Privacy
 - Goals can be: PUBLIC, PRIVATE, or FRIENDS
+- Creation of PUBLIC goals is possible only for users with role ADMIN
 - PUBLIC goals are visible to everyone
 - PRIVATE goals are visible only to owner
 - FRIENDS goals are visible to accepted friends

@@ -114,6 +114,7 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown, { capture: true });
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIdx, show]);
 
   React.useEffect(() => {

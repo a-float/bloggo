@@ -90,7 +90,7 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
             </tr>
           </thead>
           <tbody>
-            {goal.items.map((item, index) => (
+            {goal.items.map((item) => (
               <tr key={item.id}>
                 <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
                 <td className="whitespace-pre-line">{item.message || "N/A"}</td>

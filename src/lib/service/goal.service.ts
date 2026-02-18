@@ -4,7 +4,6 @@ import prisma from "../prisma";
 import { type UserDTO } from "@/data/user-dto.ts";
 import { type TagWithCount } from "@/types/common";
 import { getGoalDTO, GoalDto } from "@/data/goal-dto";
-import { Asul } from "next/font/google";
 import { revalidatePath } from "next/cache";
 
 // Duplicated blog logic

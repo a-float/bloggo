@@ -1,7 +1,0 @@
-- table select poor visibility
-- when make text code, bubble menu shifts
-- how to make inline link
-- after successfull sign-in no feedback or redirect, just sign in page without spinner
-- themes changeable despite being invisible
-- create new blog/goal buttons too striking
-- message when no goals/blogs/progress items found

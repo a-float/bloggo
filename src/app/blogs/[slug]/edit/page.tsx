@@ -5,7 +5,7 @@ import {
   getBlogBySlug,
   getBlogTagCountsForUser,
 } from "@/lib/service/blog.service";
-import { canUserEditBlog } from "@/data/access";
+import { canUserCreatePublicGoal, canUserEditBlog } from "@/data/access";
 
 export default async function BlogEdit({
   params,
@@ -14,10 +14,18 @@ export default async function BlogEdit({
 }) {
   const { user } = await getSession();
   if (!user) return unauthorized();
+
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
   if (!blog) notFound();
   if (!canUserEditBlog(user, blog)) return unauthorized();
+
   const tagCounts = await getBlogTagCountsForUser(user);
-  return <EditBlogForm blog={blog} tagCounts={tagCounts} />;
+  return (
+    <EditBlogForm
+      blog={blog}
+      tagCounts={tagCounts}
+      canCreatePublicBlog={canUserCreatePublicGoal(user)}
+    />
+  );
 }

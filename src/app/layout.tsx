@@ -47,6 +47,9 @@ export default function RootLayout({
                 <li>
                   <a href="/blogs">Blogs</a>
                 </li>
+                <li>
+                  <a href="/goals">Goals</a>
+                </li>
               </ul>
             </div>
             <div className="flex-1" />

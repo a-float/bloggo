@@ -1,0 +1,52 @@
+# Goal System Requirements
+
+## Functional Requirements
+
+### Goal Management
+- Users can create goals with: title, description, unit of measurement, target value, tags, visibility
+- Users can edit active goals (title, description, target value, tags)
+- Users cannot edit completed or abandoned goals
+- Users can delete their own goals
+- Goals have status: ACTIVE, COMPLETED
+- Goals automatically mark as COMPLETED when progress reaches target value
+
+### Progress Tracking
+- Users can log progress entries (GoalItem) with: value, date, optional note
+- Users can edit any progress entry at any time
+- Users can delete progress entries
+- Progress entries are aggregated to calculate total progress using one of three methods:
+  - **COUNT**: Count the number of entries (e.g., "read 10 books" - each entry = 1 book)
+  - **SUM**: Sum all entry values (e.g., "run 100 km" - entries: 5km, 10km, 8km = 23km total)
+  - **MAX**: Track the highest value reached (e.g., "deadlift 150kg" - entries: 100kg, 120kg, 140kg = 140kg max)
+- Progress can exceed target value (overcompletion allowed)
+- System displays current progress vs target (e.g., 105/100 books)
+- System calculates and displays progress percentage
+
+### Goal Completion
+- When progress >= target value, goal status changes to COMPLETED
+- Goal completion timestamp is recorded (completedAt)
+- Once marked COMPLETED, goal remains COMPLETED even if progress is edited below target
+- Users can continue logging progress to completed goals (overcompletion)
+- Completed goals cannot be uncompleted
+
+### Organization & Discovery
+- Goals are organized via tags (no hierarchy/parent-child relationships)
+
+### Visibility & Privacy
+- Goals can be: PUBLIC, PRIVATE, or FRIENDS
+- Creation of PUBLIC goals is possible only for users with role ADMIN
+- PUBLIC goals are visible to everyone
+- PRIVATE goals are visible only to owner
+- FRIENDS goals are visible to accepted friends
+- Users can only edit/delete their own goals
+- Admins can view and edit all goals regardless of visibility
+
+### Future Considerations [FUTURE]
+- When creating a new goal, system suggests similar goal names based on tags
+- System can duplicate an existing goal with pre-filled data
+- Suggested naming patterns: time-based (Q1 2026), sequential (#2), or custom
+- Time-limited editing of progress entries (not implemented initially)
+- Soft delete for goals (not implemented initially)
+- Stretch targets or tiered achievements (not implemented initially)
+- Goal templates or quick-create presets (not implemented initially)
+- At-risk goal alerts (deadline approaching, low progress) (not implemented initially)

@@ -23,7 +23,7 @@ const ScalableImage = Image.extend({
 
           if (width || height) {
             state.write(
-              `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""} />\n\n`
+              `<img src="${src}" alt="${alt}"${title ? ` title="${title}"` : ""}${width ? ` width="${width}"` : ""}${height ? ` height="${height}"` : ""} />\n\n`,
             );
           } else if (title) {
             state.write(`![${alt}](${src} "${title}")\n\n`);
@@ -39,7 +39,7 @@ const ScalableImage = Image.extend({
 export default function TipTapEditor(
   props: Omit<EditorProps, "label"> & {
     disabled?: boolean;
-  }
+  },
 ) {
   const editor = useEditor({
     immediatelyRender: false,
@@ -64,6 +64,7 @@ export default function TipTapEditor(
     if (!props.disabled) {
       editor?.commands.setContent(props.value || "");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.disabled, editor]);
 
   if (!editor) {

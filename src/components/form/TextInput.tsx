@@ -25,11 +25,20 @@ export function Textarea(props: TextareaProps) {
   const { label, error, hideRequired, hideLabel, ...rest } = props;
   return (
     <fieldset className="fieldset">
-      <LegendLabel {...props}>{label}</LegendLabel>
+      <div className="flex justify-between items-center">
+        <LegendLabel {...props}>{label}</LegendLabel>
+        {!!rest.maxLength && (
+          <span className="text-xs text-base-content/50">
+            {rest.value ? rest.value.toString().length : 0}/{rest.maxLength}
+          </span>
+        )}
+      </div>
       <textarea
         aria-invalid={!!error}
-        className="textarea h-24 w-full"
         {...rest}
+        className={
+          "textarea " + props.className + (error ? " textarea-error" : "")
+        }
         autoComplete="off"
       />
       {error && <p className="text-error">{error}</p>}

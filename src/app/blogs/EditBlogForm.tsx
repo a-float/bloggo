@@ -33,9 +33,14 @@ type FormValues = {
 type EditBlogFormProps = {
   blog?: BlogDTO;
   tagCounts: TagWithCount[];
+  canCreatePublicBlog: boolean;
 };
 
-export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
+export default function EditBlogForm({
+  blog,
+  tagCounts,
+  canCreatePublicBlog,
+}: EditBlogFormProps) {
   const router = useRouter();
   const blobManagerRef = React.useRef(BlobManager.getInstance());
 
@@ -60,7 +65,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const { content, images: contentImages } = await uploadNewContentImages(
       data.content,
-      blobManagerRef.current
+      blobManagerRef.current,
     );
 
     const [coverImage] = coverImagePreview
@@ -69,7 +74,7 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
     const prevImages = blog?.images || [];
     const prevImagesStillInContent = prevImages.filter((img) =>
-      content.match(new RegExp(img.url, "g"))
+      content.match(new RegExp(img.url, "g")),
     );
 
     const body = {
@@ -102,6 +107,13 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
 
   const onDelete = () => {
     if (!blog?.id) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this blog? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
     setIsDeleting(true);
     deleteBlog(blog.id)
       .then((res) => {
@@ -187,8 +199,10 @@ export default function EditBlogForm({ blog, tagCounts }: EditBlogFormProps) {
               className="w-full"
               required
             >
-              <option value={BlogVisibility.PUBLIC}>🌍 Everyone</option>
-              <option value={BlogVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends only</option>
+              {canCreatePublicBlog && (
+                <option value={BlogVisibility.PUBLIC}>🌍 Everyone</option>
+              )}
+              <option value={BlogVisibility.FRIENDS}>🧑‍🤝‍🧑 Friends</option>
               <option value={BlogVisibility.PRIVATE}>🔒 Just me</option>
             </Select>
             <Controller

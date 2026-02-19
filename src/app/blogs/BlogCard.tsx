@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BlogDTO } from "@/data/blog-dto";
 import dayjs from "dayjs";
+import BadgeRow from "@/components/BadgeRow";
 
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
@@ -33,17 +34,9 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
           >
             {blog.content}
           </p> */}
+          <div className="flex-1" />
           {blog.tags.length > 0 && (
-            <div className="flex gap-1 flex-wrap justify-end">
-              {blog.tags.map((tag) => (
-                <div
-                  key={tag}
-                  className="badge not-hover:badge-ghost badge-sm hover:badge-primary transition-colors"
-                >
-                  {tag}
-                </div>
-              ))}
-            </div>
+            <BadgeRow tags={blog.tags} className="justify-end" />
           )}
         </div>
       </div>

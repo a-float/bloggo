@@ -6,6 +6,7 @@ import { type TagWithCount } from "@/types/common";
 import GoalModal from "./GoalModal";
 import GoalCard from "./GoalCard";
 import { useRouter } from "next/navigation";
+import { TbInfoCircle } from "react-icons/tb";
 
 type GoalsClientProps = {
   goals: GoalDto[];
@@ -48,11 +49,27 @@ export default function GoalsClient(props: GoalsClientProps) {
             </button>
           ) : null}
         </div>
-        <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
-          {props.goals.map((goal) => (
-            <GoalCard key={goal.id} goal={goal} onEdit={handleEditGoal} />
-          ))}
-        </section>
+
+        {props.goals.length === 0 ? (
+          <div
+            role="alert"
+            className="alert alert-vertical sm:alert-horizontal"
+          >
+            <TbInfoCircle className="text-info" size={24} />
+            <div>
+              <h3 className="font-bold">Oof, looks pretty empty.</h3>
+              <div className="text-xs">
+                Try logging in and setting new goals for yourself!
+              </div>
+            </div>
+          </div>
+        ) : (
+          <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
+            {props.goals.map((goal) => (
+              <GoalCard key={goal.id} goal={goal} onEdit={handleEditGoal} />
+            ))}
+          </section>
+        )}
       </div>
 
       <GoalModal

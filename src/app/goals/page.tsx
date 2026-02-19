@@ -8,6 +8,7 @@ export default async function Goals() {
   const [goals, tagCounts] = await Promise.all([
     getGoalsForUser(user),
     getGoalTagCounts(user),
+    // TODO maybe fetch it from the client?
   ]);
 
   return (

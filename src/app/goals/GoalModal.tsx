@@ -117,6 +117,7 @@ export default function GoalModal(props: GoalModalProps) {
     props.onClose();
   };
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const goalType = form.watch("type");
 
   React.useEffect(() => {

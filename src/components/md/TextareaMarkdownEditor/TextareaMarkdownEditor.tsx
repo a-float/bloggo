@@ -19,7 +19,7 @@ export default function SimpleMarkdownEditor(
           onTabChange={(tab) => setActiveTab(tab)}
         />
         {activeTab === "Edit" && (
-          <Toolbar onChange={props.onChange} textarea={textareaRef.current} />
+          <Toolbar onChange={props.onChange} textareaRef={textareaRef} />
         )}
       </div>
       <div className="border border-base-content/20 rounded-input !rounded-tl-none !rounded-tr-sm">

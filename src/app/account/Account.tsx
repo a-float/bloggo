@@ -5,8 +5,25 @@ import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { UserDTO } from "@/data/user-dto.ts";
 import { useSession } from "next-auth/react";
-import { FieldError, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+
+// TODO show a dynamic list of requirements?
+const formSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(4, "Password should be at least 4 characters long")
+    .max(12, "Password should be no longer than 32 characters"),
+  repeatPassword: yup
+    .string()
+    .required("Confirm Password is required")
+    .min(4, "Password should be at least 4 characters long")
+    .max(12, "Password should be no longer than 32 characters")
+    .oneOf([yup.ref("password")], "Passwords do not match"),
+});
 
 export default function Account(props: { user: UserDTO }) {
   const { update: updateSession } = useSession();
@@ -19,20 +36,9 @@ export default function Account(props: { user: UserDTO }) {
 
   const passwordForm = useForm({
     mode: "onChange",
-    defaultValues: {
-      password: "",
-      repeatPassword: "",
-    },
-    resolver: async (data) => {
-      const errors: Record<string, FieldError> = {};
-      if (data.password !== data.repeatPassword) {
-        errors.repeatPassword = {
-          type: "validate",
-          message: "Passwords must match",
-        };
-      }
-      return { values: data, errors };
-    },
+    reValidateMode: "onBlur",
+    defaultValues: { password: "", repeatPassword: "" },
+    resolver: yupResolver(formSchema),
   });
 
   return (
@@ -89,6 +95,7 @@ export default function Account(props: { user: UserDTO }) {
           type="password"
           placeholder="Password"
           {...passwordForm.register("password")}
+          error={passwordForm.formState.errors.password?.message}
         />
         <Input
           required

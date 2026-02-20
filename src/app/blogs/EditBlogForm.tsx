@@ -161,11 +161,12 @@ export default function EditBlogForm({
         </h1>
       </div>
       <form
+        // eslint-disable-next-line react-hooks/refs
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col flex-1"
       >
         <div className="lg:flex gap-8 lg:[&_fieldset:not(:last-child)]:mb-1">
-          <div className="flex flex-col flex-[2]">
+          <div className="flex flex-col flex-2">
             <Input
               {...form.register("title")}
               defaultValue={blog?.title ?? ""}

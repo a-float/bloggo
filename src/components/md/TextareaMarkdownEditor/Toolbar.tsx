@@ -87,7 +87,7 @@ const toolbarActionGroups: ToolbarAction[][] = [
  * Adjusts selection range by trimming spaces.
  */
 const getTrimmedSelection = (
-  textarea: HTMLTextAreaElement
+  textarea: HTMLTextAreaElement,
 ): { start: number; end: number } => {
   const text = textarea.value;
   let start = textarea.selectionStart;
@@ -105,9 +105,9 @@ const getTrimmedSelection = (
 
 export function Toolbar(props: {
   onChange: EditorProps["onChange"];
-  textarea: HTMLTextAreaElement | null;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
 }) {
-  const textarea = props.textarea;
+  const textarea = props.textareaRef.current;
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const blobManagerRef = React.useRef(BlobManager.getInstance());
 
@@ -127,7 +127,7 @@ export function Toolbar(props: {
       let count = 1;
       const replacedText = ("\n" + selectedText).replaceAll(
         "\n",
-        () => `\n${prefix.replace("\d", (count++).toString())}`
+        () => `\n${prefix.replace("\d", (count++).toString())}`,
       );
       newText = `${replacedText}\n`;
     }
@@ -186,13 +186,13 @@ export function Toolbar(props: {
   };
 
   const handleImageUpload = async (
-    e: React.SyntheticEvent<HTMLInputElement>
+    e: React.SyntheticEvent<HTMLInputElement>,
   ) => {
     if (!textarea) return;
 
     const files = Array.from(e.currentTarget.files ?? []);
     const urls = await Promise.all(
-      files.map((file) => blobManagerRef.current.createObjectURL(file))
+      files.map((file) => blobManagerRef.current.createObjectURL(file)),
     );
     const imageMarkdown = urls
       .map((url, idx) => `![${files[idx].name || "Image"}](${url})`)

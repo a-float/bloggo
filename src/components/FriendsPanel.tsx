@@ -108,9 +108,9 @@ export function FriendPanel(props: {
           }
           onInputChange={(inputValue) => setQuery(inputValue)}
           formatOptionLabel={(option) => (
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>{option?.label}</span>
-              <button className="btn btn-xs btn-success btn-soft">Add</button>
+              <button className="btn btn-xs btn-success btn-outline">Add</button>
             </div>
           )}
         />

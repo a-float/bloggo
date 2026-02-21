@@ -37,7 +37,7 @@
 
   .tag-select__menu {
     border-radius: var(--radius-field);
-    @apply bg-base-100 shadow-lg my-1 overflow-hidden relative;
+    @apply bg-base-100 shadow-sm my-1 overflow-hidden relative;
   }
 
   .tag-select__menu-list {

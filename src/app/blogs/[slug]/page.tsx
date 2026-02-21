@@ -37,12 +37,11 @@ export default async function BlogPage({
         <div className="text-sm flex items-center">
           {blog.author ? (
             <>
-              <div className="size-7 rounded-full overflow-hidden mr-2">
-                <AvatarWithFallback
-                  src={blog.author.image}
-                  name={blog.author.email ?? "anon"}
-                />
-              </div>
+              <AvatarWithFallback
+                className="size-7 mr-2"
+                src={blog.author.image}
+                name={blog.author.email}
+              />
               {blog.author.name ?? "anonymous"} on
             </>
           ) : null}{" "}

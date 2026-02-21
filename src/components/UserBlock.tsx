@@ -9,7 +9,7 @@ export async function UserBlock(props: { user: UserDTO }) {
   const drawerId = "friend-panel-drawer";
   const friends = await friendService.getFriendsForUser(props.user);
   const pendingFriendRequests = friends.filter(
-    (f) => f.recipient.id === props.user.id && f.status === "PENDING"
+    (f) => f.recipient.id === props.user.id && f.status === "PENDING",
   ).length;
 
   const friendNotificationIndicator =
@@ -29,15 +29,14 @@ export async function UserBlock(props: { user: UserDTO }) {
         <div
           tabIndex={0}
           role="button"
-          className="avatar indicator focus-within:[&>*]:shadow-lg "
+          className="avatar indicator focus-within:[&>*]:shadow-lg rounded-full overflow-hidden"
         >
           {friendNotificationIndicator}
-          <div className="w-6 md:w-8 rounded-full select-none">
-            <AvatarWithFallback
-              src={props.user.image}
-              name={props.user.email}
-            />
-          </div>
+          <AvatarWithFallback
+            className="size-6 md:size-8 select-none"
+            src={props.user.image}
+            name={props.user.email}
+          />
         </div>
         <ul className="dropdown-content rounded-box overflow-hidden z-1 shadow-sm menu bg-base-200 w-34 mt-2 [&_li>*]:py-2 [&_li>*]:pl-4 p-0">
           <li>

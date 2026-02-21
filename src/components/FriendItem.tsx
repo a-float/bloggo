@@ -27,14 +27,16 @@ export default function FriendItem(props: {
 
   return (
     <li className="list-row flex gap-3 px-2 py-2 items-center">
-      <div className="size-8 rounded-full overflow-hidden">
-        <AvatarWithFallback src={otherUser.image} name={otherUser.email} />
-      </div>
+      <AvatarWithFallback
+        className="size-8"
+        src={otherUser.image}
+        name={otherUser.email}
+      />
       {friendship.status === FriendshipStatus.ACCEPTED && (
         <>
           <span>{otherUser.name}</span>
           <button
-            className="btn btn-xs btn-error btn-soft ml-auto"
+            className="btn btn-xs btn-error btn-outline ml-auto"
             title="Remove friend"
             onClick={() => removeFriend(otherUser.id).then(() => onMutate?.())}
           >
@@ -51,7 +53,7 @@ export default function FriendItem(props: {
             <span>{otherUser.name}</span>
           </div>
           <button
-            className="btn btn-xs btn-soft btn-error ml-auto"
+            className="btn btn-xs btn-outline btn-error ml-auto"
             title="Cancel invitation"
             onClick={() => removeFriend(otherUser.id).then(() => onMutate?.())}
           >
@@ -70,7 +72,7 @@ export default function FriendItem(props: {
           </div>
           <div className="flex gap-2 ml-auto">
             <button
-              className="btn btn-xs btn-soft btn-success"
+              className="btn btn-xs btn-outline btn-success"
               title="Accept invitiation"
               onClick={() =>
                 acceptFriend(otherUser.id).then(() => onMutate?.())
@@ -79,7 +81,7 @@ export default function FriendItem(props: {
               <FaCheck />
             </button>
             <button
-              className="btn btn-xs btn-soft btn-error"
+              className="btn btn-xs btn-outline btn-error"
               title="Decline invitation"
               onClick={() =>
                 removeFriend(otherUser.id).then(() => onMutate?.())

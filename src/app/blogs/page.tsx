@@ -12,7 +12,7 @@ export default async function Blogs() {
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl">Blogs</h1>
         {canUserCreateBlog(user) ? (
-          <a href="/blogs/create" className="btn btn-outline">
+          <a href="/blogs/create" className="btn btn-soft">
             Create new blog
           </a>
         ) : null}

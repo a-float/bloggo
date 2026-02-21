@@ -9,7 +9,7 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <a className="rounded-(--radius-box)" href={`/blogs/${blog.slug}`}>
       <div className="card card-sm outline-1 outline-base-300 outline-offset-0 h-full bg-base-100 shadow-sm">
-        <figure className="relative max-h-70 md:aspect-4/3">
+        <figure className="relative max-h-70 md:aspect-video">
           {blog.coverImage ? (
             <>
               <Image

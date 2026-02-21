@@ -41,7 +41,7 @@ export function ThemeController() {
       </button>
       <div
         tabIndex={-1}
-        className="dropdown-content rounded-box overflow-auto z-1 shadow-sm menu bg-base-200  w-max mt-2"
+        className="dropdown-content rounded-box overflow-auto z-50 shadow-sm menu bg-base-200  w-max mt-2"
       >
         <ul className="grid grid-cols-1 max-h-[60vh] md:grid-cols-2 lg:grid-cols-4">
           {themes.map((theme) => (

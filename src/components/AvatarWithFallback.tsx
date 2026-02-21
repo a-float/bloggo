@@ -3,10 +3,11 @@ import Avatar from "boring-avatars";
 export default function AvatarWithFallback(props: {
   src?: string | null;
   name: string;
+  className?: string;
 }) {
   return props.src ? (
-    <img src={props.src} alt={props.name} />
+    <img className={props.className} src={props.src} alt={props.name} />
   ) : (
-    <Avatar name={props.name} variant="beam" />
+    <Avatar className={props.className} name={props.name} variant="beam" />
   );
 }

@@ -12,7 +12,7 @@ export default async function Blogs() {
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl">Blogs</h1>
         {canUserCreateBlog(user) ? (
-          <a href="/blogs/create" className="btn ">
+          <a href="/blogs/create" className="btn btn-outline">
             Create new blog
           </a>
         ) : null}
@@ -34,7 +34,7 @@ export default async function Blogs() {
           </div>
         </>
       ) : (
-        <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(20rem,1fr))]">
+        <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
           {blogs.map((blog) => (
             <BlogCard blog={blog} key={blog.id} />
           ))}

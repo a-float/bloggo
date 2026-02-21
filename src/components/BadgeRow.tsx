@@ -7,7 +7,7 @@ export default function BadgeRow(props: {
   return (
     <div
       className={clsx(
-        "flex gap-1 overflow-auto scrollbar-hide",
+        "flex flex-wrap-reverse gap-x-1 gap-y-1.5 overflow-auto scrollbar-hide",
         props.className
       )}
     >

@@ -12,6 +12,14 @@
   --breakpoint-xs: 30rem;
 }
 
+body {
+  background-color: var(--color-base-200);
+}
+
+*:focus-visible {
+  outline-color: var(--color-base-content);
+}
+
 .rounded-input {
   border-radius: var(--radius-field);
 }

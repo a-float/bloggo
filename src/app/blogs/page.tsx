@@ -26,7 +26,7 @@ export default async function Blogs() {
             <TbInfoCircle className="text-info" size={24} />
             <div>
               <h3 className="font-bold">Oof, looks pretty empty.</h3>
-              <div className="text-sm">
+              <div className="text-xs">
                 Log in and add friends to see their blogs, or create your own to
                 get started!
               </div>

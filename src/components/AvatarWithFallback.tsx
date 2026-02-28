@@ -5,9 +5,13 @@ export default function AvatarWithFallback(props: {
   name: string;
   className?: string;
 }) {
-  return props.src ? (
-    <img className={props.className} src={props.src} alt={props.name} />
-  ) : (
+  return (
     <Avatar className={props.className} name={props.name} variant="beam" />
   );
+  // Ignore avatar src untill google avatar 439 fetch is resolved
+  // return props.src ? (
+  //   <img className={props.className} src={props.src} alt={props.name} />
+  // ) : (
+  //   <Avatar className={props.className} name={props.name} variant="beam" />
+  // );
 }

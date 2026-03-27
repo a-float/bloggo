@@ -36,6 +36,7 @@ export function DayPickerInput(props: DayPickerInputProps) {
         <DayPicker
           className="react-day-picker"
           mode="single"
+          weekStartsOn={1}
           {...dayPickerProps}
           selected={selected}
           onSelect={(date) => {

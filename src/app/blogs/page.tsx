@@ -3,10 +3,20 @@ import { getBlogsForUser } from "@/lib/service/blog.service";
 import { getSession } from "@/lib/session";
 import { canUserCreateBlog } from "@/data/access";
 import { TbInfoCircle } from "react-icons/tb";
+import SearchBar from "./SearchBar";
+import { Suspense } from "react";
 
-export default async function Blogs() {
+export default async function Blogs({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; sort?: string }>;
+}) {
   const { user } = await getSession();
-  const blogs = await getBlogsForUser(user);
+  const { search, sort } = await searchParams;
+  const blogs = await getBlogsForUser(user, {
+    search,
+    sort: sort === "date" ? "date" : "createdAt",
+  });
   return (
     <div>
       <div className="flex justify-between mb-6">
@@ -17,22 +27,20 @@ export default async function Blogs() {
           </a>
         ) : null}
       </div>
+      <Suspense>
+        <SearchBar />
+      </Suspense>
       {blogs.length === 0 ? (
-        <>
-          <div
-            role="alert"
-            className="alert alert-vertical sm:alert-horizontal"
-          >
-            <TbInfoCircle className="text-info" size={24} />
-            <div>
-              <h3 className="font-bold">Oof, looks pretty empty.</h3>
-              <div className="text-xs">
-                Log in and add friends to see their blogs, or create your own to
-                get started!
-              </div>
+        <div role="alert" className="alert alert-vertical sm:alert-horizontal">
+          <TbInfoCircle className="text-info" size={24} />
+          <div>
+            <h3 className="font-bold">Oof, looks pretty empty.</h3>
+            <div className="text-xs">
+              Log in and add friends to see their blogs, or create your own to
+              get started!
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <section className="grid gap-4 grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
           {blogs.map((blog) => (

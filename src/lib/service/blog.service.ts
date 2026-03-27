@@ -56,17 +56,33 @@ function getBlogWhereForUser(user: UserDTO | null): Prisma.BlogWhereInput {
   };
 }
 
-export async function getBlogsForUser(user: UserDTO | null) {
+export async function getBlogsForUser(
+  user: UserDTO | null,
+  options?: { search?: string; sort?: "createdAt" | "date" },
+) {
+  const { search, sort = "createdAt" } = options ?? {};
+  const where: Prisma.BlogWhereInput = {
+    ...getBlogWhereForUser(user),
+    ...(search
+      ? {
+          OR: [
+            { title: { contains: search, mode: "insensitive" } },
+            { content: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : {}),
+    ...(sort === "date" ? { date: { not: null } } : {}),
+  };
   const blogs = await prisma.blog.findMany({
-    where: getBlogWhereForUser(user),
+    where,
     include: { coverImage: true, images: true, author: true },
-    orderBy: { createdAt: "desc" },
+    orderBy: { [sort]: "desc" },
   });
   return blogs.map((blog) => getBlogDTO(blog));
 }
 
 export async function getBlogTagCountsForUser(
-  user: UserDTO | null
+  user: UserDTO | null,
 ): Promise<TagWithCount[]> {
   // try {
   //   const tags: { tag: string; count: bigint }[] = await prisma.$queryRaw(
@@ -96,7 +112,7 @@ export async function getBlogTagCountsForUser(
       acc[tag] = (acc[tag] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
   );
   return Object.entries(tagCounts).map(([tag, count]) => ({ tag, count }));
 }

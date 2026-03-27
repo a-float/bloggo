@@ -41,7 +41,7 @@ export default function SortableImageInput({
           <div key={item.id}>
             <div className="flex items-center gap-2 cursor-grab hover:bg-base-200 p-1 px-2">
               <img
-                className="h-[36px] w-[36px] text-info rounded-sm object-cover"
+                className="h-9 w-9 text-info rounded-sm object-cover"
                 alt=""
                 src={item.url}
               />

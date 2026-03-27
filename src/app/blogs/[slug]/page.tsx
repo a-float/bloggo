@@ -1,4 +1,3 @@
-import React from "react";
 import { notFound, unauthorized } from "next/navigation";
 import { getBlogBySlug } from "@/lib/service/blog.service";
 import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
@@ -6,6 +5,7 @@ import { getSession } from "@/lib/session";
 import dayjs from "dayjs";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
 import MarkdownRenderer from "@/components/md/MarkdownRenderer";
+import BlurredBackgroundImage from "@/components/BlurredBackgroundImage";
 
 export default async function BlogPage({
   params,
@@ -21,7 +21,12 @@ export default async function BlogPage({
 
   return (
     <>
-      <div className="self-center w-full flex-1 mt-4">
+      <div className="self-center w-full flex-1">
+        {blog.coverImage ? (
+          <figure className="relative h-40 md:h-80 mb-8 overflow-hidden">
+            <BlurredBackgroundImage src={blog.coverImage.url} />
+          </figure>
+        ) : null}
         <div className="flex justify-between">
           <div className="prose mb-6">
             <h1>{blog.title}</h1>
@@ -45,7 +50,7 @@ export default async function BlogPage({
               {blog.author.name ?? "anonymous"} on
             </>
           ) : null}{" "}
-          {dayjs(blog.createdAt).format("MMMM D, YYYY")}
+          {blog.date ? dayjs(blog.date).format("MMMM D, YYYY") : null}
         </div>
         <div className="divider" />
         {/* {blog.images.length > 0 && (

@@ -1,9 +1,9 @@
-import Image from "next/image";
 import { BlogDTO } from "@/data/blog-dto";
 import dayjs from "dayjs";
 import BadgeRow from "@/components/BadgeRow";
 import Avatar from "boring-avatars";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
+import BlurredBackgroundImage from "@/components/BlurredBackgroundImage";
 
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
@@ -11,22 +11,10 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
       <div className="card card-sm outline-1 outline-base-300 outline-offset-0 h-full bg-base-100 shadow-sm">
         <figure className="relative max-h-70 md:aspect-video">
           {blog.coverImage ? (
-            <>
-              <Image
-                className="w-full h-full scale-105 blur-xs opacity-80 absolute object-cover object-center"
-                src={blog.coverImage.url}
-                width={250}
-                height={300}
-                alt=""
-              />
-              <Image
-                className="z-0 object-contain w-full h-full object-center"
-                width={250}
-                height={300}
-                src={blog.coverImage.url}
-                alt=""
-              />
-            </>
+            <BlurredBackgroundImage
+              src={blog.coverImage.url}
+              alt={blog.title}
+            />
           ) : (
             <div className="w-full overflow-hidden opacity-80">
               <Avatar
@@ -47,7 +35,7 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         <div className="card-body overflow-hidden">
           <h2 className="card-title">{blog.title}</h2>
           <div className="text-xs whitespace-pre text-base-content/60 flex">
-            {dayjs(blog.date ?? blog.createdAt).format("MMMM D, YYYY")}{" "}
+            {blog.date ? dayjs(blog.date).format("MMMM D, YYYY") : null}{" "}
             {blog.author?.name ? (
               <span className="flex">
                 by{" "}

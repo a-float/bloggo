@@ -74,20 +74,20 @@ export default function TipTapEditor(
   return (
     <>
       <div className="p-2 flex flex-col gap-4 textarea w-full ">
-        {editor && (
-          <>
-            <MarkBubbleMenu editor={editor} />
-            <TableBubbleMenu editor={editor} />
-            <ImageBubbleMenu editor={editor} />
-            <SlashFloatingMenu editor={editor} />
-          </>
-        )}
         <EditorContent editor={editor} className="prose *:p-2 *:outline-none" />
       </div>
       <p className="mt-3 text-base-content/70">
         Start a line with <kbd className="kbd kbd-sm">/</kbd> to see more
         commands.
       </p>
+      {editor && (
+        <>
+          <MarkBubbleMenu editor={editor} />
+          <TableBubbleMenu editor={editor} />
+          <ImageBubbleMenu editor={editor} />
+          <SlashFloatingMenu editor={editor} />
+        </>
+      )}
     </>
   );
 }

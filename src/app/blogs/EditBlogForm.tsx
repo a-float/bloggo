@@ -63,46 +63,52 @@ export default function EditBlogForm({
   const isSubmitting = form.formState.isSubmitting || waitingForRedirect;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const { content, images: contentImages } = await uploadNewContentImages(
-      data.content,
-      blobManagerRef.current,
-    );
+    try {
+      const { content, images: contentImages } = await uploadNewContentImages(
+        data.content,
+        blobManagerRef.current,
+      );
 
-    const [coverImage] = coverImagePreview
-      ? await uploadNewImages([coverImagePreview], blobManagerRef.current)
-      : [null];
+      const [coverImage] = coverImagePreview
+        ? await uploadNewImages([coverImagePreview], blobManagerRef.current)
+        : [null];
 
-    const prevImages = blog?.images || [];
-    const prevImagesStillInContent = prevImages.filter((img) =>
-      content.match(new RegExp(img.url, "g")),
-    );
+      const prevImages = blog?.images || [];
+      const prevImagesStillInContent = prevImages.filter((img) =>
+        content.match(new RegExp(img.url, "g")),
+      );
 
-    const body = {
-      ...data,
-      content,
-      coverImage,
-      images: [...prevImagesStillInContent, ...contentImages],
-    };
+      const body = {
+        ...data,
+        content,
+        coverImage,
+        images: [...prevImagesStillInContent, ...contentImages],
+      };
 
-    await createOrUpdateBlog(body).then((res) => {
-      res.errors?.forEach((err) => {
-        if (err.field === "id") return;
-        form.setError(err.field as keyof FormValues, { message: err.message });
-      });
-      if (res.success) {
-        form.reset(body);
-        if (!data.id && res.data) {
-          // If this is a new blog, redirect to the new blog page
-          setWaitingForRedirect(true);
-          router.push(`/blogs/${res.data.slug}`);
+      await createOrUpdateBlog(body).then((res) => {
+        res.errors?.forEach((err) => {
+          if (err.field === "id") return;
+          form.setError(err.field as keyof FormValues, {
+            message: err.message,
+          });
+        });
+        if (res.success) {
+          form.reset(body);
+          if (!data.id && res.data) {
+            // If this is a new blog, redirect to the new blog page
+            setWaitingForRedirect(true);
+            router.push(`/blogs/${res.data.slug}`);
+          }
+          if (res.message) toast.success(res.message);
+        } else if (res.message) {
+          toast.error(res.message);
+        } else {
+          toast.error("An error occurred while saving the blog.");
         }
-        if (res.message) toast.success(res.message);
-      } else if (res.message) {
-        toast.error(res.message);
-      } else {
-        toast.error("An error occurred while saving the blog.");
-      }
-    });
+      });
+    } catch (e) {
+      toast.error(`Failed to save the blog: ${e}`);
+    }
   };
 
   const onDelete = () => {

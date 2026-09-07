@@ -7,7 +7,7 @@ function niceFloat(x: number) {
 
 export function getGoalMetrics(goal: GoalDto) {
   const currentTarget = goal.target;
-  const firstTime = dayjs(goal.items.at(-1)?.createdAt ?? undefined);
+  const firstTime = dayjs(goal.items.at(-1)?.occuredAt ?? undefined);
   const totalDone = goal.items.reduce((acc, item) => acc + item.value, 0);
   const progressPercent =
     currentTarget > 0 ? niceFloat((100 * totalDone) / currentTarget) : 0;

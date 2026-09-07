@@ -80,10 +80,10 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
         </button>
       </div>
       <div className="overflow-x-auto rounded-md">
-        <table className="table min-w-[600px]">
+        <table className="table min-w-150">
           <thead>
             <tr className="bg-base-200">
-              <th>Date</th>
+              <th>Occured At</th>
               <th>Message</th>
               <th>Value</th>
               <th>Actions</th>
@@ -92,13 +92,13 @@ export default function GoalItemsTable({ goal }: GoalItemsTableProps) {
           <tbody>
             {goal.items.map((item) => (
               <tr key={item.id}>
-                <td>{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")}</td>
+                <td>{dayjs(item.occuredAt).format("YYYY-MM-DD HH:mm")}</td>
                 <td className="whitespace-pre-line">{item.message || "N/A"}</td>
                 <td>
                   {item.value} {goal.unit}
                 </td>
                 <td>
-                  <div>
+                  <div className="flex gap-1">
                     <button
                       type="button"
                       className="btn btn-sm btn-ghost btn-square"

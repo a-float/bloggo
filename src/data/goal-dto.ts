@@ -23,8 +23,7 @@ export function getGoalDTO(goal: FullGoal) {
       id: item.id,
       value: item.value,
       message: item.message,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
+      occuredAt: item.occuredAt,
     })),
     owner: goal.owner ? getUserDTO(goal.owner) : null,
   };

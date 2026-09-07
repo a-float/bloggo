@@ -142,7 +142,7 @@ export default function GoalModal(props: GoalModalProps) {
           </h2>
           <button
             type="button"
-            onClick={props.onClose}
+            onClick={handleClose}
             className="btn btn-ghost btn-circle absolute top-4 right-4"
           >
             <FaXmark />

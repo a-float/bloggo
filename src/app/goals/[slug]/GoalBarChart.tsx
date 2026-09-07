@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { BarChart, Bar, XAxis, CartesianGrid } from "recharts";
 
 type BarChartProps = {
-  items: { createdAt: Date; value: number }[];
+  items: { occuredAt: Date; value: number }[];
   unit: string | null;
   daysPast: number;
   className?: string;
@@ -16,7 +16,7 @@ export default function GoalBarChart(props: BarChartProps) {
   const data = Array.from({ length: dayRange }).map((_, idx) => {
     const date = from.add(idx, "days");
     const itemsForData = props.items.filter((item) =>
-      dayjs(item.createdAt).isSame(date, "day")
+      dayjs(item.occuredAt).isSame(date, "day"),
     );
     const sum = itemsForData.reduce((acc, item) => acc + item.value, 0);
     return {
@@ -51,12 +51,13 @@ export default function GoalBarChart(props: BarChartProps) {
               />
             </linearGradient>
           </defs>
-          <CartesianGrid vertical={false} />
+          <CartesianGrid vertical={false} stroke="var(--color-base-content)" opacity={0.3} />
           <XAxis
             dataKey="name"
             tickLine={false}
             tickMargin={6}
             axisLine={false}
+            stroke="var(--color-base-content)"
           />
 
           <Bar

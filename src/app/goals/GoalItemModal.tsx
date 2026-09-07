@@ -1,4 +1,5 @@
 import { createOrUpdateGoalItem } from "@/actions/edit-create-goal-item.action";
+import { DayPickerInput } from "@/components/form/DayPickerInput";
 import { Input, Textarea } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { GoalDto } from "@/data/goal-dto";
@@ -19,6 +20,7 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
   const [newValue, setNewValue] = React.useState(
     props.editingItem?.value?.toString() || "",
   );
+  const [date, setDate] = React.useState<Date>();
   const [newMessage, setNewMessage] = React.useState(
     props.editingItem?.message || "",
   );
@@ -29,9 +31,11 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
     if (props.editingItem) {
       setNewValue(props.editingItem.value.toString());
       setNewMessage(props.editingItem.message || "");
+      setDate(props.editingItem.occuredAt);
     } else {
       setNewValue("");
       setNewMessage("");
+      setDate(undefined);
     }
   }, [props.editingItem]);
 
@@ -44,19 +48,20 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
     }
 
     setIsSubmitting(true);
+    const itemData = {
+      goalId: props.goal.id,
+      value: parseFloat(newValue),
+      message: newMessage.trim(),
+      occuredAt: date,
+    };
+
     try {
       const result = isEditing
         ? await createOrUpdateGoalItem({
             id: props.editingItem!.id,
-            goalId: props.goal.id,
-            value: parseFloat(newValue),
-            message: newMessage.trim() || null,
+            ...itemData,
           })
-        : await createOrUpdateGoalItem({
-            goalId: props.goal.id,
-            value: parseFloat(newValue),
-            message: newMessage.trim() || null,
-          });
+        : await createOrUpdateGoalItem(itemData);
 
       if (result.success) {
         setNewValue("");
@@ -98,7 +103,7 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
       <div className="modal-backdrop" onClick={props.onClose} />
       <div className="modal-box">
         <h3 className="font-bold text-lg mb-4">
-          Add Progress to {props.goal.title}
+          Add Progress to &quot;{props.goal.title}&quot;
         </h3>
         <button
           type="button"
@@ -118,6 +123,16 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
             placeholder={`Value${props.goal.unit ? ` (${props.goal.unit})` : ""}`}
             className="w-full"
             disabled={isSubmitting}
+          />
+          <DayPickerInput
+            label={"Date"}
+            className="w-full"
+            dayPickerProps={{
+              selected: date,
+              mode: "single",
+              disabled: { after: new Date() },
+            }}
+            onChange={(date) => setDate(date)}
           />
           <Textarea
             label="Message"

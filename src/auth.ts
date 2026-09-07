@@ -17,7 +17,7 @@ import * as yup from "yup";
 function setQueryParam(
   urlString: string,
   param: string,
-  value: string
+  value: string,
 ): string {
   const url = new URL(urlString);
   url.searchParams.set(param, value);
@@ -141,6 +141,8 @@ const authOptions = {
         const { email, password } = await signInSchema.cast(credentials);
         try {
           const user = await prisma.user.findUnique({ where: { email } });
+          const allUsers = await prisma.user.findMany();
+          console.log(allUsers);
           if (!user || !user.password) return null;
 
           const isValidPassword = await compare(password, user.password);

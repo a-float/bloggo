@@ -76,6 +76,7 @@ model GoalItem {
   goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
   goalId    Int
   createdAt DateTime @default(now())
+  occuredAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("goal_item")

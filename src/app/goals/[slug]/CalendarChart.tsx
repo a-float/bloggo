@@ -10,7 +10,7 @@ dayjs.extend(localeData);
 type CalendarChartProps = {
   from: Date;
   to: Date;
-  items: { value: number; createdAt: Date }[];
+  items: { value: number; occuredAt: Date }[];
   showY?: boolean;
   showX?: boolean;
   showLegend?: boolean;
@@ -52,7 +52,7 @@ export default function CalendarChart(props: CalendarChartProps) {
   const itemDayMap = React.useMemo(() => {
     const map = new Map<string, number>();
     props.items.forEach((item) => {
-      const key = dateToDateKey(item.createdAt);
+      const key = dateToDateKey(item.occuredAt);
       map.set(key, (map.get(key) || 0) + item.value);
     });
     return map;
@@ -103,9 +103,7 @@ export default function CalendarChart(props: CalendarChartProps) {
 
   return (
     <>
-      <div className="overflow-x-auto scrollbar-hide grid gap-2 grid-rows-[auto_1fr] mx-auto">
-        <div />
-
+      <div className="overflow-x-auto scrollbar-hide max-w-full grid gap-2 grid-rows-[auto_1fr] mx-auto">
         {/* Month legend */}
         {props.showX !== false && (
           <div className="text-xs text-base-content/70 flex justify-between row-start-1 col-start-2">

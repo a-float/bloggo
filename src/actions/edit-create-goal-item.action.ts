@@ -20,6 +20,7 @@ const GoalItemSchema = yup.object({
   goalId: yup.number().required(),
   value: yup.number().required(),
   message: yup.string().nullable().optional(),
+  occuredAt: yup.date().nullable().optional(),
 });
 
 type GoalItemInput = yup.InferType<typeof GoalItemSchema>;
@@ -48,7 +49,7 @@ export async function createOrUpdateGoalItem(
     return { success: false, errors };
   }
 
-  const { id, goalId, value, message } = parsedInput;
+  const { id, goalId, value, message, occuredAt } = parsedInput;
 
   try {
     // Check if the goal exists and user has access
@@ -69,6 +70,7 @@ export async function createOrUpdateGoalItem(
           goalId,
           value,
           message: message || null,
+          occuredAt: occuredAt || new Date(),
         },
       });
 

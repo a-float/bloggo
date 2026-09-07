@@ -79,7 +79,7 @@ export default async function GoalPage({
             <h2 className="card-title">Latest Progress</h2>
             <GoalBarChart
               daysPast={7}
-              className="h-54 md:h-64 lg:h-42 min-w-[300px] w-full"
+              className="h-54 md:h-64 lg:h-42 min-w-75 w-full"
               unit={goal.unit}
               items={goal.items}
             />

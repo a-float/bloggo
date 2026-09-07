@@ -17,7 +17,7 @@ export default function RadioGroup(props: RadioGroupProps) {
       <LegendLabel required={props.required}>{props.label}</LegendLabel>
       <div className="flex flex-col gap-1 mt-1">
         {props.options.map((option) => (
-          <label className="label" key={option.value}>
+          <label className="label whitespace-normal" key={option.value}>
             <input
               required={props.required}
               type="radio"

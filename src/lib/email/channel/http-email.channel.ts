@@ -1,6 +1,6 @@
-import { EmailChannel } from "../email.channel";
-import { EmailMessage } from "../email.message";
 import { Resend } from "resend";
+import { EmailChannel } from "../email.channel";
+import type { EmailMessage } from "../email.message";
 
 export class HttpEmailChannel extends EmailChannel {
   // TODO group env in getConfig

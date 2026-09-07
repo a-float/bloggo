@@ -1,4 +1,4 @@
-import { BaseProps, LegendLabel } from "./common";
+import { type BaseProps, LegendLabel } from "./common";
 
 type SelectProps = BaseProps & React.ComponentProps<"select">;
 
@@ -11,7 +11,7 @@ export function Select(props: SelectProps) {
         {...rest}
         aria-invalid={!!error}
         autoComplete="off"
-        className={"select " + props.className}
+        className={`select ${props.className}`}
       >
         {props.children}
       </select>

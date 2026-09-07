@@ -1,12 +1,12 @@
 import { uploadFiles } from "@/actions/upload-files.action";
-import { BlobManager } from "@/lib/blob/blob-manager";
+import type { BlobManager } from "@/lib/blob/blob-manager";
 import { compressImage } from "@/lib/compressImage";
 
 const MAX_REQUEST_SIZE = 1 * 1024 * 1024; // 1MB
 
 export async function uploadNewImages(
   images: { name: string; url: string }[],
-  blobManager: BlobManager
+  blobManager: BlobManager,
 ) {
   const uploaded: Awaited<ReturnType<typeof uploadFiles>> = [];
   let formData = new FormData();
@@ -24,7 +24,7 @@ export async function uploadNewImages(
       const file = blobManager.getObjectForUrl(image.url);
       if (!file) return [];
       return compressImage(file as File);
-    })
+    }),
   );
 
   for (const compressedImage of compressedImages) {

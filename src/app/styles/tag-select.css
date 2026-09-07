@@ -16,7 +16,7 @@
 
   .tag-select__placeholder,
   .tag-select__input-container {
-    grid-area: 1/1/2/3;
+    grid-area: 1 / 1 / 2 / 3;
     flex: 1 1 70px;
     @apply px-1;
   }

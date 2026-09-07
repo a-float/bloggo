@@ -1,4 +1,4 @@
-import { Editor, useEditorState } from "@tiptap/react";
+import { type Editor, useEditorState } from "@tiptap/react";
 import clsx from "clsx";
 
 export default function MenuBar({ editor }: { editor: Editor }) {
@@ -42,7 +42,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           disabled={!editorState.canBold}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isBold ? "btn-primary" : ""
+            editorState.isBold ? "btn-primary" : "",
           )}
         >
           Bold
@@ -53,7 +53,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           disabled={!editorState.canItalic}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isItalic ? "btn-primary" : ""
+            editorState.isItalic ? "btn-primary" : "",
           )}
         >
           Italic
@@ -64,7 +64,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           disabled={!editorState.canStrike}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isStrike ? "btn-primary" : ""
+            editorState.isStrike ? "btn-primary" : "",
           )}
         >
           Strike
@@ -75,7 +75,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           disabled={!editorState.canCode}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isCode ? "btn-primary" : ""
+            editorState.isCode ? "btn-primary" : "",
           )}
         >
           Code
@@ -99,7 +99,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isParagraph ? "btn-primary" : ""
+            editorState.isParagraph ? "btn-primary" : "",
           )}
         >
           Paragraph
@@ -111,7 +111,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading1 ? "btn-primary" : ""
+            editorState.isHeading1 ? "btn-primary" : "",
           )}
         >
           H1
@@ -123,7 +123,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading2 ? "btn-primary" : ""
+            editorState.isHeading2 ? "btn-primary" : "",
           )}
         >
           H2
@@ -135,7 +135,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading3 ? "btn-primary" : ""
+            editorState.isHeading3 ? "btn-primary" : "",
           )}
         >
           H3
@@ -147,7 +147,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading4 ? "btn-primary" : ""
+            editorState.isHeading4 ? "btn-primary" : "",
           )}
         >
           H4
@@ -159,7 +159,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading5 ? "btn-primary" : ""
+            editorState.isHeading5 ? "btn-primary" : "",
           )}
         >
           H5
@@ -171,7 +171,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           }
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isHeading6 ? "btn-primary" : ""
+            editorState.isHeading6 ? "btn-primary" : "",
           )}
         >
           H6
@@ -181,7 +181,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isBulletList ? "btn-primary" : ""
+            editorState.isBulletList ? "btn-primary" : "",
           )}
         >
           Bullet list
@@ -191,7 +191,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isOrderedList ? "btn-primary" : ""
+            editorState.isOrderedList ? "btn-primary" : "",
           )}
         >
           Ordered list
@@ -201,7 +201,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isCodeBlock ? "btn-primary" : ""
+            editorState.isCodeBlock ? "btn-primary" : "",
           )}
         >
           Code block
@@ -211,7 +211,7 @@ export default function MenuBar({ editor }: { editor: Editor }) {
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={clsx(
             "btn btn-sm btn-soft",
-            editorState.isBlockquote ? "btn-primary" : ""
+            editorState.isBlockquote ? "btn-primary" : "",
           )}
         >
           Blockquote

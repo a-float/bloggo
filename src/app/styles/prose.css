@@ -13,12 +13,6 @@
     margin: 2em 0;
   }
 
-  & table tr th,
-  & table tr td {
-    padding: 0.5em 0.75em;
-    min-width: 50px;
-  }
-
   & table td,
   & table th {
     &[align="right"] {
@@ -28,6 +22,12 @@
     &[align="center"] {
       text-align: center;
     }
+  }
+
+  & table tr th,
+  & table tr td {
+    padding: 0.5em 0.75em;
+    min-width: 50px;
   }
 
   img {

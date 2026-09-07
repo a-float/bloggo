@@ -1,11 +1,11 @@
 import { notFound, unauthorized } from "next/navigation";
 import EditBlogForm from "@/app/blogs/EditBlogForm";
-import { getSession } from "@/lib/session";
+import { canUserCreatePublicGoal, canUserEditBlog } from "@/data/access";
 import {
   getBlogBySlug,
   getBlogTagCountsForUser,
 } from "@/lib/service/blog.service";
-import { canUserCreatePublicGoal, canUserEditBlog } from "@/data/access";
+import { getSession } from "@/lib/session";
 
 export default async function BlogEdit({
   params,

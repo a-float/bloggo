@@ -1,8 +1,8 @@
-import { deleteGoal } from "@/actions/delete-goal.action";
-import { GoalDto } from "@/data/goal-dto";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { deleteGoal } from "@/actions/delete-goal.action";
+import type { GoalDto } from "@/data/goal-dto";
 
 export default function useGoalDeleteMutation() {
   const router = useRouter();

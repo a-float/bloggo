@@ -1,6 +1,6 @@
 import React from "react";
-import TextareaMarkdownEditor from "./TextareaMarkdownEditor";
 import { LegendLabel } from "../form/common";
+import TextareaMarkdownEditor from "./TextareaMarkdownEditor";
 import TipTapEditor from "./TipTapEditor/TipTapEditor";
 
 type EditorType = "simple" | "visual";

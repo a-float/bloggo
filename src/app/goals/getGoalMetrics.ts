@@ -1,5 +1,5 @@
-import { GoalDto } from "@/data/goal-dto";
 import dayjs from "dayjs";
+import type { GoalDto } from "@/data/goal-dto";
 
 function niceFloat(x: number) {
   return parseFloat(x.toFixed(3));

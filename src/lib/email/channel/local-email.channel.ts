@@ -1,6 +1,6 @@
-import { createTransport, Transporter } from "nodemailer";
+import { createTransport, type Transporter } from "nodemailer";
 import { EmailChannel } from "../email.channel";
-import { EmailMessage } from "../email.message";
+import type { EmailMessage } from "../email.message";
 
 export class LocalEmailChannel extends EmailChannel {
   transport: Transporter | null = null;
@@ -8,7 +8,7 @@ export class LocalEmailChannel extends EmailChannel {
   init() {
     this.transport = createTransport({
       host: process.env.EMAIL_SERVER_HOST,
-      port: parseInt(process.env.EMAIL_SERVER_PORT!),
+      port: parseInt(process.env.EMAIL_SERVER_PORT!, 10),
       // auth: {
       //   user: process.env.EMAIL_SERVER_USER,
       //   pass: process.env.AUTH_RESEND_KEY,

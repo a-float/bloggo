@@ -1,12 +1,12 @@
 import {
-  Html,
-  Head,
   Body,
-  Preview,
   Container,
+  Head,
   Heading,
   Hr,
+  Html,
   Link,
+  Preview,
 } from "@react-email/components";
 import type React from "react";
 

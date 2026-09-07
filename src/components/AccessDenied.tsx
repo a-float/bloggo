@@ -1,5 +1,4 @@
 import { getSession } from "@/lib/session";
-import React from "react";
 
 export default async function AccessDenied() {
   const { user } = await getSession();

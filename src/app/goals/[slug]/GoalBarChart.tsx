@@ -1,6 +1,6 @@
 "use client";
 import dayjs from "dayjs";
-import { BarChart, Bar, XAxis, CartesianGrid } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 type BarChartProps = {
   items: { occuredAt: Date; value: number }[];
@@ -51,7 +51,11 @@ export default function GoalBarChart(props: BarChartProps) {
               />
             </linearGradient>
           </defs>
-          <CartesianGrid vertical={false} stroke="var(--color-base-content)" opacity={0.3} />
+          <CartesianGrid
+            vertical={false}
+            stroke="var(--color-base-content)"
+            opacity={0.3}
+          />
           <XAxis
             dataKey="name"
             tickLine={false}

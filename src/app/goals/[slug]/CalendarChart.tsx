@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import dayjs from "dayjs";
-import React from "react";
 import localeData from "dayjs/plugin/localeData";
+import React from "react";
 
 dayjs.extend(localeData);
 

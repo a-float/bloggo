@@ -1,13 +1,13 @@
 "use server";
 
-import { canUserEditBlog } from "@/data/access";
-import { getBlogById } from "@/lib/service/blog.service";
-import { createBlobStorage } from "@/lib/blob";
-import { getSession } from "@/lib/session";
-import prisma from "@/lib/prisma";
-import { Blog } from "@prisma/client";
+import type { Blog } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { notFound, unauthorized } from "next/navigation";
+import { canUserEditBlog } from "@/data/access";
+import { createBlobStorage } from "@/lib/blob";
+import prisma from "@/lib/prisma";
+import { getBlogById } from "@/lib/service/blog.service";
+import { getSession } from "@/lib/session";
 
 type ActionState = {
   success?: boolean;

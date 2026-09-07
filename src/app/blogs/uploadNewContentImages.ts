@@ -1,11 +1,11 @@
-import { BlobManager } from "@/lib/blob/blob-manager";
+import type { BlobManager } from "@/lib/blob/blob-manager";
 import { uploadNewImages } from "./uploadNewImages";
 
 export async function uploadNewContentImages(
   content: string,
-  blobManager: BlobManager
+  blobManager: BlobManager,
 ) {
-  const matches = content.matchAll(/blob:https?:\/\/[a-zA-Z0-9:.\/-]+/g);
+  const matches = content.matchAll(/blob:https?:\/\/[a-zA-Z0-9:./-]+/g);
   const toUpload: { name: string; url: string }[] = [];
   for (const match of matches) {
     const url = match[0];

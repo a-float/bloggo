@@ -1,5 +1,5 @@
-import { getSession } from "@/lib/session";
 import { unauthorized } from "next/navigation";
+import { getSession } from "@/lib/session";
 import Account from "./Account";
 
 export default async function AccountPage() {

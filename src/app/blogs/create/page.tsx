@@ -1,8 +1,8 @@
+import { unauthorized } from "next/navigation";
 import EditBlogForm from "@/app/blogs/EditBlogForm";
 import { canUserCreateBlog, canUserCreatePublicGoal } from "@/data/access";
 import { getBlogTagCountsForUser } from "@/lib/service/blog.service";
 import { getSession } from "@/lib/session";
-import { unauthorized } from "next/navigation";
 
 export default async function BlogCreate() {
   const { user } = await getSession();

@@ -1,10 +1,10 @@
-import BlogCard from "./BlogCard";
+import { Suspense } from "react";
+import { TbInfoCircle } from "react-icons/tb";
+import { canUserCreateBlog } from "@/data/access";
 import { getBlogsForUser } from "@/lib/service/blog.service";
 import { getSession } from "@/lib/session";
-import { canUserCreateBlog } from "@/data/access";
-import { TbInfoCircle } from "react-icons/tb";
+import BlogCard from "./BlogCard";
 import SearchBar from "./SearchBar";
-import { Suspense } from "react";
 
 export default async function Blogs({
   searchParams,

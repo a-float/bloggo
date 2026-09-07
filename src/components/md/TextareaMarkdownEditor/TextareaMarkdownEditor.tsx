@@ -1,11 +1,11 @@
 import React from "react";
 import Tabs from "../../Tabs";
-import { EditorProps } from "../MarkdownEditor";
+import type { EditorProps } from "../MarkdownEditor";
 import MarkdownRenderer from "../MarkdownRenderer";
 import { Toolbar } from "./Toolbar";
 
 export default function SimpleMarkdownEditor(
-  props: Pick<EditorProps, "defaultValue" | "onChange" | "value">
+  props: Pick<EditorProps, "defaultValue" | "onChange" | "value">,
 ) {
   const [activeTab, setActiveTab] = React.useState<"Edit" | "Preview">("Edit");
   const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);

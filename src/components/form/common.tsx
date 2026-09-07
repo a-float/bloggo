@@ -9,11 +9,11 @@ export function LegendLabel(
   props: {
     children: string;
     required?: boolean;
-  } & Pick<BaseProps, "hideLabel" | "hideRequired">
+  } & Pick<BaseProps, "hideLabel" | "hideRequired">,
 ) {
   return (
     <legend
-      className={"fieldset-legend gap-0 " + (props.hideLabel ? "sr-only" : "")}
+      className={`fieldset-legend gap-0 ${props.hideLabel ? "sr-only" : ""}`}
     >
       <span>{props.children}</span>
       {props.hideRequired ? null : props.required ? (

@@ -3,7 +3,7 @@
 export function resizeImage(
   file: File,
   maxWidth: number,
-  maxHeight: number
+  maxHeight: number,
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const img = new Image();

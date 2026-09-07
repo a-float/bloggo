@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { FaXmark } from "react-icons/fa6";
-import { BlobManager } from "@/lib/blob/blob-manager";
 import toast from "react-hot-toast";
-import { Input } from "@/components/form/TextInput";
+import { FaXmark } from "react-icons/fa6";
 import FileInput from "@/components/form/FileInput";
+import { Input } from "@/components/form/TextInput";
+import { BlobManager } from "@/lib/blob/blob-manager";
 
 type ImageInsertModalProps = {
   isOpen: boolean;
@@ -37,15 +37,10 @@ export default function ImageInsertModal({
     onClose();
   };
 
-  const resetModal = () => {
+  React.useEffect(() => {
+    if (isOpen) return;
     setImageUrl("");
     setAltText("");
-  };
-
-  React.useEffect(() => {
-    if (!isOpen) {
-      resetModal();
-    }
   }, [isOpen]);
 
   if (!isOpen) return null;

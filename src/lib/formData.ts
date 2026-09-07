@@ -1,7 +1,7 @@
 export function objectToFormData(
   obj: Record<string, unknown>,
   formData = new FormData(),
-  parentKey = ""
+  parentKey = "",
 ): FormData {
   for (const key in obj) {
     const value = obj[key];
@@ -10,7 +10,7 @@ export function objectToFormData(
     if (value instanceof File) {
       formData.append(formKey, value);
     } else if (Array.isArray(value)) {
-      value.forEach((item) => formData.append(key, item));
+      value.forEach((item) => void formData.append(key, item));
     } else if (value === null) {
       formData.append(formKey, "");
     } else {

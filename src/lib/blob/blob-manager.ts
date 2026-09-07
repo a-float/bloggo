@@ -2,8 +2,8 @@ export class BlobManager {
   private static instance: BlobManager | null = null;
 
   static getInstance() {
-    this.instance ??= new BlobManager();
-    return this.instance;
+    BlobManager.instance ??= new BlobManager();
+    return BlobManager.instance;
   }
 
   blobs: Record<string, Blob | null> = {};

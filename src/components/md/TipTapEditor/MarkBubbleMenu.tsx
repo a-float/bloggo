@@ -1,4 +1,4 @@
-import { Editor, useEditorState } from "@tiptap/react";
+import { type Editor, useEditorState } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import clsx from "clsx";
 import { FaBold, FaCode, FaItalic, FaStrikethrough } from "react-icons/fa6";
@@ -70,7 +70,7 @@ export default function MarkBubbleMenu({ editor }: { editor: Editor }) {
             onClick={btn.run}
             className={clsx(
               "btn btn-soft btn-xs btn-square m-1",
-              btn.active && "btn-active"
+              btn.active && "btn-active",
             )}
           >
             {btn.icon}

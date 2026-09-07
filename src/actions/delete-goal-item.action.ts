@@ -1,8 +1,8 @@
 "use server";
 
-import prisma from "@/lib/prisma";
-import * as yup from "yup";
 import { revalidatePath } from "next/cache";
+import * as yup from "yup";
+import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
 export type DeleteGoalItemActionState = {
@@ -21,11 +21,11 @@ const capitalize = (str: string) =>
   str.slice(0, 1).toUpperCase() + str.slice(1);
 
 export async function deleteGoalItem(
-  input: DeleteGoalItemInput
+  input: DeleteGoalItemInput,
 ): Promise<DeleteGoalItemActionState> {
   const { user } = await getSession();
   if (!user) return { success: false, message: "Access denied." };
-  
+
   const errors: DeleteGoalItemActionState["errors"] = [];
 
   const parsedInput = await DeleteGoalItemSchema.validate(input, {
@@ -63,11 +63,11 @@ export async function deleteGoalItem(
     });
 
     revalidatePath(`/goals/${goalItem.goal.id}`);
-    revalidatePath('/goals');
+    revalidatePath("/goals");
 
-    return { 
-      success: true, 
-      message: "Goal item deleted successfully"
+    return {
+      success: true,
+      message: "Goal item deleted successfully",
     };
   } catch (error) {
     console.error("Error deleting goal item:", error);

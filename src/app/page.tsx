@@ -1,4 +1,3 @@
-
 export default function Home() {
   return (
     <main className="hero bg-base-200 flex-1">

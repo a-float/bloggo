@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
+import { VerificationTokenType } from "@prisma/client";
 import { signIn } from "next-auth/react";
-import { Input } from "../../../components/form/TextInput";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Spinner from "../../../components/Spinner";
 import { FaEnvelope } from "react-icons/fa6";
-import { VerificationTokenType } from "@prisma/client";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
+import { Input } from "../../../components/form/TextInput";
+import Spinner from "../../../components/Spinner";
 
 export default function ResetPassword() {
   const form = useForm({ defaultValues: { email: "" } });
@@ -17,7 +16,7 @@ export default function ResetPassword() {
     const res = await signIn("email", {
       email: emailTypeMapper.encode(
         VerificationTokenType.RESET_PASSWORD,
-        data.email
+        data.email,
       ),
       redirect: false,
       callbackUrl: "/account",
@@ -36,34 +35,32 @@ export default function ResetPassword() {
         Type your email address and we&apos;ll send you a link to reset you
         password.
       </p>
-      <>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <Input
-            {...form.register("email")}
-            required
-            label="Email"
-            type="email"
-            placeholder="Email"
-            className="w-full"
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Input
+          {...form.register("email")}
+          required
+          label="Email"
+          type="email"
+          placeholder="Email"
+          className="w-full"
+        />
 
-          <button type="submit" className="btn btn-primary mt-4 w-full">
-            {form.formState.isSubmitting ? (
-              <Spinner />
-            ) : (
-              <>
-                <FaEnvelope />
-                Send password reset email
-              </>
-            )}
-          </button>
-          <p className="mt-4 text-sm text-base-content/60">
-            <a href="./login" className="link">
-              Go back to login
-            </a>
-          </p>
-        </form>
-      </>
+        <button type="submit" className="btn btn-primary mt-4 w-full">
+          {form.formState.isSubmitting ? (
+            <Spinner />
+          ) : (
+            <>
+              <FaEnvelope />
+              Send password reset email
+            </>
+          )}
+        </button>
+        <p className="mt-4 text-sm text-base-content/60">
+          <a href="./login" className="link">
+            Go back to login
+          </a>
+        </p>
+      </form>
     </div>
   );
 }

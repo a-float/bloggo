@@ -1,11 +1,11 @@
-import { notFound, unauthorized } from "next/navigation";
-import { getBlogBySlug } from "@/lib/service/blog.service";
-import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
-import { getSession } from "@/lib/session";
 import dayjs from "dayjs";
+import { notFound, unauthorized } from "next/navigation";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
-import MarkdownRenderer from "@/components/md/MarkdownRenderer";
 import BlurredBackgroundImage from "@/components/BlurredBackgroundImage";
+import MarkdownRenderer from "@/components/md/MarkdownRenderer";
+import { canUserEditBlog, canUserSeeBlog } from "@/data/access";
+import { getBlogBySlug } from "@/lib/service/blog.service";
+import { getSession } from "@/lib/session";
 
 export default async function BlogPage({
   params,
@@ -20,40 +20,39 @@ export default async function BlogPage({
   if (!canSeeBlog) return unauthorized();
 
   return (
-    <>
-      <div className="self-center w-full flex-1">
-        {blog.coverImage ? (
-          <figure className="relative h-40 md:h-80 mb-8 overflow-hidden">
-            <BlurredBackgroundImage src={blog.coverImage.url} />
-          </figure>
-        ) : null}
-        <div className="flex justify-between">
-          <div className="prose mb-6">
-            <h1>{blog.title}</h1>
-          </div>
-          <div className="flex-1"></div>
-          {canUserEditBlog(user, blog) && (
-            <a className="btn btn-ghost" href={`/blogs/${slug}/edit`}>
-              Edit
-            </a>
-          )}
+    <div className="self-center w-full flex-1">
+      {blog.coverImage ? (
+        <figure className="relative h-40 md:h-80 mb-8 overflow-hidden">
+          <BlurredBackgroundImage src={blog.coverImage.url} />
+        </figure>
+      ) : null}
+      <div className="flex justify-between">
+        <div className="prose mb-6">
+          <h1>{blog.title}</h1>
         </div>
-        {/* TODO extract to another component */}
-        <div className="text-sm flex items-center">
-          {blog.author ? (
-            <>
-              <AvatarWithFallback
-                className="size-7 mr-2"
-                src={blog.author.image}
-                name={blog.author.email}
-              />
-              {blog.author.name ?? "anonymous"} on
-            </>
-          ) : null}{" "}
-          {blog.date ? dayjs(blog.date).format("MMMM D, YYYY") : null}
-        </div>
-        <div className="divider" />
-        {/* {blog.images.length > 0 && (
+        <div className="flex-1"></div>
+        {canUserEditBlog(user, blog) && (
+          <a className="btn btn-ghost" href={`/blogs/${slug}/edit`}>
+            Edit
+          </a>
+        )}
+      </div>
+      {/* TODO extract to another component */}
+      <div className="text-sm flex items-center">
+        {blog.author ? (
+          <>
+            <AvatarWithFallback
+              className="size-7 mr-2"
+              src={blog.author.image}
+              name={blog.author.email}
+            />
+            {blog.author.name ?? "anonymous"} on
+          </>
+        ) : null}{" "}
+        {blog.date ? dayjs(blog.date).format("MMMM D, YYYY") : null}
+      </div>
+      <div className="divider" />
+      {/* {blog.images.length > 0 && (
           <section className="prose">
             <h2 className="mt-[2em] text-2xl">Gallery</h2>
             <Gallery
@@ -63,9 +62,8 @@ export default async function BlogPage({
             />
           </section>
         )} */}
-        {/* TODO consider restricting trust */}
-        <MarkdownRenderer markdown={blog.content} trusted />
-      </div>
-    </>
+      {/* TODO consider restricting trust */}
+      <MarkdownRenderer markdown={blog.content} trusted />
+    </div>
   );
 }

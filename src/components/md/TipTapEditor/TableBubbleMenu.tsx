@@ -1,7 +1,7 @@
-import { Editor, findParentNode, posToDOMRect } from "@tiptap/react";
+import { type Editor, findParentNode, posToDOMRect } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import clsx from "clsx";
-import React from "react";
+import type React from "react";
 import {
   TbColumnInsertLeft,
   TbColumnRemove,
@@ -121,13 +121,13 @@ export default function TableBubbleMenu({ editor }: { editor: Editor }) {
       getReferencedVirtualElement={() => {
         // example from https://tiptap.dev/docs/editor/extensions/functionality/bubble-menu
         const parentNode = findParentNode((node) => node.type.name === "table")(
-          editor.state.selection
+          editor.state.selection,
         );
         if (!parentNode) return null;
         const domRect = posToDOMRect(
           editor.view,
           parentNode.start,
-          parentNode.start + parentNode.node.nodeSize
+          parentNode.start + parentNode.node.nodeSize,
         );
         return {
           getBoundingClientRect: () => domRect,
@@ -154,7 +154,7 @@ export default function TableBubbleMenu({ editor }: { editor: Editor }) {
                   onClick={btn.action}
                   className={clsx(
                     "btn btn-soft btn-xs btn-square m-1",
-                    btn.action === tableCommands.deleteTable && "btn-error"
+                    btn.action === tableCommands.deleteTable && "btn-error",
                   )}
                 >
                   {btn.icon}

@@ -1,6 +1,6 @@
 import { canUserCreateGoal } from "@/data/access";
-import { getSession } from "@/lib/session";
 import { getGoalsForUser, getGoalTagCounts } from "@/lib/service/goal.service";
+import { getSession } from "@/lib/session";
 import GoalsClient from "./GoalsClient";
 
 export default async function Goals() {

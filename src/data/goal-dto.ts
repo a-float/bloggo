@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { getUserDTO } from "./user-dto.ts";
 
 type FullGoal = Prisma.GoalGetPayload<{

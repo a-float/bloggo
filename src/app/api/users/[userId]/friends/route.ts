@@ -1,11 +1,11 @@
-import { getSession } from "@/lib/session";
 import { unauthorized } from "next/navigation";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import * as friendService from "@/lib/service/friend.service";
+import { getSession } from "@/lib/session";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   const { userId } = await params;
   const { user } = await getSession();

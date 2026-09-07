@@ -1,13 +1,13 @@
 "use client";
 
+import dayjs from "dayjs";
 import { useState } from "react";
-import { GoalDto } from "@/data/goal-dto";
+import toast from "react-hot-toast";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { TbPlus } from "react-icons/tb";
-import dayjs from "dayjs";
-import GoalItemModal from "../GoalItemModal";
 import { deleteGoalItem } from "@/actions/delete-goal-item.action";
-import toast from "react-hot-toast";
+import type { GoalDto } from "@/data/goal-dto";
+import GoalItemModal from "../GoalItemModal";
 
 type GoalItemType = GoalDto["items"][0];
 

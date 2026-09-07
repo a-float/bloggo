@@ -1,18 +1,18 @@
-import prisma from "@/lib/prisma";
-import NextAuth, { AuthError, type NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import GoogleProvider from "next-auth/providers/google";
-import EmailProvider from "next-auth/providers/email";
-import Credentials from "next-auth/providers/credentials";
+import { Prisma, type User, VerificationTokenType } from "@prisma/client";
 import { compare } from "bcrypt";
-import { Prisma, VerificationTokenType, type User } from "@prisma/client";
-import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
-import { createEmailChannel } from "@/lib/email/email.channel.factory";
-import { Adapter } from "next-auth/adapters";
 import dayjs from "dayjs";
+import NextAuth, { AuthError, type NextAuthConfig } from "next-auth";
+import type { Adapter } from "next-auth/adapters";
+import Credentials from "next-auth/providers/credentials";
+import EmailProvider from "next-auth/providers/email";
+import GoogleProvider from "next-auth/providers/google";
+import * as yup from "yup";
+import { getUserDTO, type UserDTO } from "@/data/user-dto.ts";
+import { createEmailChannel } from "@/lib/email/email.channel.factory";
 import { createVerificationEmailMessage } from "@/lib/email/email.message.factory";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
-import * as yup from "yup";
+import prisma from "@/lib/prisma";
 
 function setQueryParam(
   urlString: string,
@@ -61,7 +61,7 @@ const authOptions = {
     jwt({ user, token, trigger, session }) {
       if (trigger === "update" && session.name) {
         // TODO fix any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: too lazy
         (token.user as any).name = session.name;
       }
       if (user) {
@@ -112,7 +112,7 @@ const authOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: parseInt(process.env.EMAIL_SERVER_PORT!),
+        port: parseInt(process.env.EMAIL_SERVER_PORT!, 10),
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.AUTH_RESEND_KEY,
@@ -143,7 +143,7 @@ const authOptions = {
           const user = await prisma.user.findUnique({ where: { email } });
           const allUsers = await prisma.user.findMany();
           console.log(allUsers);
-          if (!user || !user.password) return null;
+          if (!user?.password) return null;
 
           const isValidPassword = await compare(password, user.password);
           if (!isValidPassword) return null;

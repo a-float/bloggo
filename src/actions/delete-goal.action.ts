@@ -1,12 +1,12 @@
 "use server";
 
-import { canUserEditGoal } from "@/data/access";
-import { getGoalById } from "@/lib/service/goal.service";
-import { getSession } from "@/lib/session";
-import prisma from "@/lib/prisma";
-import { Goal } from "@prisma/client";
+import type { Goal } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { notFound, unauthorized } from "next/navigation";
+import { canUserEditGoal } from "@/data/access";
+import prisma from "@/lib/prisma";
+import { getGoalById } from "@/lib/service/goal.service";
+import { getSession } from "@/lib/session";
 
 type ActionState = {
   success?: boolean;

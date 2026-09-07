@@ -1,16 +1,16 @@
 "use client";
 
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useSession } from "next-auth/react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { TbLock, TbUser } from "react-icons/tb";
+import * as yup from "yup";
 import { updateUser } from "@/actions/update-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
-import { UserDTO } from "@/data/user-dto.ts";
-import { useSession } from "next-auth/react";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import React from "react";
-import { TbLock, TbUser } from "react-icons/tb";
+import type { UserDTO } from "@/data/user-dto.ts";
 
 // TODO show a dynamic list of requirements?
 const formSchema = yup.object().shape({

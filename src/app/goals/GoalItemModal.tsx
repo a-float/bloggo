@@ -1,11 +1,11 @@
+import React from "react";
+import toast from "react-hot-toast";
+import { FaXmark } from "react-icons/fa6";
 import { createOrUpdateGoalItem } from "@/actions/edit-create-goal-item.action";
 import { DayPickerInput } from "@/components/form/DayPickerInput";
 import { Input, Textarea } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
-import { GoalDto } from "@/data/goal-dto";
-import React from "react";
-import toast from "react-hot-toast";
-import { FaXmark } from "react-icons/fa6";
+import type { GoalDto } from "@/data/goal-dto";
 
 type GoalItemType = GoalDto["items"][0];
 
@@ -58,7 +58,7 @@ export default function GoalItemModal(props: AddGoalItemModalProps) {
     try {
       const result = isEditing
         ? await createOrUpdateGoalItem({
-            id: props.editingItem!.id,
+            id: props.editingItem?.id,
             ...itemData,
           })
         : await createOrUpdateGoalItem(itemData);

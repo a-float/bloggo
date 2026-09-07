@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
+import { components, type OptionProps } from "react-select";
 import CreatableSelect from "react-select/creatable";
 import { LegendLabel } from "./form/common";
-import { components, OptionProps } from "react-select";
 
 type TagWithCount = {
   tag: string;

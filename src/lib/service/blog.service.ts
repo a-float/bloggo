@@ -1,9 +1,14 @@
 import "server-only";
+import {
+  BlogVisibility,
+  FriendshipStatus,
+  type Prisma,
+  Role,
+} from "@prisma/client";
 import { getBlogDTO } from "@/data/blog-dto";
-import { type TagWithCount } from "@/types/common";
-import { Prisma, Role, BlogVisibility, FriendshipStatus } from "@prisma/client";
+import type { UserDTO } from "@/data/user-dto.ts";
+import type { TagWithCount } from "@/types/common";
 import prisma from "../prisma";
-import { type UserDTO } from "@/data/user-dto.ts";
 
 export async function getBlogById(id: number) {
   const blog = await prisma.blog.findUnique({

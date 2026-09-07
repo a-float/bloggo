@@ -1,4 +1,9 @@
-import { PrismaClient, Prisma, Role, BlogVisibility } from "@prisma/client";
+import {
+  BlogVisibility,
+  type Prisma,
+  PrismaClient,
+  Role,
+} from "@prisma/client";
 import { hash } from "bcrypt";
 
 const prisma = new PrismaClient();

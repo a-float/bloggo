@@ -1,7 +1,7 @@
-import { render } from "@react-email/render";
 import { Button, Section, Text } from "@react-email/components";
-import { EmailTemplate, styles } from "./template";
+import { render } from "@react-email/render";
 import { VerificationEmailMessage } from "../email.message";
+import { EmailTemplate, styles } from "./template";
 
 export class ResetPasswordMessage extends VerificationEmailMessage {
   getMaxAge(): number {
@@ -34,7 +34,7 @@ export class ResetPasswordMessage extends VerificationEmailMessage {
           anyone.
         </Text>
         <Text style={styles.paragraph}>Happy Blogging!</Text>
-      </EmailTemplate>
+      </EmailTemplate>,
     );
   }
 }

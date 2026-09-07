@@ -28,7 +28,7 @@ export default function BarChart(props: BarChartProps) {
                 height: `${heightPercent}%`,
               }}
               title={`${item.value} on ${dayjs(item.createdAt).format(
-                "MMM DD, YYYY"
+                "MMM DD, YYYY",
               )}`}
             />
             <span className="text-sm">

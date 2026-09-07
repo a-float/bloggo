@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
 import { TbSearch } from "react-icons/tb";
 import { useDebounceCallback } from "usehooks-ts";
 

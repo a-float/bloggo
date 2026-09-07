@@ -1,4 +1,3 @@
-import React from "react";
 import { getSession } from "@/lib/session";
 import LoginLink from "./LoginLink";
 import { UserBlock } from "./UserBlock";

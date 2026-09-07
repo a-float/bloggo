@@ -1,11 +1,11 @@
 "use server";
 
-import prisma from "@/lib/prisma";
-import * as yup from "yup";
-import { GoalItem } from "@prisma/client";
+import type { GoalItem } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getSession } from "@/lib/session";
+import * as yup from "yup";
+import prisma from "@/lib/prisma";
 import { markGoalAsCompletedIfNeeded } from "@/lib/service/goal.service";
+import { getSession } from "@/lib/session";
 
 export type GoalItemActionState = {
   success: boolean;

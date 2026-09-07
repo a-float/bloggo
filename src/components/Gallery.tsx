@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 import { FaAngleLeft, FaAngleRight, FaXmark } from "react-icons/fa6";
 import { useKeyPress } from "@/hooks/useKeyPress";
-import { useRouter, useSearchParams } from "next/navigation";
 
 type GalleryProps = React.HTMLAttributes<HTMLDivElement> & {
   images: string[];
@@ -14,8 +14,8 @@ type GalleryProps = React.HTMLAttributes<HTMLDivElement> & {
 export default function Gallery(props: GalleryProps) {
   const { images, imageClassName, ...containerProps } = props;
   const searchParams = useSearchParams();
-  const index = parseInt(searchParams.get("view") ?? "");
-  const isOpen = !isNaN(index);
+  const index = parseInt(searchParams.get("view") ?? "", 10);
+  const isOpen = !Number.isNaN(index);
   const router = useRouter();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ startIndex: index });
@@ -25,7 +25,7 @@ export default function Gallery(props: GalleryProps) {
     return () => {
       document.body.classList.remove("overflow-y-hidden");
     };
-  }, [isOpen, emblaApi]);
+  }, [isOpen]);
 
   const openModal = (idx: number) => {
     window.history.pushState(null, "", `?view=${idx}`);

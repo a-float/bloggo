@@ -1,15 +1,20 @@
 "use server";
 
-import prisma from "@/lib/prisma";
-import * as yup from "yup";
-import { Goal, GoalType, GoalVisibility, Prisma } from "@prisma/client";
+import {
+  type Goal,
+  GoalType,
+  GoalVisibility,
+  type Prisma,
+} from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { getSession } from "@/lib/session";
+import * as yup from "yup";
+import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
+import prisma from "@/lib/prisma";
 import {
   getGoalById,
   markGoalAsCompletedIfNeeded,
 } from "@/lib/service/goal.service";
-import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
+import { getSession } from "@/lib/session";
 
 export type ActionState = {
   success: boolean;

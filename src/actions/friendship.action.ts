@@ -1,10 +1,10 @@
 "use server";
 
-import { type UserDTO } from "@/data/user-dto.ts";
-import { getSession } from "@/lib/session";
-import * as friendService from "@/lib/service/friend.service";
 import { FriendshipStatus } from "@prisma/client";
 import { notFound, unauthorized } from "next/navigation";
+import type { UserDTO } from "@/data/user-dto.ts";
+import * as friendService from "@/lib/service/friend.service";
+import { getSession } from "@/lib/session";
 
 type FriendshipResponse = {
   success: boolean;
@@ -12,7 +12,7 @@ type FriendshipResponse = {
 };
 
 export async function createFriendship(
-  friendId: UserDTO["id"]
+  friendId: UserDTO["id"],
 ): Promise<FriendshipResponse> {
   if (!friendId) {
     throw new Error("Invalid data");
@@ -27,7 +27,7 @@ export async function createFriendship(
 
 export async function updateFriendship(
   friendId: UserDTO["id"],
-  status: FriendshipStatus
+  status: FriendshipStatus,
 ): Promise<FriendshipResponse> {
   if (!friendId || status === FriendshipStatus.PENDING) {
     throw new Error("Invalid data");
@@ -39,7 +39,7 @@ export async function updateFriendship(
 }
 
 export async function deleteFriendship(
-  friendId: UserDTO["id"]
+  friendId: UserDTO["id"],
 ): Promise<FriendshipResponse> {
   if (!friendId) {
     throw new Error("Invalid data");

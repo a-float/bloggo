@@ -1,4 +1,4 @@
-import { RefCallBack } from "react-hook-form";
+import type { RefCallBack } from "react-hook-form";
 import { LegendLabel } from "./form/common";
 
 type RadioGroupProps = {

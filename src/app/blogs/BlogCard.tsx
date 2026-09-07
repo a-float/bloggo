@@ -1,9 +1,9 @@
-import { BlogDTO } from "@/data/blog-dto";
-import dayjs from "dayjs";
-import BadgeRow from "@/components/BadgeRow";
 import Avatar from "boring-avatars";
+import dayjs from "dayjs";
 import AvatarWithFallback from "@/components/AvatarWithFallback";
+import BadgeRow from "@/components/BadgeRow";
 import BlurredBackgroundImage from "@/components/BlurredBackgroundImage";
+import type { BlogDTO } from "@/data/blog-dto";
 
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (

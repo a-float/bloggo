@@ -1,9 +1,9 @@
 "use client";
 
-import { GoalDto } from "@/data/goal-dto";
-import React from "react";
-import GoalModal from "../GoalModal";
 import clsx from "clsx";
+import React from "react";
+import type { GoalDto } from "@/data/goal-dto";
+import GoalModal from "../GoalModal";
 
 export default function EditGoalButton(props: {
   goal: GoalDto;

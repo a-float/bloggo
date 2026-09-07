@@ -1,5 +1,5 @@
-import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
+import { getSession } from "@/lib/session";
 
 export default async function VerifyRequest() {
   const session = await getSession();

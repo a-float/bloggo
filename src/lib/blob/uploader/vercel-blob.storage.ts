@@ -1,11 +1,11 @@
-import { put, del } from "@vercel/blob";
-import BlobStorage from "../blob-storage";
+import { del, put } from "@vercel/blob";
+import type BlobStorage from "../blob-storage";
 
 export class VercelBlobStorage implements BlobStorage {
   constructor() {
     if (!process.env.BLOB_READ_WRITE_TOKEN)
       throw new Error(
-        "process.env.BLOB_READ_WRITE_TOKEN must be defined when using local uploader"
+        "process.env.BLOB_READ_WRITE_TOKEN must be defined when using local uploader",
       );
   }
   async upload(file: File): Promise<string> {

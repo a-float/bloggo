@@ -3,7 +3,7 @@ import { gfm, gfmHtml } from "micromark-extension-gfm";
 
 export function markdownToHtml(
   markdown: string,
-  options?: { trusted: boolean }
+  options?: { trusted: boolean },
 ) {
   return micromark(markdown, {
     extensions: [gfm()],

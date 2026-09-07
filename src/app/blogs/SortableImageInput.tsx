@@ -1,7 +1,7 @@
-import { LegendLabel } from "@/components/form/common";
-import { BlobManager } from "@/lib/blob/blob-manager";
 import { FaXmark } from "react-icons/fa6";
-import { ItemInterface, ReactSortable } from "react-sortablejs";
+import { type ItemInterface, ReactSortable } from "react-sortablejs";
+import { LegendLabel } from "@/components/form/common";
+import type { BlobManager } from "@/lib/blob/blob-manager";
 
 export type SortableImage = ItemInterface & { name: string; url: string };
 

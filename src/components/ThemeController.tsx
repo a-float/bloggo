@@ -23,15 +23,15 @@ function ThemeIcon(props: { theme?: string; className?: string }) {
 export function ThemeController() {
   const [activeTheme, _setActiveTheme] = React.useState("");
 
-  const setActiveTheme = (theme: string) => {
+  const setActiveTheme = React.useCallback((theme: string) => {
     _setActiveTheme(theme);
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-  };
+  }, []);
 
   React.useEffect(() => {
     setActiveTheme(localStorage.getItem("theme") || "");
-  }, []);
+  }, [setActiveTheme]);
 
   return (
     <div title="Change theme" className="dropdown dropdown-end">

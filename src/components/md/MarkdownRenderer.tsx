@@ -10,8 +10,9 @@ export default function MarkdownRenderer(props: MarkdownRendererProps) {
     props.html ?? markdownToHtml(props.markdown, { trusted: !!props.trusted });
   return (
     <div
-      className={"prose " + (props.className ?? "")}
+      className={`prose ${props.className ?? ""}`}
       style={{ wordWrap: "break-word" }}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: necessary
       dangerouslySetInnerHTML={{ __html: content }}
     />
   );

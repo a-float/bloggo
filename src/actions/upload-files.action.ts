@@ -1,12 +1,12 @@
 "use server";
 
-import { createBlobStorage } from "@/lib/blob";
-import { getSession } from "@/lib/session";
-import prisma from "@/lib/prisma";
 import { unauthorized } from "next/navigation";
+import { createBlobStorage } from "@/lib/blob";
+import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 export async function uploadFiles(
-  formData: FormData
+  formData: FormData,
 ): Promise<{ url: string; name: string }[]> {
   const { user } = await getSession();
   if (!user) return unauthorized();

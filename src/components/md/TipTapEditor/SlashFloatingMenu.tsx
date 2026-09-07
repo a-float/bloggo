@@ -1,17 +1,17 @@
-import HeadingIcon from "@/components/HeadingIcon";
+import type { Editor } from "@tiptap/react";
+import { FloatingMenu } from "@tiptap/react/menus";
+import clsx from "clsx";
+import React from "react";
 import {
-  FaListUl,
-  FaListOl,
-  FaQuoteLeft,
   FaImage,
+  FaListOl,
+  FaListUl,
+  FaQuoteLeft,
   FaRulerHorizontal,
   FaTable,
 } from "react-icons/fa6";
-import React from "react";
-import clsx from "clsx";
-import { executeCommand, insertImage, Command } from "./execute";
-import { type Editor } from "@tiptap/react";
-import { FloatingMenu } from "@tiptap/react/menus";
+import HeadingIcon from "@/components/HeadingIcon";
+import { type Command, executeCommand, insertImage } from "./execute";
 import ImageInsertModal from "./ImageInsertModal";
 
 type SlashMenuItem = {
@@ -39,49 +39,51 @@ const menuItemGroups: SlashMenuItem[][] = [
   ],
 ];
 
-export function SlashFloatingMenu(props: { editor: Editor }) {
+export function SlashFloatingMenu({ editor }: { editor: Editor }) {
   const [activeIdx, setActiveIdx] = React.useState<number>(-1);
   const [show, setShow] = React.useState(false);
   const [showImageModal, setShowImageModal] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement>(null);
   const menuItems = menuItemGroups.flat();
 
-  const decrement = () => {
+  const decrement = React.useCallback(() => {
     setActiveIdx((prev) => Math.max(prev - 1, 0));
-  };
+  }, []);
 
-  const increment = () => {
+  const increment = React.useCallback(() => {
     setActiveIdx((prev) => Math.min(prev + 1, menuItems.length - 1));
-  };
+  }, [menuItems.length]);
 
-  const executeItem = (itemIdx: number) => {
-    const item = menuItems.at(itemIdx);
-    if (itemIdx < 0 || !item) return;
+  const executeItem = React.useCallback(
+    (itemIdx: number) => {
+      const item = menuItems.at(itemIdx);
+      if (itemIdx < 0 || !item) return;
 
-    const { editor } = props;
-    const { state } = editor;
-    const { selection } = state;
-    const { $from } = selection;
+      const { $from } = editor.state.selection;
 
-    // Remove the "/" character before executing the command
-    const charBefore = $from.parent.textContent.charAt($from.parentOffset - 1);
-    if (charBefore === "/") {
-      editor
-        .chain()
-        .deleteRange({ from: $from.pos - 1, to: $from.pos })
-        .run();
-    }
+      // Remove the "/" character before executing the command
+      const charBefore = $from.parent.textContent.charAt(
+        $from.parentOffset - 1,
+      );
+      if (charBefore === "/") {
+        editor
+          .chain()
+          .deleteRange({ from: $from.pos - 1, to: $from.pos })
+          .run();
+      }
 
-    if (item.command === "image") {
-      setShowImageModal(true);
-      return;
-    }
+      if (item.command === "image") {
+        setShowImageModal(true);
+        return;
+      }
 
-    executeCommand(editor, item.command);
-  };
+      executeCommand(editor, item.command);
+    },
+    [menuItems, editor],
+  );
 
   const handleImageInsert = (src: string, alt?: string) => {
-    insertImage(props.editor, src, alt);
+    insertImage(editor, src, alt);
     setShowImageModal(false);
   };
 
@@ -114,8 +116,7 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown, { capture: true });
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIdx, show]);
+  }, [activeIdx, show, decrement, increment, executeItem]);
 
   React.useEffect(() => {
     menuRef.current
@@ -125,7 +126,7 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
 
   React.useEffect(() => {
     setActiveIdx(-1);
-  }, [show]);
+  }, []);
 
   let flatIdx = -1;
 
@@ -134,10 +135,10 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
       <FloatingMenu
         appendTo={document.body} // fix z-index overlap with inputs
         options={{ placement: "bottom-start", offset: 8 }}
-        editor={props.editor}
+        editor={editor}
         className={clsx(
           "menu not-prose bg-base-200 rounded-box w-48 max-h-[300px] overflow-auto shadow-lg",
-          !show && "hidden"
+          !show && "hidden",
         )}
         ref={menuRef}
         shouldShow={({ state }) => {
@@ -164,7 +165,7 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
                   className={clsx(
                     groupIdx > 0 &&
                       idx === 0 &&
-                      "before:content-[''] before:block before:h-px before:my-2 before:bg-base-content/20 before:w-[90%] before:mx-auto"
+                      "before:content-[''] before:block before:h-px before:my-2 before:bg-base-content/20 before:w-[90%] before:mx-auto",
                   )}
                 >
                   <a
@@ -181,7 +182,7 @@ export function SlashFloatingMenu(props: { editor: Editor }) {
                   </a>
                 </li>
               );
-            })
+            }),
           )}
         </ul>
       </FloatingMenu>

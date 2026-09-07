@@ -1,14 +1,14 @@
+import { Image } from "@tiptap/extension-image";
+import { TableKit } from "@tiptap/extension-table";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React from "react";
-import { EditorProps } from "../MarkdownEditor";
 import { Markdown } from "tiptap-markdown";
-import { TableKit } from "@tiptap/extension-table";
-import { Image } from "@tiptap/extension-image";
-import { SlashFloatingMenu } from "./SlashFloatingMenu";
-import MarkBubbleMenu from "./MarkBubbleMenu";
-import TableBubbleMenu from "./TableBubbleMenu";
+import type { EditorProps } from "../MarkdownEditor";
 import ImageBubbleMenu from "./ImageBubbleMenu";
+import MarkBubbleMenu from "./MarkBubbleMenu";
+import { SlashFloatingMenu } from "./SlashFloatingMenu";
+import TableBubbleMenu from "./TableBubbleMenu";
 
 // Added newline so that it doesn't break next element
 // Probably breaks images in tables
@@ -16,7 +16,7 @@ const ScalableImage = Image.extend({
   addStorage() {
     return {
       markdown: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: too lazy to fix
         serialize(state: any, node: any) {
           const { src, title, width, height } = node.attrs;
           const alt = node.attrs.alt || "";
@@ -65,7 +65,7 @@ export default function TipTapEditor(
       editor?.commands.setContent(props.value || "");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.disabled, editor]);
+  }, [props.disabled, editor, props.value]);
 
   if (!editor) {
     return <div className="skeleton h-[50vh] w-full"></div>;

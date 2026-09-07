@@ -1,4 +1,4 @@
-import { Editor } from "@tiptap/react";
+import type { Editor } from "@tiptap/react";
 
 export type Command =
   | `h${1 | 2 | 3 | 4}`
@@ -22,7 +22,7 @@ export function insertImage(editor: Editor, src: string, alt?: string) {
 export function executeCommand(
   editor: Editor,
   cmd: Command,
-  options?: { onImageInsert?: () => void }
+  options?: { onImageInsert?: () => void },
 ) {
   switch (cmd) {
     case "h1":

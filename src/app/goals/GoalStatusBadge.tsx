@@ -1,7 +1,7 @@
-import { GoalDto } from "@/data/goal-dto";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import { FaRocket, FaTrophy } from "react-icons/fa6";
+import type { GoalDto } from "@/data/goal-dto";
 
 export default function GoalStatusBadge(props: {
   goal: GoalDto;

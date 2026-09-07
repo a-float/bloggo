@@ -1,4 +1,4 @@
-import { BaseProps, LegendLabel } from "./common";
+import { type BaseProps, LegendLabel } from "./common";
 
 type InputProps = BaseProps & React.ComponentProps<"input">;
 
@@ -12,7 +12,7 @@ export function Input(props: InputProps) {
         aria-invalid={!!error}
         {...rest}
         autoComplete="off"
-        className={"input " + props.className + (error ? " input-error" : "")}
+        className={`input ${props.className}${error ? " input-error" : ""}`}
       />
       {error ? <p className="text-error">{error}</p> : null}
     </fieldset>
@@ -36,9 +36,7 @@ export function Textarea(props: TextareaProps) {
       <textarea
         aria-invalid={!!error}
         {...rest}
-        className={
-          "textarea " + props.className + (error ? " textarea-error" : "")
-        }
+        className={`textarea ${props.className}${error ? " textarea-error" : ""}`}
         autoComplete="off"
       />
       {error && <p className="text-error">{error}</p>}

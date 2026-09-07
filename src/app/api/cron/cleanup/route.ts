@@ -1,6 +1,6 @@
+import type { NextRequest } from "next/server";
 import { createBlobStorage } from "@/lib/blob";
 import prisma from "@/lib/prisma";
-import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");

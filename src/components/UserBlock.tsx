@@ -1,9 +1,9 @@
-import { Drawer, DrawerToggle } from "./Drawer";
-import SignOutButton from "./SignOutButton";
-import { type UserDTO } from "@/data/user-dto.ts";
-import { FriendPanel } from "./FriendsPanel";
+import type { UserDTO } from "@/data/user-dto.ts";
 import * as friendService from "@/lib/service/friend.service";
 import AvatarWithFallback from "./AvatarWithFallback";
+import { Drawer, DrawerToggle } from "./Drawer";
+import { FriendPanel } from "./FriendsPanel";
+import SignOutButton from "./SignOutButton";
 
 export async function UserBlock(props: { user: UserDTO }) {
   const drawerId = "friend-panel-drawer";

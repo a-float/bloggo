@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { GoalDto } from "@/data/goal-dto";
-import { type TagWithCount } from "@/types/common";
-import GoalModal from "./GoalModal";
-import GoalCard from "./GoalCard";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { TbInfoCircle } from "react-icons/tb";
+import type { GoalDto } from "@/data/goal-dto";
+import type { TagWithCount } from "@/types/common";
+import GoalCard from "./GoalCard";
+import GoalModal from "./GoalModal";
 
 type GoalsClientProps = {
   goals: GoalDto[];
@@ -44,7 +44,11 @@ export default function GoalsClient(props: GoalsClientProps) {
         <div className="flex justify-between mb-6">
           <h1 className="text-3xl">Goals</h1>
           {props.canCreate ? (
-            <button type="button" className="btn btn-soft" onClick={handleCreateGoal}>
+            <button
+              type="button"
+              className="btn btn-soft"
+              onClick={handleCreateGoal}
+            >
               Create new goal
             </button>
           ) : null}

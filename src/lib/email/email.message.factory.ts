@@ -1,7 +1,7 @@
 import { VerificationTokenType } from "@prisma/client";
-import {
-  type VerificationEmailMessageOptions,
-  type VerificationEmailMessage,
+import type {
+  VerificationEmailMessage,
+  VerificationEmailMessageOptions,
 } from "./email.message";
 import { LoginMessage } from "./message/login.message";
 import { ResetPasswordMessage } from "./message/reset-password.message";
@@ -9,7 +9,7 @@ import { VerifyEmailMessage } from "./message/verify-email.message";
 
 export function createVerificationEmailMessage(
   type: VerificationTokenType,
-  options: VerificationEmailMessageOptions
+  options: VerificationEmailMessageOptions,
 ): VerificationEmailMessage {
   switch (type) {
     case VerificationTokenType.LOGIN:

@@ -1,15 +1,15 @@
 "use client";
 
-import { UserDTO } from "@/data/user-dto.ts";
-import React from "react";
-import Select from "react-select";
-import { clearStyleProxy } from "./TagSelect";
-import { FriendshipDTO } from "@/data/friendship-dto";
 import { FriendshipStatus } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import Select from "react-select";
 import { useDebounceValue } from "usehooks-ts";
 import { createFriendship } from "@/actions/friendship.action";
+import type { FriendshipDTO } from "@/data/friendship-dto";
+import type { UserDTO } from "@/data/user-dto.ts";
 import FriendItem from "./FriendItem";
+import { clearStyleProxy } from "./TagSelect";
 
 const USER_SEARCH_DEBOUNCE_MS = 100;
 
@@ -61,16 +61,16 @@ export function FriendPanel(props: {
   const nonInvitiableUserIds = new Set(
     (friendshipsQuery.data ?? [])
       .flatMap((f) => [f.requester.id, f.recipient.id])
-      .concat(props.user.id)
+      .concat(props.user.id),
   );
   const options = (usersQuery?.data || []).filter(
-    (user) => !nonInvitiableUserIds.has(user.id)
+    (user) => !nonInvitiableUserIds.has(user.id),
   );
   const pendingFriendships = friendshipsQuery.data?.filter(
-    (friendship) => friendship.status === FriendshipStatus.PENDING
+    (friendship) => friendship.status === FriendshipStatus.PENDING,
   );
   const acceptedFriendships = friendshipsQuery.data?.filter(
-    (friendship) => friendship.status === FriendshipStatus.ACCEPTED
+    (friendship) => friendship.status === FriendshipStatus.ACCEPTED,
   );
 
   return (
@@ -100,7 +100,7 @@ export function FriendPanel(props: {
           onChange={(selectedOption) => {
             if (!selectedOption) return;
             inviteFriend(selectedOption.data.id).then(() =>
-              friendshipsQuery.refetch()
+              friendshipsQuery.refetch(),
             );
           }}
           isLoading={
@@ -110,7 +110,9 @@ export function FriendPanel(props: {
           formatOptionLabel={(option) => (
             <div className="flex justify-between items-center">
               <span>{option?.label}</span>
-              <button className="btn btn-xs btn-success btn-outline">Add</button>
+              <button className="btn btn-xs btn-success btn-outline">
+                Add
+              </button>
             </div>
           )}
         />
@@ -135,7 +137,7 @@ export function FriendPanel(props: {
       )}
       <section>
         <h3 className="text-xl mb-3">Your friends</h3>
-        {!!acceptedFriendships?.length ? (
+        {acceptedFriendships?.length ? (
           <ul className="list">
             {acceptedFriendships.map((friendship) => (
               <FriendItem

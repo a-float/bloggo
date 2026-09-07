@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
-import { GoalDto } from "@/data/goal-dto";
-import { TbPlus } from "react-icons/tb";
-import BadgeRow from "@/components/BadgeRow";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaEllipsis, FaTrash } from "react-icons/fa6";
-import Link from "next/link";
-import GoalItemModal from "./GoalItemModal";
-import CalendarChart from "./[slug]/CalendarChart";
-import dayjs from "dayjs";
+import { TbPlus } from "react-icons/tb";
+import BadgeRow from "@/components/BadgeRow";
 import Progress from "@/components/Progress";
-import { getGoalMetrics } from "./getGoalMetrics";
-import GoalStatusBadge from "./GoalStatusBadge";
 import Spinner from "@/components/Spinner";
+import type { GoalDto } from "@/data/goal-dto";
+import CalendarChart from "./[slug]/CalendarChart";
+import GoalItemModal from "./GoalItemModal";
+import GoalStatusBadge from "./GoalStatusBadge";
+import { getGoalMetrics } from "./getGoalMetrics";
 import useGoalDeleteMutation from "./useGoalDeleteMutation";
 
 type GoalCardProps = {

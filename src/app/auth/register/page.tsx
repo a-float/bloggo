@@ -1,14 +1,14 @@
 "use client";
 
+import { VerificationTokenType } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
-import { VerificationTokenType } from "@prisma/client";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
 export default function Register() {
   const router = useRouter();
@@ -27,11 +27,11 @@ export default function Register() {
         signIn("email", {
           email: emailTypeMapper.encode(
             VerificationTokenType.VERIFY_EMAIL,
-            data.email
+            data.email,
           ),
           redirect: false,
           callbackUrl: "/",
-        })
+        }),
       )
       .then(() => {
         toast.success("User created successfully");

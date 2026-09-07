@@ -1,5 +1,5 @@
-import { type UserDTO } from "@/data/user-dto.ts";
 import { type DefaultSession } from "next-auth";
+import { type UserDTO } from "@/data/user-dto.ts";
 
 declare module "next-auth" {
   /**

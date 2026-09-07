@@ -1,7 +1,7 @@
-import React from "react";
-import { DayPicker, DayPickerProps } from "react-day-picker";
-import { BaseProps, LegendLabel } from "./common";
 import clsx from "clsx";
+import React from "react";
+import { DayPicker, type DayPickerProps } from "react-day-picker";
+import { type BaseProps, LegendLabel } from "./common";
 
 type DayPickerInputProps = BaseProps &
   Omit<React.ComponentProps<"input">, "onChange"> & {

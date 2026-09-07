@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ToolbarAction, EditorAction } from "./Toolbar";
+import type { EditorAction, ToolbarAction } from "./Toolbar";
 
 export function ToolbarItem(props: {
   action: ToolbarAction;

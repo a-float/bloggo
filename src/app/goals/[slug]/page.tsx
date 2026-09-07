@@ -1,17 +1,17 @@
+import dayjs from "dayjs";
+import { unauthorized } from "next/navigation";
+import { FaCalendarDay } from "react-icons/fa6";
 import NotFound from "@/app/not-found";
+import Progress from "@/components/Progress";
 import { canUserSeeGoal } from "@/data/access";
 import { getGoalById } from "@/lib/service/goal.service";
 import { getSession } from "@/lib/session";
-import dayjs from "dayjs";
-import { unauthorized } from "next/navigation";
-import EditGoalButton from "./EditGoalButton";
-import CalendarChart from "./CalendarChart";
-import GoalBarChart from "./GoalBarChart";
-import Progress from "@/components/Progress";
-import GoalItemsTable from "./GoalItemsTable";
-import { getGoalMetrics } from "../getGoalMetrics";
-import { FaCalendarDay } from "react-icons/fa6";
 import GoalStatusBadge from "../GoalStatusBadge";
+import { getGoalMetrics } from "../getGoalMetrics";
+import CalendarChart from "./CalendarChart";
+import EditGoalButton from "./EditGoalButton";
+import GoalBarChart from "./GoalBarChart";
+import GoalItemsTable from "./GoalItemsTable";
 
 export default async function GoalPage({
   params,
@@ -54,7 +54,7 @@ export default async function GoalPage({
           </div>
         </div>
         <div className="stat">
-          <div className="stat-title capitalize">Total {goal.unit + "s"}</div>
+          <div className="stat-title capitalize">Total {`${goal.unit}s`}</div>
           <div className="stat-value">{metrics.totalDone}</div>
           <div className="stat-desc">
             with an average of {metrics.averagePerDay} {goal.unit}s per day

@@ -1,11 +1,11 @@
 "use server";
 
-import { getUserDTO, UserDTO } from "@/data/user-dto.ts";
-import prisma from "@/lib/prisma";
-import { getSession } from "@/lib/session";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
 import { unauthorized } from "next/navigation";
+import { getUserDTO, type UserDTO } from "@/data/user-dto.ts";
+import prisma from "@/lib/prisma";
+import { getSession } from "@/lib/session";
 
 export async function updateUser(data: {
   name?: string;

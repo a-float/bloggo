@@ -1,21 +1,21 @@
 "use client";
 
+import React from "react";
 import {
   FaBold,
-  FaItalic,
   FaCode,
-  FaImage,
   FaHeading,
-  FaQuoteLeft,
+  FaImage,
+  FaItalic,
+  FaLink,
   FaListOl,
   FaListUl,
-  FaLink,
+  FaQuoteLeft,
 } from "react-icons/fa6";
-import { EditorProps } from "../MarkdownEditor";
-import React from "react";
-import { BlobManager } from "@/lib/blob/blob-manager";
-import { ToolbarItem } from "./ToolbarItem";
 import HeadingIcon from "@/components/HeadingIcon";
+import { BlobManager } from "@/lib/blob/blob-manager";
+import type { EditorProps } from "../MarkdownEditor";
+import { ToolbarItem } from "./ToolbarItem";
 
 type HeadingLevel = 1 | 2 | 3 | 4;
 
@@ -125,9 +125,9 @@ export function Toolbar(props: {
     let newText = "";
     if (mode === "all") {
       let count = 1;
-      const replacedText = ("\n" + selectedText).replaceAll(
+      const replacedText = `\n${selectedText}`.replaceAll(
         "\n",
-        () => `\n${prefix.replace("\d", (count++).toString())}`,
+        () => `\n${prefix.replace("d", (count++).toString())}`,
       );
       newText = `${replacedText}\n`;
     }
@@ -175,7 +175,7 @@ export function Toolbar(props: {
       case "ul":
         return prependSelectedLines("- ", "all");
       case "ol":
-        return prependSelectedLines("\d. ", "all");
+        return prependSelectedLines("d. ", "all");
       default:
         return;
     }

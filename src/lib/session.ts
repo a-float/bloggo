@@ -1,5 +1,5 @@
+import type { Session } from "next-auth";
 import { auth } from "@/auth";
-import { type Session } from "next-auth";
 
 export async function getSession(): Promise<Session | { user: null }> {
   const session = await auth();

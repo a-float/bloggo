@@ -1,5 +1,5 @@
-import React from "react";
-import { BaseProps, LegendLabel } from "./common";
+import type React from "react";
+import { type BaseProps, LegendLabel } from "./common";
 
 type FileInputProps = BaseProps & {
   // previews: { url: string; name: string }[];

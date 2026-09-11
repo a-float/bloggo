@@ -3,6 +3,8 @@ import { getGoalsForUser, getGoalTagCounts } from "@/lib/service/goal.service";
 import { getSession } from "@/lib/session";
 import GoalsClient from "./GoalsClient";
 
+export const revalidate = 60;
+
 export default async function Goals() {
   const { user } = await getSession();
   const [goals, tagCounts] = await Promise.all([

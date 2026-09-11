@@ -6,6 +6,8 @@ import { getSession } from "@/lib/session";
 import BlogCard from "./BlogCard";
 import SearchBar from "./SearchBar";
 
+export const revalidate = 60;
+
 export default async function Blogs({
   searchParams,
 }: {

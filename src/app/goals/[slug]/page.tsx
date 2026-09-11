@@ -18,10 +18,11 @@ export default async function GoalPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { user } = await getSession();
-
   const { slug } = await params;
-  const goal = await getGoalById(Number(slug));
+  const [user, goal] = await Promise.all([
+    getSession(),
+    getGoalById(Number(slug)),
+  ]);
 
   if (!goal) throw NotFound();
   const canSeeGoal = await canUserSeeGoal(user, goal);

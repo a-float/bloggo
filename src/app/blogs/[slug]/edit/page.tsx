@@ -16,11 +16,12 @@ export default async function BlogEdit({
   if (!user) return unauthorized();
 
   const { slug } = await params;
-  const blog = await getBlogBySlug(slug);
+  const [blog, tagCounts] = await Promise.all([
+    getBlogBySlug(slug),
+    getBlogTagCountsForUser(user),
+  ]);
   if (!blog) notFound();
   if (!canUserEditBlog(user, blog)) return unauthorized();
-
-  const tagCounts = await getBlogTagCountsForUser(user);
   return (
     <EditBlogForm
       blog={blog}

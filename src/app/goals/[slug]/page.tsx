@@ -19,7 +19,7 @@ export default async function GoalPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [user, goal] = await Promise.all([
+  const [{ user }, goal] = await Promise.all([
     getSession(),
     getGoalById(Number(slug)),
   ]);

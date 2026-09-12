@@ -13,7 +13,10 @@ export default async function BlogPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [user, blog] = await Promise.all([getSession(), getBlogBySlug(slug)]);
+  const [{ user }, blog] = await Promise.all([
+    getSession(),
+    getBlogBySlug(slug),
+  ]);
   if (!blog) return notFound();
   const canSeeBlog = await canUserSeeBlog(user, blog);
   if (!canSeeBlog) return unauthorized();

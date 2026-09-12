@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { FaGithub } from "react-icons/fa6";
 import LoginControl from "@/components/LoginControl";
 import Providers from "@/components/Providers";
+import RouteProgress from "@/components/RouteProgress";
 import { ThemeController } from "@/components/ThemeController";
 
 const geistSans = Geist({
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col font-sans`}
       >
         <Providers>
+          <RouteProgress />
           <div className="navbar bg-base-100 shadow-sm">
             <a href="/" className="btn btn-ghost text-xl">
               Bloggo

@@ -1,5 +1,4 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { Prisma, type User, VerificationTokenType } from "@prisma/client";
 import { compare } from "bcrypt";
 import dayjs from "dayjs";
 import NextAuth, { AuthError, type NextAuthConfig } from "next-auth";
@@ -9,6 +8,11 @@ import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import * as yup from "yup";
 import { getUserDTO, type UserDTO } from "@/data/user-dto.ts";
+import {
+  Prisma,
+  type User,
+  VerificationTokenType,
+} from "@/generated/prisma/client";
 import { createEmailChannel } from "@/lib/email/email.channel.factory";
 import { createVerificationEmailMessage } from "@/lib/email/email.message.factory";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";

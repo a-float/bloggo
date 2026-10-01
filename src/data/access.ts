@@ -1,4 +1,4 @@
-import { BlogVisibility, Role } from "@prisma/client";
+import { BlogVisibility, Role } from "@/generated/prisma/client";
 import * as friendService from "@/lib/service/friend.service";
 import type { BlogDTO } from "./blog-dto";
 import type { GoalDto } from "./goal-dto";

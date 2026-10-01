@@ -1,12 +1,12 @@
 import "server-only";
+import { getBlogDTO } from "@/data/blog-dto";
+import type { UserDTO } from "@/data/user-dto.ts";
 import {
   BlogVisibility,
   FriendshipStatus,
   type Prisma,
   Role,
-} from "@prisma/client";
-import { getBlogDTO } from "@/data/blog-dto";
-import type { UserDTO } from "@/data/user-dto.ts";
+} from "@/generated/prisma/client";
 import type { TagWithCount } from "@/types/common";
 import prisma from "../prisma";
 

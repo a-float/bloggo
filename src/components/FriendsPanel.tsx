@@ -1,6 +1,5 @@
 "use client";
 
-import { FriendshipStatus } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Select from "react-select";
@@ -8,6 +7,8 @@ import { useDebounceValue } from "usehooks-ts";
 import { createFriendship } from "@/actions/friendship.action";
 import type { FriendshipDTO } from "@/data/friendship-dto";
 import type { UserDTO } from "@/data/user-dto.ts";
+// TODO Check all prisma imports and consider importing from models/enums https://www.prisma.io/docs/orm/v7/prisma-schema/overview/generators
+import { FriendshipStatus } from "@/generated/prisma/browser";
 import FriendItem from "./FriendItem";
 import { clearStyleProxy } from "./TagSelect";
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { BlogVisibility } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import MarkdownEditor from "@/components/md/MarkdownEditor";
 import Spinner from "@/components/Spinner";
 import TagSelect from "@/components/TagSelect";
 import type { BlogDTO } from "@/data/blog-dto";
+import { BlogVisibility } from "@/generated/prisma/enums";
 import { BlobManager } from "@/lib/blob/blob-manager";
 import type { TagWithCount } from "@/types/common";
 import SortableImageInput, { type SortableImage } from "./SortableImageInput";

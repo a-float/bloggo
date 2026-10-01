@@ -1,10 +1,10 @@
 "use client";
 
-import { VerificationTokenType } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaEnvelope } from "react-icons/fa6";
+import { VerificationTokenType } from "@/generated/prisma/client";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
 import { Input } from "../../../components/form/TextInput";
 import Spinner from "../../../components/Spinner";

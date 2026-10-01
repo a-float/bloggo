@@ -1,4 +1,4 @@
-import { VerificationTokenType } from "@prisma/client";
+import { VerificationTokenType } from "@/generated/prisma/client";
 import type {
   VerificationEmailMessage,
   VerificationEmailMessageOptions,

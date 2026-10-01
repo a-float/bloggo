@@ -1,7 +1,7 @@
 "use server";
 
-import { Role } from "@prisma/client";
 import { notFound, unauthorized } from "next/navigation";
+import { Role } from "@/generated/prisma/client";
 import { createBlobStorage } from "@/lib/blob";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";

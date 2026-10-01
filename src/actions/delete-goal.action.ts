@@ -1,9 +1,9 @@
 "use server";
 
-import type { Goal } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { notFound, unauthorized } from "next/navigation";
 import { canUserEditGoal } from "@/data/access";
+import type { Goal } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { getGoalById } from "@/lib/service/goal.service";
 import { getSession } from "@/lib/session";

@@ -1,9 +1,9 @@
 "use server";
 
-import type { Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
 import { unauthorized } from "next/navigation";
 import { getUserDTO, type UserDTO } from "@/data/user-dto.ts";
+import type { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 

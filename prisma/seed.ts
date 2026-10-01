@@ -1,5 +1,5 @@
 import { hash } from "bcrypt";
-import { BlogVisibility, type Prisma, Role } from "@/generated/prisma/models";
+import { BlogVisibility, type Prisma, Role } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
 const blogData: Prisma.BlogCreateInput[] = [

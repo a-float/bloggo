@@ -1,4 +1,3 @@
-import { FriendshipStatus } from "@prisma/client";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import {
   deleteFriendship,
@@ -6,6 +5,7 @@ import {
 } from "@/actions/friendship.action";
 import type { FriendshipDTO } from "@/data/friendship-dto";
 import type { UserDTO } from "@/data/user-dto.ts";
+import { FriendshipStatus } from "@/generated/prisma/browser";
 import AvatarWithFallback from "./AvatarWithFallback";
 
 function removeFriend(friendId: UserDTO["id"]) {

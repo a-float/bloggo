@@ -1,6 +1,5 @@
 "use client";
 
-import { GoalType, GoalVisibility } from "@prisma/client";
 import React from "react";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -12,6 +11,7 @@ import RadioGroup from "@/components/RadioGroup";
 import Spinner from "@/components/Spinner";
 import TagSelect from "@/components/TagSelect";
 import type { GoalDto } from "@/data/goal-dto";
+import { GoalType, GoalVisibility } from "@/generated/prisma/browser";
 import type { TagWithCount } from "@/types/common";
 import useGoalDeleteMutation from "./useGoalDeleteMutation";
 

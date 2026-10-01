@@ -1,6 +1,5 @@
 "use client";
 
-import { VerificationTokenType } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import toast from "react-hot-toast";
 import { createUser } from "@/actions/create-user.action";
 import { Input } from "@/components/form/TextInput";
 import Spinner from "@/components/Spinner";
+import { VerificationTokenType } from "@/generated/prisma/client";
 import { emailTypeMapper } from "@/lib/email/email-type-mapper";
 
 export default function Register() {

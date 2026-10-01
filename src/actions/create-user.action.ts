@@ -1,7 +1,7 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
 import { hash } from "bcrypt";
+import { Prisma } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
 export async function createUser(data: {

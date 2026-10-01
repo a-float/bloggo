@@ -1,5 +1,5 @@
+import type { User } from "@/generated/prisma/client";
 import "server-only";
-import type { User } from "@prisma/client";
 
 export function getUserDTO(user: User) {
   return {

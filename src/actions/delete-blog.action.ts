@@ -1,9 +1,9 @@
 "use server";
 
-import type { Blog } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { notFound, unauthorized } from "next/navigation";
 import { canUserEditBlog } from "@/data/access";
+import type { Blog } from "@/generated/prisma/client";
 import { createBlobStorage } from "@/lib/blob";
 import prisma from "@/lib/prisma";
 import { getBlogById } from "@/lib/service/blog.service";

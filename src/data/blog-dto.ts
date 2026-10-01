@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@/generated/prisma/client";
 import { getUserDTO } from "./user-dto.ts";
 
 // TODO do not always query for images?

@@ -1,8 +1,8 @@
 "use server";
 
-import { FriendshipStatus } from "@prisma/client";
 import { notFound, unauthorized } from "next/navigation";
 import type { UserDTO } from "@/data/user-dto.ts";
+import { FriendshipStatus } from "@/generated/prisma/client";
 import * as friendService from "@/lib/service/friend.service";
 import { getSession } from "@/lib/session";
 

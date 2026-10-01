@@ -1,4 +1,4 @@
-import { VerificationTokenType } from "@prisma/client";
+import { VerificationTokenType } from "@/generated/prisma/client";
 
 export const emailTypeMapper = {
   encode(type: VerificationTokenType, email: string) {

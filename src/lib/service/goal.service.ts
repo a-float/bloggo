@@ -1,13 +1,13 @@
 import "server-only";
+import { revalidatePath } from "next/cache";
+import { type GoalDto, getGoalDTO } from "@/data/goal-dto";
+import type { UserDTO } from "@/data/user-dto.ts";
 import {
   FriendshipStatus,
   GoalVisibility,
   type Prisma,
   Role,
-} from "@prisma/client";
-import { revalidatePath } from "next/cache";
-import { type GoalDto, getGoalDTO } from "@/data/goal-dto";
-import type { UserDTO } from "@/data/user-dto.ts";
+} from "@/generated/prisma/client";
 import type { TagWithCount } from "@/types/common";
 import prisma from "../prisma";
 

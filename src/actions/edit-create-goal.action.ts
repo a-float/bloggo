@@ -1,14 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import * as yup from "yup";
+import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
 import {
   type Goal,
   GoalType,
   GoalVisibility,
   type Prisma,
-} from "@prisma/client";
-import { revalidatePath } from "next/cache";
-import * as yup from "yup";
-import { canUserCreateGoal, canUserEditGoal } from "@/data/access";
+} from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import {
   getGoalById,

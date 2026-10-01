@@ -1,7 +1,7 @@
 import "server-only";
-import { FriendshipStatus } from "@prisma/client";
 import { getFriendshipDTO } from "@/data/friendship-dto";
 import type { UserDTO } from "@/data/user-dto.ts";
+import { FriendshipStatus } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
 export async function areUsersFriends(

@@ -1,9 +1,14 @@
 "use server";
 
-import { type Blog, BlogVisibility, type Prisma, Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import * as yup from "yup";
 import { canUserCreateBlog, canUserEditBlog } from "@/data/access";
+import {
+  type Blog,
+  BlogVisibility,
+  type Prisma,
+  Role,
+} from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 import { getBlogById } from "@/lib/service/blog.service";
 import { getSession } from "@/lib/session";

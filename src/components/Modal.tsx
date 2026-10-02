@@ -3,7 +3,12 @@ import type React from "react";
 export default function Modal(props: {
   id: string;
   children: React.ReactNode;
+  open?: boolean;
 }) {
+  if (!props.open) {
+    return null;
+  }
+
   return (
     <dialog id={props.id} className="modal">
       <div className="modal-box">

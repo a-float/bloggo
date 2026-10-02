@@ -5,6 +5,15 @@ import BadgeRow from "@/components/BadgeRow";
 import BlurredBackgroundImage from "@/components/BlurredBackgroundImage";
 import type { BlogDTO } from "@/data/blog-dto";
 
+const getContentPreview = (content: string): string => {
+  if (!content) return "";
+  // If content is short, show it all; otherwise, show first 100 characters and add ellipsis
+  if (content.length <= 100) {
+    return content;
+  }
+  return content.slice(0, 100) + "...";
+};
+
 export default function BlogCard({ blog }: { blog: BlogDTO }) {
   return (
     <a className="rounded-(--radius-box)" href={`/blogs/${blog.slug}`}>
@@ -34,6 +43,9 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
         </figure>
         <div className="card-body overflow-hidden">
           <h2 className="card-title">{blog.title}</h2>
+          <p className="line-clamp-2 flex-none text-base-content/60 mb-2">
+            {getContentPreview(blog.content)}
+          </p>
           <div className="text-xs whitespace-pre text-base-content/60 flex">
             {blog.date ? dayjs(blog.date).format("MMMM D, YYYY") : null}{" "}
             {blog.author?.name ? (
@@ -48,7 +60,6 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
               </span>
             ) : null}
           </div>
-          {/* <p className={`line-clamp-3 flex-none`}>{blog.content}</p> */}
           <div className="flex-1" />
           {blog.tags.length > 0 && (
             <BadgeRow tags={blog.tags} className="justify-end align-bottom" />

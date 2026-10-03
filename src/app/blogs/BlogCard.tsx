@@ -48,7 +48,6 @@ export default function BlogCard({ blog }: { blog: BlogDTO }) {
               </span>
             ) : null}
           </div>
-          {/* <p className={`line-clamp-3 flex-none`}>{blog.content}</p> */}
           <div className="flex-1" />
           {blog.tags.length > 0 && (
             <BadgeRow tags={blog.tags} className="justify-end align-bottom" />

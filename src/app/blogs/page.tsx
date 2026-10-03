@@ -5,6 +5,7 @@ import { getBlogsForUser } from "@/lib/service/blog.service";
 import { getSession } from "@/lib/session";
 import BlogCard from "./BlogCard";
 import SearchBar from "./SearchBar";
+import QuickPostButton from "@/components/QuickPostButton";
 
 export default async function Blogs({
   searchParams,
@@ -17,15 +18,21 @@ export default async function Blogs({
     search,
     sort: sort === "date" ? "date" : "createdAt",
   });
+
   return (
     <div>
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl">Blogs</h1>
-        {canUserCreateBlog(user) ? (
-          <a href="/blogs/create" className="btn btn-soft">
-            Create new blog
-          </a>
-        ) : null}
+        <div className="flex gap-2">
+          {canUserCreateBlog(user) ? (
+            <>
+              <a href="/blogs/create" className="btn btn-soft">
+                Create new blog
+              </a>
+              <QuickPostButton user={user} />
+            </>
+          ) : null}
+        </div>
       </div>
       <Suspense>
         <SearchBar />
